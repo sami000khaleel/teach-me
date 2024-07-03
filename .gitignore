@@ -1,0 +1,6 @@
+.crt
+.key
+images
+snapshots
+node_modules
+uploads
