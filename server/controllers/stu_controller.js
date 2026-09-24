@@ -1,10 +1,13 @@
+require("dotenv").config();
+
 const studentmodels = require("../models/student");
 const teachermodels = require("../models/teacher");
 const get_id = require("../models/get_id");
 const https = require("https");
 const util = require("util");
 const FormData = require("form-data");
-const { createReadStream, readFileSync } = require("fs");
+const executeQuery = require("../config/db");
+const { createReadStream } = require("fs");
 const axios = require("axios");
 const Call = require("../models/call");
 const course_model = require("../models/course");
@@ -12,9 +15,40 @@ const multer = require("multer");
 const fs = require("fs/promises");
 const path = require("path");
 const nodemailer = require("nodemailer");
-const { teacher } = require("../models/get_id");
-const { models } = require("mongoose");
-const { title } = require("process");
+
+// =====================================================================
+// 🔹 Helper: Safely call the Flask AI service.
+//    Returns the response data OR null. Never throws.
+// =====================================================================
+async function callAiService(endpoint, formData, timeoutMs = 5000) {
+  const aiBaseUrl = process.env.AI_SERVICE_URL || "https://127.0.0.1:5000";
+  const url = `${aiBaseUrl}${endpoint}`;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
+  try {
+    const response = await axios.post(url, formData, {
+      httpsAgent,
+      headers: formData.getHeaders(),
+      timeout: timeoutMs,
+    });
+    console.log(`✅ AI service responded: ${endpoint}`);
+    return response.data;
+  } catch (err) {
+    if (err.code === "ECONNREFUSED") {
+      console.warn(
+        `⚠️  AI service not running at ${aiBaseUrl} — skipping ${endpoint}`
+      );
+    } else if (err.code === "ECONNABORTED") {
+      console.warn(
+        `⚠️  AI service timed out after ${timeoutMs}ms — skipping ${endpoint}`
+      );
+    } else {
+      console.warn(`⚠️  AI service error at ${endpoint}:`, err.message);
+    }
+    return null;
+  }
+}
+
 class studentcontroller {
   static giveObservationTitle(message) {
     let observationTitle = null;
@@ -28,9 +62,6 @@ class studentcontroller {
       case "usingPhone":
         observationTitle = "student is using his phone";
         break;
-      case "usingPhone":
-        observationTitle = "student is using his phone";
-        break;
       default:
         break;
     }
@@ -38,11 +69,12 @@ class studentcontroller {
   }
 
   static addObservation(call, studentId, observationTitle, date) {
+    studentId = studentId.split(".")[0];
     for (let student of call.students) {
       if (student.studentId == studentId) {
         let foundOneFlag = false;
         for (let observation of student.observations) {
-          if (observation?.title !== observationTitle) continue;
+          if (observation?.title != observationTitle) continue;
           foundOneFlag = true;
           observation.occurrencesDates.push(date);
           break;
@@ -74,94 +106,67 @@ class studentcontroller {
         cb(null, `${Date.now()}-${file.originalname}`);
       },
     });
-  
+
     const upload = multer({ storage }).single("file");
     const uploadPromise = util.promisify(upload);
-  
+
     try {
       await uploadPromise(req, res);
+
       let call = await Call.findById(req.body.callId);
       const file = req?.file;
       let date = req.body?.date;
-      date = new Date(date);
-  
+
       if (!file) {
         console.log("No file was received");
-        return res.json({ success: true });
+        return res.json({ success: true, observation: "attentive" });
       }
-  
+
       const formData = new FormData();
       formData.append("file", createReadStream(req.filepath));
-      const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-      const probability = Math.random();
-      let response;
-  
-      if (probability < 0.5) {
-        response = await axios.post(
-          `https://127.0.0.1:5000/api/action_student`,
-          formData,
-          {
-            httpsAgent,
-            headers: {
-              ...formData.getHeaders(),
-            },
-          }
-        );
-      } else {
-        response = await axios.post(
-          `https://127.0.0.1:5000/api/check_student`,
-          formData,
-          {
-            httpsAgent,
-            headers: {
-              ...formData.getHeaders(),
-            },
-          }
-        );
+
+      // 🔹 Ask the AI service (optional — returns null if down)
+      const aiResponse = await callAiService("/api/observation", formData);
+
+      if (!aiResponse) {
+        // AI service unavailable → treat as attentive and continue
+        return res
+          .status(200)
+          .json({ success: true, observation: "attentive" });
       }
-        console.log(response.data);
-          let studentId  
-          studentId = req.file.filename.split("-")[1]; // Extract student ID
-          console.log('student id', studentId)
-            for (let student of call.students) {
-              if (student.studentId != studentId) 
-                continue
-              student.checkOccurrences.push(date);
-              console.log('got it')
-              
-            }
-        
-      
-  
-      if (response?.data?.result) {
-        return res.json({ warningFlag: false,observation:'attentive' });
+
+      const message = aiResponse.message;
+
+      if (message === "attentive" || !message) {
+        return res
+          .status(200)
+          .json({ success: true, observation: "attentive" });
       }
-  
-      let message = response?.data?.message;
-      console.log(response.data);
-      if (message == "attentive") {
-        return res.status(200).json({ success: true,observation:'attentive' });
+
+      // Extract student ID from filename
+      const studentId = req.file.filename.split("-")[1];
+
+      for (let student of call.students) {
+        if (student.studentId != studentId) continue;
+        student.checkOccurrences.push(date);
       }
-  
-       studentId = req.file.filename.split("-")[1];
+
       call = studentcontroller.addObservation(call, studentId, message, date);
-      
-      await call.save(); // Save the updated call object
-  
+      await call.save();
+
       return res.json({ warningFlag: true, observation: message });
     } catch (error) {
-      console.error(error.message);
+      console.error("checkFrame error:", error.message);
       return res.status(500).json({ success: false, message: error.message });
     } finally {
       if (req.filepath) {
-        fs.unlink(req.filepath, (err) => {
-          if (err) {
-            console.error("Failed to delete temporary file:", err);
-          }
-        });
+        fs.unlink(req.filepath).catch((err) =>
+          console.error("Failed to delete temp file:", err)
+        );
       }
     }
   }
+
   static async getStudentsByCourse(req, res) {
     try {
       const { courseId } = req.query;
@@ -170,9 +175,10 @@ class studentcontroller {
       const result = await studentmodels.getstudents_by_course_id(courseId);
       return res.json(result);
     } catch (error) {
-      return res.status(500).json({ message: err.message });
+      return res.status(500).json({ message: error.message });
     }
   }
+
   static async findCall(req, res) {
     try {
       const { courseId } = req.query;
@@ -180,18 +186,16 @@ class studentcontroller {
         return res.status(400).json({ message: "no course id was sent" });
       const calls = await Call.find({ courseId, onGoing: true }).sort({
         createdAt: 1,
-      }); // Sort by createdAt ascending
+      });
       if (calls.length == 0)
         return res
           .status(404)
           .json({ message: "no call are onGoing at the momemnt" });
-      console.log(calls.length);
       if (calls.length > 1) console.log("more than a call is taking place");
-      // return res.status(500).json({message:'more than a call is being on for a course that is a no no'})
       return res.json(calls[0]);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ message: err.message });
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -204,7 +208,7 @@ class studentcontroller {
           message: "no data about the image was provided",
         });
       return res.sendFile(
-        path.join(__dirname, "..", "images", studentId, imageName)
+        path.join(__dirname, "..", "images", studentId, studentId + ".jpg")
       );
     } catch (err) {
       console.log(err);
@@ -213,6 +217,7 @@ class studentcontroller {
         .json({ success: false, message: "internal server error" });
     }
   }
+
   static async verifyCode(req, res) {
     try {
       const { code } = req.query;
@@ -224,37 +229,51 @@ class studentcontroller {
     }
   }
 
-  // /////////////////////////////////////////////
   static async sendCode(req, res) {
     try {
       const role = req.query.role;
       const email = req.query.email;
+
+      if (!email || !role) {
+        return res
+          .status(400)
+          .json({ message: "email and role are required" });
+      }
+
       const id = await get_id.verifyEmail(email, role);
-      console.log(email);
       const code = Math.floor(1000000 * Math.random());
+
+      if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+        console.error("❌ GMAIL credentials missing in .env");
+        return res
+          .status(500)
+          .json({ message: "email service is not configured" });
+      }
+
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "samihellstrong@gmail.com",
-          pass: "aygk wlub dppn ftum",
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD,
         },
       });
-      const emialOptions = {
-        from: "samihellstrong@gmail.com",
+
+      const emailOptions = {
+        from: process.env.GMAIL_USER,
         to: email,
-        subject: "account verification",
-        text: `your code is : ${code}`,
+        subject: "Teach-Me — Account Verification",
+        text: `Your verification code is: ${code}\n\nThis code will expire soon.`,
       };
-      const info = await transporter.sendMail(emialOptions);
+
+      await transporter.sendMail(emailOptions);
       await get_id.saveCode(code, id, role);
-      res.json({ message: "email was sent" });
+
+      return res.json({ message: "email was sent" });
     } catch (err) {
-      console.log(err);
+      console.error("❌ sendCode error:", err.message);
       return res.status(500).json({ message: "internal server error" });
     }
   }
-
-  //***************************************************************** */
 
   static async addnewstudent(req, res) {
     try {
@@ -277,69 +296,71 @@ class studentcontroller {
               m: err.message,
             });
           }
-          // if (!req.file ||!req.file.buffer) {
-          //   return res.status(400).json({ message: 'No image file provided' })
-          // }
+
           const { firstname, lastname, email, password } = req.body;
-          const student = await studentmodels
-            .addstudent(firstname, lastname, email, password)
-            .catch((err) =>
-              res
-                .status(500)
-                .json({ success: false, message: "error with users" })
-            );
-          const destinationDir = path.join("./images", String(student.id)); // Create directory based on product ID
-          await fs.mkdir(destinationDir, { recursive: true }); // Ensure directory exists
+
+          // 1. Create the student in MySQL
+          const student = await studentmodels.addstudent(
+            firstname,
+            lastname,
+            email,
+            password
+          );
+
+          // 2. Move the uploaded image to the student's folder
+          const destinationDir = path.join("./images", String(student.id));
+          await fs.mkdir(destinationDir, { recursive: true });
+
           const filesNames = await fs.readdir(path.join("./", "uploads"));
           for (const fileName of filesNames) {
             const finalPath = path.join(
               destinationDir,
               String(student.id) + ".jpg"
             );
-            await fs.rename(path.join("./", "uploads", fileName), finalPath); // Move each file
+            await fs.rename(
+              path.join("./", "uploads", fileName),
+              finalPath
+            );
           }
 
-          const url = `api/student/image?studentId=${student.id}&imageName=${req.file.filename}`;
+          // 3. Save the image URL in MySQL
+          const url = `/api/student/image?studentId=${student.id}&imageName=${
+            req.file?.filename || student.id + ".jpg"
+          }`;
           await studentmodels.addImageUrl(url, student.id);
+
+          // 4. Register the student's face with the AI service (optional)
           const formData = new FormData();
-          const httpsAgent = new https.Agent({ rejectUnauthorized: false });
           formData.append(
             "file",
             createReadStream(
               path.join(destinationDir, String(student.id) + ".jpg")
             )
           );
-          const response = await axios.post(
-            "https://127.0.0.1:5000/api/store_image",
-            formData,
-            {
-              httpsAgent,
-              headers: {
-                ... formData.getHeaders()
-              },
-            }
-          );
+
+          const aiResult = await callAiService("/api/store_image", formData);
+          if (aiResult) {
+            console.log(`👤 Face registered for student ${student.id}`);
+          }
+
+          // 5. Always return the student — signup succeeds regardless of AI
           return res.json(student);
         } catch (err) {
-          console.log(err);
-          return res.status(500).json({ success: false });
+          console.error("addnewstudent inner error:", err);
+          return res.status(500).json({ success: false, message: err.message });
         }
       });
     } catch (err) {
-      // console.log(err)
+      console.error("addnewstudent outer error:", err);
       return res.status(400).json({ message: err.message });
     }
   }
 
-  //*****************************************/
-
   static async reinsert(req, res) {
     try {
       const { email } = req.query;
-      console.log(email, "email");
       var password = req.headers.password;
       var student = await studentmodels.reinsert(email, password);
-      console.log(student);
       res.json(student);
     } catch (err) {
       console.log(err);
@@ -347,19 +368,25 @@ class studentcontroller {
     }
   }
 
-  //******************************************************** */
-
   static async get_courses(req, res) {
     try {
       var results = await studentmodels.get_courses();
+      for (let course of results) {
+        const id_teacher = await executeQuery(
+          "select id_teacher from relater where id_cours=?",
+          [course.id_cours]
+        );
+        const teacher = await executeQuery(
+          "select id_teacher,first_name,last_name,email from teacher where id_teacher=?",
+          [id_teacher[0].id_teacher]
+        );
+        course.teacher = { ...teacher[0] };
+      }
       res.send(results);
     } catch (err) {
-      console.log(err);
       return res.status(400).json({ message: err.message });
     }
   }
-
-  //********************************************************* */
 
   static async course_info(req, res) {
     try {
@@ -414,13 +441,11 @@ class studentcontroller {
       var id = req.query.id;
 
       var g_i = await get_id.student(email, password);
-      console.log(g_i.id_stu, req.query.id, "aaaaaaa");
       if (req.query.id != g_i.id_stu)
         return res.status(400).json({ message: "ids do not match" });
 
       var id_course = await course_model.get_idcourse_forstudent(id);
       var results = await course_model.get_courses(id_course);
-      console.log(results);
       res.send(results);
     } catch (err) {
       console.log(err);
@@ -434,19 +459,12 @@ class studentcontroller {
       var password2 = req.body.password;
       var password = req.headers.password;
       var email = req.headers.email;
-      console.log(email, password, password2, role);
       if (role == "teacher") {
         var id_teacher = await get_id.teacher(email, password);
-        var update_password = await teachermodels.update_password(
-          password2,
-          id_teacher.id_teacher
-        );
+        await teachermodels.update_password(password2, id_teacher.id_teacher);
       } else {
         var id_student = await get_id.student(email, password);
-        var update_password1 = await studentmodels.update_password(
-          password2,
-          id_student.id_stu
-        );
+        await studentmodels.update_password(password2, id_student.id_stu);
       }
 
       return res.json("rsest password is finish");
@@ -456,4 +474,5 @@ class studentcontroller {
     }
   }
 }
+
 module.exports = studentcontroller;

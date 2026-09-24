@@ -1,5 +1,19 @@
 const executeQuery = require('../config/db');
 class course {
+
+    static async delete_leceture(courseId,file_name){
+        console.log(courseId,file_name)
+        const result = await executeQuery('delete from lectures where id_course=? and lecture=?',[courseId,file_name])
+    }
+
+    static async get_lectures_by_course_id(id_course){
+        console.log('uysd')
+        const result =await executeQuery('select *from lectures where id_course=?',[id_course]);
+        return result
+
+
+    }
+
     static validatedates(date1, date2) {
         const d1 = new Date(date1);
         const d2 = new Date(date2);
@@ -11,6 +25,7 @@ class course {
     }
     static async get_courses_id(id_teacher) {
         const res = await executeQuery('select id_cours from relater where id_teacher=?', [id_teacher]);
+        console.log(res)
         let ids = []
 
         for (let i = 0; i < res.length; i++) {
@@ -37,8 +52,8 @@ class course {
     }
 
 
-    static async update(cours_name,cours_discription,first_course, end_course, date1, date2, id_course) {
-        const res = await executeQuery('update cours set cours_name=?,cours_discription=?, first_cours=? ,end_cours=?,date1=?,date2=? where id_cours=?', [cours_name,cours_discription,first_course, end_course, date1, date2, id_course]);
+    static async update(first_course, end_course, date1, date2, id_course) {
+        const res = await executeQuery('update cours set first_cours=? ,end_cours=?,date1=?,date2=? where id_cours=?', [first_course, end_course, date1, date2, id_course]);
         return res[0];
     }
 

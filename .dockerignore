@@ -1,0 +1,41 @@
+# ---------- Dependencies ----------
+**/node_modules
+
+# ---------- Build artifacts ----------
+**/dist
+**/build
+**/.vite
+
+# ---------- Env / secrets ----------
+**/.env
+**/.env.*
+!**/.env.example
+
+# ---------- Certificates ----------
+**/*.crt
+**/*.key
+**/*.pem
+certs/
+
+# ---------- Git ----------
+.git
+.gitignore
+
+# ---------- OS junk ----------
+.DS_Store
+Thumbs.db
+
+# ---------- Runtime uploads ----------
+server/images/*
+server/lectures/*
+server/snapshots/*
+server/uploads/*
+
+# ---------- Archives ----------
+*.rar
+*.zip
+
+# ---------- Misc ----------
+project-bundle.txt
+bundle.js
+test.js

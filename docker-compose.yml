@@ -1,0 +1,117 @@
+version: "3.9"
+
+services:
+  # ===================================================================
+  # MySQL — relational data (users, courses, lectures, relations)
+  # ===================================================================
+  mysql:
+    image: mysql:8.0
+    container_name: teachme-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"   # 3307 on host avoids conflict with local MySQL
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./server/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-p${MYSQL_ROOT_PASSWORD}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - teachme
+
+  # ===================================================================
+  # MongoDB — session data (calls, logs, observations, messages)
+  # ===================================================================
+  mongo:
+    image: mongo:7.0
+    container_name: teachme-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - "27018:27017"   # 27018 on host avoids conflict with local MongoDB
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - teachme
+
+   # ===================================================================
+  # Server — Node.js backend + serves built React frontend
+  # ===================================================================
+  server:
+    build:
+      context: .                    # project root (needs browser/ and server/)
+      dockerfile: Dockerfile
+    container_name: teachme-server
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongo:
+        condition: service_started
+    environment:
+      PORT: 3000
+      NODE_ENV: ${NODE_ENV}
+
+      # MySQL
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
+
+      # MongoDB (with auth)
+      MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}?authSource=admin
+
+      # AI service
+      AI_SERVICE_URL: http://ai:5000
+
+      # CORS — allow everything in local dev
+      CLIENT_ORIGIN: "*"
+
+      # HTTPS — off inside Docker (localhost is a secure context)
+      USE_HTTPS: "false"
+
+      # Email
+      GMAIL_USER: ${GMAIL_USER}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
+    ports:
+      - "${SERVER_PORT}:3000"
+    volumes:
+      # Persist uploaded files across container restarts
+      - ./server/images:/app/images
+      - ./server/lectures:/app/lectures
+      - ./server/snapshots:/app/snapshots
+    networks:
+      - teachme
+
+# ===================================================================
+# Named volumes (managed by Docker)
+# ===================================================================
+volumes:
+  mysql_data:
+  mongo_data:
+
+# ===================================================================
+# Networks
+# ===================================================================
+networks:
+  teachme:
+    driver: bridge

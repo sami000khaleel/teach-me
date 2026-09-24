@@ -6,10 +6,122 @@ const Student = require("../models/student");
 const multer = require("multer");
 const studentmodels = require("../models/student");
 const { validatedates } = require("../models/course");
+const path=require('path')
 const Call = require("../models/call");
 const course = require("../models/course");
 const executeQuery = require("../config/db");
+const fs=require('fs/promises')
 class teacher_controller {
+
+  static async delete_lecture(req,res){
+    try {
+
+// Check if the file exists
+const filePath = path.join(__dirname, '../lectures', req.query.courseId,req.query.file_name)
+await fs.access(filePath);
+console.log(`File ${filePath} exists, deleting...`);
+// Delete the file
+await fs.unlink(filePath);
+
+console.log(`File ${filePath} deleted successfully!`);
+const delete_lecture = await course_model.delete_leceture(req.query.courseId,req.query.file_name)
+
+// Example usage
+return res.send('done')
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message:'internal server error'})
+    }
+}
+
+
+  static async get_lectures(req, res) {
+    try {
+        console.log('hello')
+      const courseId = req.query.courseId;
+      
+     const lectures= await course_model.get_lectures_by_course_id(courseId)
+     res.json(lectures)
+     
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+
+  static async get_lectures_by_course(req, res) {
+    try {
+      const courseId = req.query.courseId;
+      const lectureName = req.query.lectureName;
+     
+        const filePath = path.join(__dirname, `../lectures/${courseId}/${lectureName}`);
+        console.log(filePath)
+        res.download(filePath, lectureName, (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(400).json({ message: err.message });
+          }
+        });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async add_lecture(req,res){
+
+    try {
+        const storage = multer.diskStorage({
+          destination: function (req, file, cb) {
+            cb(null, './uploads')
+          },
+          filename: function (req, file, cb) {
+            cb(null,file.originalname)
+          }
+        })
+        const upload = multer({ storage }).single('file')
+        
+        await upload(req, res, async (err) => {
+          if (err) {
+            console.log(err.message)
+            return res.status(500).json({ message: 'internal error handling the file', m: err.message })
+          }
+          const email =req.headers.email;
+          const password =req.headers.password;
+          const id_course=req.body.id_course;
+          const id_teacher=req.body.id_teacher;
+          var idteacher = await get_id.teacher(email, password);
+        if (req.body.id_teacher != idteacher.id_teacher)
+            return res.status(400).json({ message: "ids do not match" })
+
+           let {id}= await teacher_model.add_idCourse(id_course)
+            let lectureId=id
+           const destinationDir = path.join('./lectures', String(id_course)); // Create directory based on product ID
+          await fs.mkdir(destinationDir, { recursive: true }); // Ensure directory exists
+          const filesNames= await fs.readdir(path.join('./','uploads'))
+          for (const fileName of filesNames) {
+            const finalPath = path.join(destinationDir,req.body?.fileName);
+            await fs.rename(path.join('./','uploads',fileName), finalPath); // Move each file
+          }
+          
+          const url = `https://127.0.0.1:3000/api/teacher/download_lecture?courseId=${id_course}&lectureName=${req.file.filename}`
+          await teacher_model.addlectureUrl(req.body.fileName, lectureId)
+          
+          return res.json("ok baby")
+        })
+  
+      }
+      catch (err) {
+        // console.log(err)
+        return res.status(400).json({ message: err.message })
+      }
+
+
+
+
+
+ }
   static async create_test_call(req, res) {
     try {
       const call = await Call.create(req.body);
@@ -21,17 +133,13 @@ class teacher_controller {
         .json({ success: false, err: "internal server error" });
     }
   }
-  static getStartAndEndOfDay = (dateString) => {
-    const date = new Date(dateString);
-
-    // Start of the day in UTC
+  static getStartAndEndOfDay = (date) => {
     const start = new Date(date);
-    start.setUTCHours(0, 0, 0, 0); // Set the time to 00:00:00.000 UTC
-  
-    // End of the day in UTC
+    start.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
+
     const end = new Date(date);
-    end.setUTCHours(23, 59, 59, 999); // Set the time to 23:59:59.999 UTC
-  
+    end.setHours(23, 59, 59, 999); // Set the time to 23:59:59.999
+
     return { start, end };
   };
 
@@ -63,7 +171,7 @@ class teacher_controller {
             "student had been using his phone": [],
             "student was not attentive": [],
             "student had gotten out of the cameras range": [],
-            "students face had not matched": [],
+            "students face had not matched": []
           },
         };
       }
@@ -113,27 +221,12 @@ class teacher_controller {
                 (new Date(obs.occurrencesDates[observationEnd]) -
                   new Date(obs.occurrencesDates[observationEnd - 1])) /
                 1000;
-              console.log(timeJump, "calculatede time jump");
-              // ensures there is a linear action
-              if (timeJump < 0) throw new Error("error");
-              if (timeJump > 2) {
-                console.log("time jump ", timeJump, obs.title);
-                // console.log(observationStart, observationEnd);
-                observationStart = --observationEnd;
-                timeDifference = 0;
-                break;
-              }
-              timeDifference =
+              if (timeJump > 1) {
+                timeDifference =
                 (new Date(obs.occurrencesDates[observationEnd]) -
                   new Date(obs.occurrencesDates[observationStart])) /
                 1000;
-              // he must be caught in the act for 5 seconds
-              if (timeDifference < 5) continue;
-
-              // console.log(tempObservation);
-              // console.log(observation);
-              // if (observation.title != obs.tempObservation) continue;
-              // console.log('just saying hi')
+              if (timeDifference < 2) continue;
 
               studentReports[student.studentId].observations[
                 tempObservation
@@ -141,14 +234,13 @@ class teacher_controller {
                 from: obs.occurrencesDates[observationStart],
                 to: obs.occurrencesDates[observationEnd],
               });
-
-              // occurrenceCount++;
-              // console.log(observationStart, observationEnd);
-              observationStart = --observationEnd;
-              // console.log(obs.title);
-              // console.log(timeDifference);
-              timeDifference = 0;
-              break;
+                console.log("time jump ", timeJump, obs.title);
+                observationStart = --observationEnd;
+                timeDifference = 0;
+                
+                break;
+              }
+              
             }
           }
           // if (occurrenceCount > 1)
@@ -176,9 +268,8 @@ class teacher_controller {
       }
 
       const { start, end } = teacher_controller.getStartAndEndOfDay(
-        date
+        new Date(date)
       );
-      console.log(start,end)
       const calls = await Call.find({
         createdAt: {
           $gte: start,
@@ -186,6 +277,7 @@ class teacher_controller {
         },
         courseId: courseId,
       }).sort({ createdAt: -1 });
+      console.log(calls);
       if (!calls.length) {
         return res
           .status(404)
@@ -224,25 +316,6 @@ class teacher_controller {
       const { callId } = req.query;
       const call = await Call.findById(callId);
       if (!call) return res.status(404).json({ message: "no call was found" });
-      // if (!date || !courseId) {
-      //   return res.status(400).send("Date and courseId are required");
-      // }
-
-      // const { start, end } = getStartAndEndOfDay(new Date(date));
-
-      // const calls = await Call.find({
-      //   createdAt: {
-      //     $gte: start,
-      //     $lte: end,
-      //   },
-      //   courseId,
-      // });
-
-      // if (!calls.length) {
-      //   return res
-      //     .status(404)
-      //     .send("No calls found for the specified date and courseId");
-      // }
       const totalLectureTime =
         new Date(call.endedAt) - new Date(call.createdAt);
       // const totalLectureTime = teacher_controller.calculateTotalLectureTime(calls);
@@ -287,37 +360,40 @@ class teacher_controller {
     }
   }
   static async createLesson(req, res) {
-    try {
-      const { courseId, teacherId } = req.body;
-      const { email, password } = req.headers;
-      const objectId = await get_id.teacher(email, password);
-      if (objectId.id_teacher != teacherId)
-        return res.status(400).json({ message: "ids do not match" });
-      let calls = await Call.find({ teacherId, onGoing: true });
-      console.log(
-        `found ${calls?.length} calls ongoing shutting them down ...`
-      );
-      for (let call of calls) {
-        call.onGoing = false;
-        call.endedAt = new Date();
-        await call.save();
-      }
-      await course_model.checkTeacherGivesCourse(courseId, teacherId);
-      const students = await studentmodels.getstudents_by_course_id(courseId);
-      const ids = students.map((student) => ({ studentId: student.id_stu }));
+  try {
+    const { courseId, teacherId } = req.body;
+    const { email, password } = req.headers;
+    const objectId = await get_id.teacher(email, password);
+    if (objectId.id_teacher != teacherId)
+      return res.status(400).json({ message: "ids do not match" });
 
-      const call = await Call.create({
-        courseId,
-        teacherId,
-        students: ids,
-        onGoing: true,
-      });
-      return res.json(call);
-    } catch (err) {
-      console.error(err);
-      return res.status(400).json({ message: err.message });
+    // Shut down any ongoing calls for this teacher
+    let calls = await Call.find({ teacherId, onGoing: true });
+    console.log(`found ${calls?.length} calls ongoing shutting them down ...`);
+    for (let call of calls) {
+      call.onGoing = false;
+      call.endedAt = new Date();
+      await call.save();
     }
+
+    // Verify the teacher actually teaches this course
+    await course_model.checkTeacherGivesCourse(courseId, teacherId);
+
+    const students = await studentmodels.getstudents_by_course_id(courseId);
+    const ids = students.map((student) => ({ studentId: student.id_stu }));
+
+    const call = await Call.create({
+      courseId,
+      teacherId,
+      students: ids,
+      onGoing: true,
+    });
+    return res.json(call);
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({ message: err.message });
   }
+}
 
   static async checkTeacherGivesCourse(req, res) {
     try {
@@ -433,20 +509,16 @@ class teacher_controller {
 
   static async update_date(req, res) {
     try {
+      console.log(req.body);
       const id_teacher = req.body.id_teacher;
-      const course_name = req.body.course_name;
-      const course_description = req.body.course_description;
       const id_course = req.body.id_course;
-      let first_course = req.body.first_course;
-      let end_course = req.body.end_course
-      
+      const first_course = req.body.first_course;
+      const end_course = req.body.end_course;
       const date1 = req.body.date1;
       const date2 = req.body.date2;
       var email = req.headers.email;
       var password = req.headers.password;
-      console.log(req.body)
-      console.log(first_course,end_course)
-        var teacher_id = await get_id.teacher(email, password);
+      var teacher_id = await get_id.teacher(email, password);
       if (req.body.id_teacher != teacher_id.id_teacher)
         return res.status(400).json({ message: "ids do not match" });
       const validatedates = await course_model.validatedates(
@@ -454,17 +526,16 @@ class teacher_controller {
         end_course
       );
       const update_d = await course_model.update(
-        course_name,
-        course_description,
         first_course,
         end_course,
         date1,
         date2,
         id_course
       );
+      console.log(update_d);
       return res.json(update_d);
     } catch (err) {
-      console.log(err.message);
+      // console.log(err)
       return res.status(400).json({ message: err.message });
     }
   }
@@ -507,5 +578,10 @@ class teacher_controller {
       return res.status(400).json({ message: err.message });
     }
   }
+
+
+  //*********************************************************** */
+
+
 }
 module.exports = teacher_controller;

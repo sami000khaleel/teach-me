@@ -1,6 +1,86 @@
-.crt
-.key
-images
-snapshots
-node_modules
-uploads
+# ================================
+# Secrets
+# ================================
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ================================
+# Node
+# ================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ================================
+# Build output
+# ================================
+dist/
+build/
+out/
+.vite/
+
+# ================================
+# Certificates & keys
+# ================================
+*.key
+*.crt
+*.pem
+certs/
+
+# ================================
+# Uploads / runtime data
+# ================================
+server/uploads/
+server/snapshots/
+server/images/*
+server/lectures/*
+!server/images/.gitkeep
+!server/lectures/.gitkeep
+
+# ================================
+# Logs
+# ================================
+logs/
+*.log
+
+# ================================
+# Editor / OS
+# ================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# ================================
+# Archives / backups
+# ================================
+*.rar
+*.zip
+*.7z
+*.tar
+*.tar.gz
+
+# ================================
+# Coverage / cache
+# ================================
+coverage/
+.cache/
+.parcel-cache/
+
+# ================================
+# Python (AI service)
+# ================================
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# ================================
+# Misc project files
+# ================================
+project-bundle.txt

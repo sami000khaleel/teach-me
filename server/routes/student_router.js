@@ -1,4 +1,3 @@
-const express=require('express')
 const router=require('express').Router();
 const student_controller =require('../controllers/stu_controller')
 router.post('/addstudent',student_controller.addnewstudent)

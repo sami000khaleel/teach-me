@@ -54,6 +54,18 @@ class teacher {
 }
 
 
+static async add_idCourse(id_course)
+{
+
+  const result= await executeQuery('insert into lectures (id_course) values(?)',[id_course]);
+  if (result) 
+  return {id:result.insertId};
+}
+static async addlectureUrl(lectureUrl,id_lecture){
+  await executeQuery(`update lectures set lecture=? where id_lecture=?`, [lectureUrl,id_lecture])
+}
+
+
 
 }
 module.exports = teacher
