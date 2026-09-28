@@ -1,63 +1,68 @@
-version: "3.9"
+# ===================================================================
+# TeachMe — Docker Compose stack
+#   - mysql  : relational data
+#   - mongo  : session / log data
+#   - server : Node backend + serves the built React frontend
+# ===================================================================
 
 services:
   # ===================================================================
-  # MySQL — relational data (users, courses, lectures, relations)
+  # MySQL
   # ===================================================================
   mysql:
     image: mysql:8.0
     container_name: teachme-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?MYSQL_DATABASE is required}
+      MYSQL_USER: ${MYSQL_USER:?MYSQL_USER is required}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
     ports:
-      - "3307:3306"   # 3307 on host avoids conflict with local MySQL
+      - "${MYSQL_HOST_PORT:-3307}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./server/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      # Mount the WHOLE db folder — MySQL runs every .sql alphabetically.
+      - ./server/db:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-p${MYSQL_ROOT_PASSWORD}",
-        ]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p\"$$MYSQL_ROOT_PASSWORD\""]
       interval: 10s
       timeout: 5s
       retries: 10
+      start_period: 30s
     networks:
       - teachme
 
   # ===================================================================
-  # MongoDB — session data (calls, logs, observations, messages)
+  # MongoDB
   # ===================================================================
   mongo:
     image: mongo:7.0
     container_name: teachme-mongo
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:?MONGO_INITDB_ROOT_USERNAME is required}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:?MONGO_INITDB_ROOT_PASSWORD is required}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:?MONGO_INITDB_DATABASE is required}
     ports:
-      - "27018:27017"   # 27018 on host avoids conflict with local MongoDB
+      - "${MONGO_HOST_PORT:-27018}:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     networks:
       - teachme
 
-   # ===================================================================
-  # Server — Node.js backend + serves built React frontend
+  # ===================================================================
+  # Server — Node backend + serves built React frontend
   # ===================================================================
   server:
     build:
-      context: .                    # project root (needs browser/ and server/)
+      context: .
       dockerfile: Dockerfile
     container_name: teachme-server
     restart: unless-stopped
@@ -65,37 +70,36 @@ services:
       mysql:
         condition: service_healthy
       mongo:
-        condition: service_started
+        condition: service_healthy
     environment:
       PORT: 3000
-      NODE_ENV: ${NODE_ENV}
+      NODE_ENV: ${NODE_ENV:-development}
 
-      # MySQL
+      # ---- MySQL (service name + internal port) ----
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USER: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_NAME: ${MYSQL_DATABASE}
 
-      # MongoDB (with auth)
+      # ---- MongoDB — full URI, no host/port juggling ----
       MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}?authSource=admin
 
-      # AI service
-      AI_SERVICE_URL: http://ai:5000
+      # ---- AI ----
+      AI_SERVICE_URL: ${AI_SERVICE_URL:-http://ai:5000}
 
-      # CORS — allow everything in local dev
-      CLIENT_ORIGIN: "*"
+      # ---- CORS ----
+      CLIENT_ORIGIN: ${CLIENT_ORIGIN:-http://localhost:3000}
 
-      # HTTPS — off inside Docker (localhost is a secure context)
+      # ---- HTTPS (off inside Docker) ----
       USE_HTTPS: "false"
 
-      # Email
+      # ---- Email ----
       GMAIL_USER: ${GMAIL_USER}
       GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
     ports:
-      - "${SERVER_PORT}:3000"
+      - "${SERVER_PORT:-3000}:3000"
     volumes:
-      # Persist uploaded files across container restarts
       - ./server/images:/app/images
       - ./server/lectures:/app/lectures
       - ./server/snapshots:/app/snapshots
@@ -103,7 +107,7 @@ services:
       - teachme
 
 # ===================================================================
-# Named volumes (managed by Docker)
+# Named volumes
 # ===================================================================
 volumes:
   mysql_data:
