@@ -33,7 +33,7 @@ Teach-Me is a complete real-time teaching platform I designed and built end-to-e
 
 I built this because I wanted to prove to myself that I could. Every layer — the React UI, the Node backend, the WebRTC signaling, the observation algorithm, the database design — is mine.
 
-**[📥 Try it locally in 3 commands →](#-run-it-in-60-seconds)**
+**[📥 Try it locally in 3 commands →](#-run-it-in-60-seconds)**  
 **[🎥 Watch the 2-minute demo →](https://1drv.ms/v/c/ca524006c0ac4fc8/ETmrB7oF_75PgMy_lPOCcLsBkOuhSDVU0okXV8RwZPg4vg?e=MIHYhl)**
 
 ---
@@ -81,35 +81,35 @@ I built this because I wanted to prove to myself that I could. Every layer — t
 
 ```mermaid
 flowchart LR
-    subgraph Browser["🌐 Browser (React + Vite)"]
+    subgraph Browser["Browser - React + Vite"]
         UI[UI Pages]
         RTC[WebRTC PeerConnections]
-        SNAP[Frame Capture<br/>ImageCapture / Canvas]
+        SNAP[Frame Capture]
     end
 
-    subgraph Server["🖥 Node.js + Express + Socket.IO"]
+    subgraph Server["Node.js + Express + Socket.IO"]
         API[REST API]
         SIO[Socket.IO Hub]
-        ALGO[Observation<br/>Clustering Algorithm]
+        ALGO[Observation Clustering]
         DIST[Serves built React app]
     end
 
-    subgraph AI["🐍 Python Flask AI Service"]
-        CV[Computer Vision<br/>Face + Pose + Action]
+    subgraph AI["Python Flask AI Service"]
+        CV[Computer Vision]
     end
 
-    subgraph DB["🗄 Data Layer"]
-        MY[(MySQL<br/>relational)]
-        MG[(MongoDB<br/>live session)]
+    subgraph DB["Data Layer"]
+        MY[(MySQL)]
+        MG[(MongoDB)]
     end
 
     UI -->|REST| API
     RTC <-->|Signaling| SIO
-    SNAP -->|POST /check_frame| API
+    SNAP -->|POST check_frame| API
     API -->|relay frame| CV
     CV -->|observation label| API
     API -->|save| MG
-    API <-->|users, courses| MY
+    API <-->|users and courses| MY
     ALGO -->|read logs| MG
     ALGO -->|response| API
     DIST --> UI
@@ -135,10 +135,10 @@ WebRTC can't find peers on its own — it needs a **signaling channel**. I built
 
 ```mermaid
 sequenceDiagram
-    participant T as 👨‍🏫 Teacher
-    participant S as 🔌 Server
-    participant S1 as 🧑‍🎓 Student A
-    participant S2 as 🧑‍🎓 Student B
+    participant T as Teacher
+    participant S as Server
+    participant S1 as Student A
+    participant S2 as Student B
 
     T->>S: create_lesson (REST)
     S-->>T: callId
@@ -151,10 +151,10 @@ sequenceDiagram
     S->>T: request-offer (studentId=A)
 
     T->>T: RTCPeerConnection.createOffer()
-    T->>S: emit teacher-offer (offer, callId)
+    T->>S: emit teacher-offer
     S->>S1: teacher-offer
 
-    S1->>S1: setRemoteDescription(offer)
+    S1->>S1: setRemoteDescription
     S1->>S1: createAnswer()
     S1->>S: emit student-answer
     S->>T: student-answer (from A)
@@ -166,7 +166,7 @@ sequenceDiagram
         S->>T: student-candidate
     end
 
-    Note over T,S1: ✅ WebRTC connection established (P2P media)
+    Note over T,S1: WebRTC connection established
 ```
 
 Each student gets their **own** `RTCPeerConnection` from the teacher — so the teacher's browser maintains N connections for N students. This is what makes it "multi-peer."
@@ -177,20 +177,21 @@ While the lesson runs, each student's browser captures a frame every `1/fps` sec
 
 ```mermaid
 flowchart LR
-    V[📹 Student video] -->|every 500ms| C{ImageCapture<br/>available?}
+    V[Student video] -->|every 500ms| C{ImageCapture available?}
     C -->|yes| IC[ImageCapture.takePhoto]
     C -->|no| CV[Canvas.drawImage]
     IC --> B[Blob]
     CV --> B
-    B -->|POST multipart| API[/api/student/check_frame/]
-    API -->|forward| AI[Flask /api/observation]
+    B -->|POST multipart| API[api check_frame]
+    API -->|forward| AI[Flask observation]
     AI -->|label| API
-    API -->|push timestamp| MG[(MongoDB<br/>Call.students[].observations)]
+    API -->|push timestamp| MG[MongoDB observations]
 ```
 
 The backend is a **thin relay** — it does not process images. This keeps Node fast and lets me swap the AI model without touching the app.
 
 The AI service returns one of five labels:
+
 - `attentive` — student is paying attention
 - `notAttentive` — looking away
 - `usingPhone` — phone detected
@@ -223,13 +224,13 @@ So I wrote an algorithm that walks the timestamps and clusters them into **conti
 
 ```mermaid
 flowchart TD
-    A[Sorted timestamps] --> B[start = ts[0]]
-    B --> C{next ts - prev ts<br/>≤ 2s?}
+    A[Sorted timestamps] --> B[start equals first]
+    B --> C{next minus prev within 2s?}
     C -->|yes| D[extend cluster]
-    C -->|no| E{cluster duration<br/>≥ 2s?}
-    E -->|yes| F[emit interval<br/>from: start, to: prev]
+    C -->|no| E{cluster duration at least 2s?}
+    E -->|yes| F[emit interval]
     E -->|no| G[discard noise]
-    F --> H[start = next ts]
+    F --> H[start equals next]
     G --> H
     D --> C
     H --> C
@@ -241,7 +242,7 @@ The output is a clean list of `{ from, to }` intervals per observation type, plu
 
 Chat reuses the same Socket.IO connection as the signaling. Messages are:
 
-1. Emitted by the student with `message` event
+1. Emitted by the student with the `message` event
 2. Persisted into `Call.messages[]` in MongoDB
 3. Broadcast to the teacher and all other students in the call
 
@@ -254,7 +255,8 @@ The chat is **scoped to the call** — when a lesson ends, the message history i
 > **Prerequisites:** Docker Desktop is installed and running.
 
 ```bash
-git clone <your-repo-url> teach-me && cd teach-me
+git clone https://github.com/sami000khaleel/teach-me.git
+cd teach-me
 
 cp .env.example .env          # then fill in GMAIL_APP_PASSWORD (optional)
 
@@ -404,7 +406,7 @@ I'm **Sami Khaleel** — a full-stack developer based in Jülich, NRW, Germany.
 I built Teach-Me to prove to myself that I could ship something real, not another tutorial. If you're reading this because you're hiring, **I'd love to talk**. I'm available immediately and I speak English (C1) and German (B2).
 
 - 📧 **Email:** sami000khaleel@gmail.com
-- 💼 **LinkedIn:** [linkedin.com/in/sami-khaleel](https://linkedin.com/in/)
+- 💼 **LinkedIn:** *(add your LinkedIn URL here)*
 - 🐙 **GitHub:** [@sami000khaleel](https://github.com/sami000khaleel)
 - 📍 **Location:** Jülich, NRW (open to Köln, Aachen, Düsseldorf, remote)
 
