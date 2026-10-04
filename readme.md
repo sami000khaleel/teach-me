@@ -406,9 +406,7 @@ I'm **Sami Khaleel** — a full-stack developer based in Jülich, NRW, Germany.
 I built Teach-Me to prove to myself that I could ship something real, not another tutorial. If you're reading this because you're hiring, **I'd love to talk**. I'm available immediately and I speak English (C1) and German (B2).
 
 - 📧 **Email:** sami000khaleel@gmail.com
-- 💼 **LinkedIn:** *(add your LinkedIn URL here)*
 - 🐙 **GitHub:** [@sami000khaleel](https://github.com/sami000khaleel)
-- 📍 **Location:** Jülich, NRW (open to Köln, Aachen, Düsseldorf, remote)
 
 **[🎥 Watch the demo →](https://1drv.ms/v/c/ca524006c0ac4fc8/ETmrB7oF_75PgMy_lPOCcLsBkOuhSDVU0okXV8RwZPg4vg?e=MIHYhl)**
 
