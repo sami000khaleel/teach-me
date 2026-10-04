@@ -29,7 +29,6 @@ Teach-Me is a complete real-time teaching platform I designed and built end-to-e
 - 📊 **Automated attendance reports** — an algorithm clusters thousands of raw timestamps into human-readable "the student was on their phone for 45 seconds" intervals. Plain English, computed from raw data.
 - 💬 **Real-time chat** built on top of the same Socket.IO layer as the video signaling.
 - 🗄️ **Two databases** doing different jobs — MySQL for relational data, MongoDB for live session state. Chosen deliberately, not by accident.
-- 📦 **Dockerized** — `docker compose up` and it runs.
 
 I built this because I wanted to prove to myself that I could. Every layer — the React UI, the Node backend, the WebRTC signaling, the observation algorithm, the database design — is mine.
 
