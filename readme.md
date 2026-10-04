@@ -208,37 +208,6 @@ The chat is **scoped to the call** — when a lesson ends, the message history i
 
 ---
 
-## 🚀 Run it in 60 seconds
-
-> **Prerequisites:** Docker Desktop is installed and running.
-
-```bash
-git clone https://github.com/sami000khaleel/teach-me.git
-cd teach-me
-
-cp .env.example .env          # then fill in GMAIL_APP_PASSWORD (optional)
-
-docker compose up --build
-```
-
-That's it. Open **http://localhost:3000**.
-
-The first build takes ~3 minutes (it compiles the React app and installs dependencies for Node). Subsequent starts are instant.
-
-### Quick walkthrough to see it working
-
-1. **Sign up as a teacher** → create a course
-2. **Open an incognito window** → sign up as a student → enroll in that course
-3. **As teacher:** click *Start Lecture* → click the camera icon
-4. **As student:** click *Attend Lesson*
-5. **Watch the magic:** the student's video appears on the teacher's screen, and vice versa
-6. **Chat:** type a message as the student, see it appear on the teacher's side
-7. **End the call**, then open *Reports* — you'll see the attendance record
-
-> **Why incognito?** Browsers lock the camera to one tab at a time. Two tabs in the same browser will fail to establish WebRTC. Use two different browsers or an incognito window.
-
----
-
 ## 🛠 Tech Stack
 
 | Layer | Technologies |
