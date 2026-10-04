@@ -217,7 +217,6 @@ The chat is **scoped to the call** — when a lesson ends, the message history i
 | **Real-time** | WebRTC (native), Socket.IO, REST |
 | **Databases** | MySQL 8 (relational), MongoDB 7 (session state) |
 | **AI (optional)** | Python 3.11, Flask, OpenCV, MediaPipe, face_recognition |
-| **Infrastructure** | Docker, Docker Compose, multi-stage builds |
 
 ---
 
