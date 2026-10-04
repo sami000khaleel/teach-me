@@ -81,7 +81,6 @@ flowchart LR
 | **MySQL for relational data** | Users, courses, enrollments — all naturally relational. Foreign keys enforce integrity. |
 | **MongoDB for live session state** | A `Call` document grows unboundedly during a lesson (messages, logs, observations). Embedding it in a single document is faster than joins and matches the access pattern. |
 | **AI service as optional** | The backend calls the AI service with a 5-second timeout. If it's down, the lesson continues with `attentive` as the default. **Nothing breaks.** |
-| **Docker for orchestration** | Two databases + Node + Python is a lot of moving parts. One command brings everything up. |
 
 ---
 
