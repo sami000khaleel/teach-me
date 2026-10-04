@@ -36,46 +36,6 @@ I built this because I wanted to prove to myself that I could. Every layer — t
 **[🎥 Watch the 2-minute demo →](https://1drv.ms/v/c/ca524006c0ac4fc8/ETmrB7oF_75PgMy_lPOCcLsBkOuhSDVU0okXV8RwZPg4vg?e=MIHYhl)**
 
 ---
-
-## 📸 Screenshots
-
-<table>
-  <tr>
-    <td width="50%">
-      <img src="docs/login.png" alt="Login" />
-      <p align="center"><b>Authentication</b> — signup with profile image, login, password recovery, email verification</p>
-    </td>
-    <td width="50%">
-      <img src="docs/home.png" alt="Home" />
-      <p align="center"><b>Course catalog</b> — search, filter, enroll, dark mode</p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <img src="docs/course.png" alt="Course detail" />
-      <p align="center"><b>Course page</b> — weekly schedule, enrolled students, live lecture button</p>
-    </td>
-    <td width="50%">
-      <img src="docs/room.png" alt="Live room" />
-      <p align="center"><b>Live lesson</b> — teacher streaming to multiple students via WebRTC, with chat and per-student status</p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <img src="docs/reports.png" alt="Reports" />
-      <p align="center"><b>Reports</b> — attendance summary per lesson, per student, per day</p>
-    </td>
-    <td width="50%">
-      <img src="docs/report-detail.png" alt="Report detail" />
-      <p align="center"><b>Report detail</b> — every observation the AI made, clustered into time intervals</p>
-    </td>
-  </tr>
-</table>
-
-> **Note:** drop your screenshots into a `docs/` folder at the project root — the README will pick them up automatically.
-
----
-
 ## 🏗 Architecture
 
 ```mermaid
