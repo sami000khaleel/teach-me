@@ -32,7 +32,7 @@ Teach-Me is a complete real-time teaching platform I designed and built end-to-e
 
 I built this because I wanted to prove to myself that I could. Every layer — the React UI, the Node backend, the WebRTC signaling, the observation algorithm, the database design — is mine.
 
-**[🎥 Watch the 2-minute demo →](https://1drv.ms/v/c/ca524006c0ac4fc8/ETmrB7oF_75PgMy_lPOCcLsBkOuhSDVU0okXV8RwZPg4vg?e=MIHYhl)**
+**[🎥 Watch the demo →](https://1drv.ms/v/c/ca524006c0ac4fc8/ETmrB7oF_75PgMy_lPOCcLsBkOuhSDVU0okXV8RwZPg4vg?e=MIHYhl)**
 
 ---
 ## 🏗 Architecture
