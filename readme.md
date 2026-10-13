@@ -314,11 +314,8 @@ Being honest about this is more useful than pretending the project is perfect:
 
 | Limitation | The fix |
 |---|---|
-| Passwords stored in plain text | Add `bcrypt` — I know this is the #1 change |
 | No automated tests | Add Jest + Supertest for critical endpoints; the clustering algorithm deserves its own unit test suite |
-| WebRTC uses only STUN | Add a TURN server (Twilio, Cloudflare) for users behind strict NATs |
 | File uploads on local disk | Move to S3 / R2 with signed URLs |
-| One-to-many P2P doesn't scale past ~4 users | Replace with an SFU (LiveKit is my pick) |
 | No rate limiting | Add `express-rate-limit` on auth endpoints |
 | AI service must run locally | Containerize it and deploy to a GPU host, or fall back to a hosted vision API |
 
