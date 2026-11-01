@@ -47,12 +47,33 @@ const ALLOW_CREDENTIALS = CLIENT_ORIGIN !== "*";
 
 /**
  * Build the MongoDB connection URI.
- *   • If MONGO_URI is provided (Docker path), use it verbatim.
- *   • Otherwise assemble from parts (host path).
+ *
+ *   • Atlas (mongodb+srv): set MONGO_CLUSTER + MONGO_USER + MONGO_PASSWORD + MONGO_DB.
+ *       mongodb+srv://USER:PASS@CLUSTER/DB?retryWrites=true&w=majority
+ *
+ *   • Explicit URI: set MONGO_URI and it is used verbatim.
+ *
+ *   • Local / Docker parts: set MONGO_HOST / MONGO_PORT / MONGO_DB
+ *       (and optionally MONGO_USER / MONGO_PASSWORD).
  */
 function buildMongoUri() {
+  // 1) Atlas SRV form
+  if (process.env.MONGO_CLUSTER) {
+    const user = process.env.MONGO_USER || "";
+    const pass = process.env.MONGO_PASSWORD || "";
+    const db = process.env.MONGO_DB || "teachMe";
+    const cluster = process.env.MONGO_CLUSTER;
+
+    if (user && pass) {
+      return `mongodb+srv://${user}:${encodeURIComponent(pass)}@${cluster}/${db}?retryWrites=true&w=majority`;
+    }
+    return `mongodb+srv://${cluster}/${db}?retryWrites=true&w=majority`;
+  }
+
+  // 2) Explicit URI
   if (process.env.MONGO_URI) return process.env.MONGO_URI;
 
+  // 3) Local / Docker parts
   const host = process.env.MONGO_HOST || "127.0.0.1";
   const port = process.env.MONGO_PORT || "27017";
   const db =
