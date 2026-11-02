@@ -6,10 +6,10 @@ const fs = require('fs');
 const path = require('path');
 
 const DB = {
-  host: 'host',
-  port: 13397,
-  user: 'avnadmin',
-  password: 'password',
+  host: '',
+  port: ,
+  user: '',
+  password: '',
   // database: 'TeachMe',   <-- removed: DB is created below
   ssl: {
     ca: fs.readFileSync(path.join(__dirname, 'ca.pem')),
