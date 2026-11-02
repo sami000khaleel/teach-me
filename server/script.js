@@ -6,10 +6,10 @@ const fs = require('fs');
 const path = require('path');
 
 const DB = {
-  host: 'mysql-3bac93a2-samihellstrong-fa30.a.aivencloud.com',
+  host: 'host',
   port: 13397,
   user: 'avnadmin',
-  password: 'AVNS_swQ2st22HXmH5nRHsI_',
+  password: 'password',
   // database: 'TeachMe',   <-- removed: DB is created below
   ssl: {
     ca: fs.readFileSync(path.join(__dirname, 'ca.pem')),
