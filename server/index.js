@@ -1,22 +1,19 @@
 // ===================================================================
-// TeachMe — Node.js server entry point (production-ready)
+// TeachMe — Node.js server entry point (PRODUCTION / Render-only)
 //   • REST routes under /api/student and /api/teacher
 //   • Socket.IO for realtime messaging
 //   • Serves built React frontend from ./dist
 //   • MongoDB (Mongoose) + MySQL (via db.js)
 //
-// TLS: DO NOT enable USE_HTTPS in production (Render/Heroku/etc.
-// terminate TLS at the proxy). Use USE_HTTPS=true only when running
-// the app directly on a host with your own Let's Encrypt certs.
+// TLS: Render terminates TLS at its edge and forwards plain HTTP.
+//      This file NEVER creates an HTTPS server. Do not add USE_HTTPS.
 // ===================================================================
 
 require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
-const https = require("https");
 const http = require("http");
-const fs = require("fs");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -28,7 +25,7 @@ const teacher_router = require("./routes/teacher_router");
 const socketHandler = require("./socketHandler");
 
 // -------------------------------------------------------------------
-// Configuration helpers
+// Configuration
 // -------------------------------------------------------------------
 
 function parseOrigins(raw) {
@@ -38,12 +35,6 @@ function parseOrigins(raw) {
 
 const CLIENT_ORIGIN = parseOrigins(process.env.CLIENT_ORIGIN);
 const ALLOW_CREDENTIALS = CLIENT_ORIGIN !== "*";
-
-const IS_PROD = process.env.NODE_ENV === "production";
-
-// -------------------------------------------------------------------
-// MongoDB URI builder (unchanged logic, just cleaned)
-// -------------------------------------------------------------------
 
 function buildMongoUri() {
   if (process.env.MONGO_CLUSTER) {
@@ -68,7 +59,6 @@ function buildMongoUri() {
 }
 
 function redactUri(uri) {
-  // Redact user:pass@ and any query-string token values
   return uri
     .replace(/\/\/[^@]*@/, "//***:***@")
     .replace(/([?&](?:password|token|secret)=)[^&]+/gi, "$1***");
@@ -79,7 +69,7 @@ function redactUri(uri) {
 // -------------------------------------------------------------------
 
 const app = express();
-app.set("trust proxy", 1); // required behind Render/Heroku proxies
+app.set("trust proxy", 1); // Render's reverse proxy
 app.use(helmet());
 app.use(
   cors({
@@ -91,7 +81,7 @@ app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 // -------------------------------------------------------------------
-// MongoDB connection — do not kill the process on transient failure
+// MongoDB
 // -------------------------------------------------------------------
 
 const MONGO_URI = buildMongoUri();
@@ -102,36 +92,16 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => {
     console.error("❌ MongoDB connection failed:", err.message);
-    // In production, do NOT process.exit — let the process stay up so
-    // the platform can restart it cleanly. In dev, exit to surface the bug.
-    if (!IS_PROD) process.exit(1);
+    // Do NOT process.exit in production — let Render keep the process
+    // alive and restart it cleanly if Mongo is temporarily unreachable.
   });
 
 // -------------------------------------------------------------------
-// HTTP / HTTPS server
+// HTTP server (always plain HTTP — Render handles TLS)
 // -------------------------------------------------------------------
 
-const useHttps = process.env.USE_HTTPS === "true" && !IS_PROD;
-let server;
-
-if (useHttps) {
-  try {
-    const serverOptions = {
-      ca: fs.readFileSync(process.env.SSL_CA_PATH),
-      key: fs.readFileSync(process.env.SSL_KEY_PATH),
-      cert: fs.readFileSync(process.env.SSL_CERT_PATH),
-    };
-    server = https.createServer(serverOptions, app);
-    console.log("🔒 HTTPS server enabled (self-managed certs)");
-  } catch (err) {
-    console.error("❌ Failed to load TLS certs:", err.message);
-    console.error("   Falling back to HTTP. Check SSL_* paths in .env");
-    server = http.createServer(app);
-  }
-} else {
-  server = http.createServer(app);
-  console.log("🔓 HTTP server enabled (expecting TLS-terminating proxy in production)");
-}
+const server = http.createServer(app);
+console.log("🔓 HTTP server enabled (TLS terminated by Render proxy)");
 
 // -------------------------------------------------------------------
 // Socket.IO
@@ -143,8 +113,6 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
     credentials: ALLOW_CREDENTIALS,
   },
-  // If your client connects over wss:// behind Render's proxy, keep defaults.
-  // Do NOT force transports: ["websocket"] — polling fallback is useful.
 });
 
 io.on("connection", (socket) => {
@@ -174,13 +142,12 @@ app.get(/^\/(?!api\/).*/, (req, res) => {
 // -------------------------------------------------------------------
 
 const PORT = Number(process.env.PORT) || 3000;
-const HOST = process.env.HOST || "0.0.0.0"; // bind all interfaces in Docker
+const HOST = "0.0.0.0";
 
 server.listen(PORT, HOST, () => {
-  console.log(`🚀 Server listening on http${useHttps ? "s" : ""}://${HOST}:${PORT}`);
+  console.log(`🚀 Server listening on http://${HOST}:${PORT}`);
   if (localIpAddress) console.log("   Local IPs:", localIpAddress);
 
-  // ---------- AI Service Health Check (non-blocking) ----------
   const aiUrl = process.env.AI_SERVICE_URL;
   if (!aiUrl) {
     console.warn("⚠️  AI_SERVICE_URL not set — face observation will be skipped");
@@ -226,10 +193,6 @@ async function shutdown(signal) {
 
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));
-
-// -------------------------------------------------------------------
-// Global error handling
-// -------------------------------------------------------------------
 
 process.on("uncaughtException", (err) => {
   console.error("❌ Uncaught Exception:", err);
