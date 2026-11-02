@@ -1,14 +1,4 @@
-// ===================================================================
-// TeachMe — Node.js server entry point
-//   - Serves REST routes under /api/student and /api/teacher
-//   - Hosts Socket.IO for realtime messaging
-//   - Serves the built React frontend from ./dist
-//   - Connects to MongoDB (sessions) and MySQL (relational via db.js)
-//
-// Runs both:
-//   • In Docker  → env vars injected by docker-compose.yml
-//   • On host    → env vars loaded from server/.env
-// ===================================================================
+
 
 require("dotenv").config();
 
@@ -45,17 +35,6 @@ function parseOrigins(raw) {
 const CLIENT_ORIGIN = parseOrigins(process.env.CLIENT_ORIGIN);
 const ALLOW_CREDENTIALS = CLIENT_ORIGIN !== "*";
 
-/**
- * Build the MongoDB connection URI.
- *
- *   • Atlas (mongodb+srv): set MONGO_CLUSTER + MONGO_USER + MONGO_PASSWORD + MONGO_DB.
- *       mongodb+srv://USER:PASS@CLUSTER/DB?retryWrites=true&w=majority
- *
- *   • Explicit URI: set MONGO_URI and it is used verbatim.
- *
- *   • Local / Docker parts: set MONGO_HOST / MONGO_PORT / MONGO_DB
- *       (and optionally MONGO_USER / MONGO_PASSWORD).
- */
 function buildMongoUri() {
   // 1) Atlas SRV form
   if (process.env.MONGO_CLUSTER) {
@@ -195,9 +174,8 @@ app.get(/^\/(?!api\/).*/, (req, res) => {
 // -------------------------------------------------------------------
 
 const PORT = Number(process.env.PORT) || 3000;
-const HOST = process.env.HOST || "0.0.0.0"; // bind all interfaces inside Docker
 
-server.listen(PORT, HOST, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Server running on http${useHttps ? "s" : ""}://${HOST}:${PORT}`);
   if (localIpAddress) {
     console.log("   Local IPs:", localIpAddress);
