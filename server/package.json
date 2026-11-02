@@ -50,6 +50,7 @@
     "has-flag": "^4.0.0",
     "has-proto": "^1.0.1",
     "has-symbols": "^1.0.3",
+    "helmet": "^8.3.0",
     "http-errors": "^1.6.3",
     "iconv-lite": "^0.4.24",
     "inherits": "^2.0.3",
