@@ -1,0 +1,10 @@
+.env
+uploads
+snapshots
+*.crt
+*.key
+*.pem
+script.js
+images
+db
+node_modules
