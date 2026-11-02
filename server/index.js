@@ -1,4 +1,14 @@
-
+// ===================================================================
+// TeachMe — Node.js server entry point (production-ready)
+//   • REST routes under /api/student and /api/teacher
+//   • Socket.IO for realtime messaging
+//   • Serves built React frontend from ./dist
+//   • MongoDB (Mongoose) + MySQL (via db.js)
+//
+// TLS: DO NOT enable USE_HTTPS in production (Render/Heroku/etc.
+// terminate TLS at the proxy). Use USE_HTTPS=true only when running
+// the app directly on a host with your own Let's Encrypt certs.
+// ===================================================================
 
 require("dotenv").config();
 
@@ -10,6 +20,7 @@ const fs = require("fs");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const helmet = require("helmet");
 
 const { localIpAddress } = require("./utilities");
 const student_router = require("./routes/student_router");
@@ -20,59 +31,47 @@ const socketHandler = require("./socketHandler");
 // Configuration helpers
 // -------------------------------------------------------------------
 
-/**
- * Parse CLIENT_ORIGIN into an array so CORS can accept multiple origins.
- * "*" stays as a wildcard string (no credentials allowed in that case).
- */
 function parseOrigins(raw) {
   if (!raw || raw.trim() === "*") return "*";
-  return raw
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  return raw.split(",").map((s) => s.trim()).filter(Boolean);
 }
 
 const CLIENT_ORIGIN = parseOrigins(process.env.CLIENT_ORIGIN);
 const ALLOW_CREDENTIALS = CLIENT_ORIGIN !== "*";
 
+const IS_PROD = process.env.NODE_ENV === "production";
+
+// -------------------------------------------------------------------
+// MongoDB URI builder (unchanged logic, just cleaned)
+// -------------------------------------------------------------------
+
 function buildMongoUri() {
-  // 1) Atlas SRV form
   if (process.env.MONGO_CLUSTER) {
     const user = process.env.MONGO_USER || "";
     const pass = process.env.MONGO_PASSWORD || "";
     const db = process.env.MONGO_DB || "teachMe";
     const cluster = process.env.MONGO_CLUSTER;
-
-    if (user && pass) {
-      return `mongodb+srv://${user}:${encodeURIComponent(pass)}@${cluster}/${db}?retryWrites=true&w=majority`;
-    }
-    return `mongodb+srv://${cluster}/${db}?retryWrites=true&w=majority`;
+    return user && pass
+      ? `mongodb+srv://${user}:${encodeURIComponent(pass)}@${cluster}/${db}?retryWrites=true&w=majority`
+      : `mongodb+srv://${cluster}/${db}?retryWrites=true&w=majority`;
   }
-
-  // 2) Explicit URI
   if (process.env.MONGO_URI) return process.env.MONGO_URI;
 
-  // 3) Local / Docker parts
   const host = process.env.MONGO_HOST || "127.0.0.1";
   const port = process.env.MONGO_PORT || "27017";
-  const db =
-    process.env.MONGO_DB ||
-    process.env.MONGO_INITDB_DATABASE ||
-    "teachMe";
-  const user =
-    process.env.MONGO_USER || process.env.MONGO_INITDB_ROOT_USERNAME;
-  const pass =
-    process.env.MONGO_PASSWORD || process.env.MONGO_INITDB_ROOT_PASSWORD;
-
-  if (user && pass) {
-    return `mongodb://${user}:${encodeURIComponent(pass)}@${host}:${port}/${db}?authSource=admin`;
-  }
-  return `mongodb://${host}:${port}/${db}`;
+  const db = process.env.MONGO_DB || process.env.MONGO_INITDB_DATABASE || "teachMe";
+  const user = process.env.MONGO_USER || process.env.MONGO_INITDB_ROOT_USERNAME;
+  const pass = process.env.MONGO_PASSWORD || process.env.MONGO_INITDB_ROOT_PASSWORD;
+  return user && pass
+    ? `mongodb://${user}:${encodeURIComponent(pass)}@${host}:${port}/${db}?authSource=admin`
+    : `mongodb://${host}:${port}/${db}`;
 }
 
-/** Strip credentials from a URI before logging it. */
 function redactUri(uri) {
-  return uri.replace(/\/\/[^@]*@/, "//***:***@");
+  // Redact user:pass@ and any query-string token values
+  return uri
+    .replace(/\/\/[^@]*@/, "//***:***@")
+    .replace(/([?&](?:password|token|secret)=)[^&]+/gi, "$1***");
 }
 
 // -------------------------------------------------------------------
@@ -80,7 +79,8 @@ function redactUri(uri) {
 // -------------------------------------------------------------------
 
 const app = express();
-
+app.set("trust proxy", 1); // required behind Render/Heroku proxies
+app.use(helmet());
 app.use(
   cors({
     origin: CLIENT_ORIGIN,
@@ -91,7 +91,7 @@ app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 // -------------------------------------------------------------------
-// MongoDB connection
+// MongoDB connection — do not kill the process on transient failure
 // -------------------------------------------------------------------
 
 const MONGO_URI = buildMongoUri();
@@ -102,14 +102,16 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => {
     console.error("❌ MongoDB connection failed:", err.message);
-    process.exit(1);
+    // In production, do NOT process.exit — let the process stay up so
+    // the platform can restart it cleanly. In dev, exit to surface the bug.
+    if (!IS_PROD) process.exit(1);
   });
 
 // -------------------------------------------------------------------
 // HTTP / HTTPS server
 // -------------------------------------------------------------------
 
-const useHttps = process.env.USE_HTTPS === "true";
+const useHttps = process.env.USE_HTTPS === "true" && !IS_PROD;
 let server;
 
 if (useHttps) {
@@ -120,7 +122,7 @@ if (useHttps) {
       cert: fs.readFileSync(process.env.SSL_CERT_PATH),
     };
     server = https.createServer(serverOptions, app);
-    console.log("🔒 HTTPS server enabled");
+    console.log("🔒 HTTPS server enabled (self-managed certs)");
   } catch (err) {
     console.error("❌ Failed to load TLS certs:", err.message);
     console.error("   Falling back to HTTP. Check SSL_* paths in .env");
@@ -128,7 +130,7 @@ if (useHttps) {
   }
 } else {
   server = http.createServer(app);
-  console.log("🔓 HTTP server enabled");
+  console.log("🔓 HTTP server enabled (expecting TLS-terminating proxy in production)");
 }
 
 // -------------------------------------------------------------------
@@ -141,6 +143,8 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
     credentials: ALLOW_CREDENTIALS,
   },
+  // If your client connects over wss:// behind Render's proxy, keep defaults.
+  // Do NOT force transports: ["websocket"] — polling fallback is useful.
 });
 
 io.on("connection", (socket) => {
@@ -155,16 +159,12 @@ app.use("/api/student", student_router);
 app.use("/api/teacher", teacher_router);
 
 // -------------------------------------------------------------------
-// Serve built React frontend (production build)
+// Serve built React frontend
 // -------------------------------------------------------------------
 
 const distDir = path.join(__dirname, "dist");
-
 app.use(express.static(distDir));
 
-// SPA fallback — anything not matched by /api/* returns index.html.
-// Use a regex instead of "*" to avoid swallowing /api routes on
-// Express 5 (which rejects bare "*" as a path).
 app.get(/^\/(?!api\/).*/, (req, res) => {
   res.sendFile(path.join(distDir, "index.html"));
 });
@@ -174,12 +174,11 @@ app.get(/^\/(?!api\/).*/, (req, res) => {
 // -------------------------------------------------------------------
 
 const PORT = Number(process.env.PORT) || 3000;
+const HOST = process.env.HOST || "0.0.0.0"; // bind all interfaces in Docker
 
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on http${useHttps ? "s" : ""}://${HOST}:${PORT}`);
-  if (localIpAddress) {
-    console.log("   Local IPs:", localIpAddress);
-  }
+server.listen(PORT, HOST, () => {
+  console.log(`🚀 Server listening on http${useHttps ? "s" : ""}://${HOST}:${PORT}`);
+  if (localIpAddress) console.log("   Local IPs:", localIpAddress);
 
   // ---------- AI Service Health Check (non-blocking) ----------
   const aiUrl = process.env.AI_SERVICE_URL;
@@ -219,7 +218,6 @@ async function shutdown(signal) {
     process.exit(0);
   });
 
-  // Force exit if graceful shutdown hangs
   setTimeout(() => {
     console.error("⚠️  Forced exit after timeout");
     process.exit(1);
@@ -236,9 +234,8 @@ process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("uncaughtException", (err) => {
   console.error("❌ Uncaught Exception:", err);
 });
-
 process.on("unhandledRejection", (reason) => {
   console.error("❌ Unhandled Rejection:", reason);
 });
 
-module.exports = { io };
+module.exports = { app, server, io };
