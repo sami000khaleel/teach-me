@@ -1,10 +1,12 @@
 const mysql = require('mysql2/promise');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 // -------------------------------------------------------------------
 // Validate required env vars early
 // -------------------------------------------------------------------
-const required = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
+const required = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
 for (const key of required) {
   if (!process.env[key]) {
     console.error(`❌ Missing required env var: ${key}`);
@@ -13,10 +15,17 @@ for (const key of required) {
 }
 
 // -------------------------------------------------------------------
-// Connection pool (ClickHouse Cloud MySQL-interface)
-//   DB_PORT must be 3306 (MySQL wire port), not 8443.
-//   DB_USER must be mysql4<subdomain>, not default.
-//   TLS is mandatory on ClickHouse Cloud.
+// CA certificate (Aiven MySQL requires TLS with their CA)
+// -------------------------------------------------------------------
+const CA_PATH = path.join(__dirname,'../', 'ca.pem');
+if (!fs.existsSync(CA_PATH)) {
+  console.error(`❌ CA certificate not found at ${CA_PATH}`);
+  console.error('   Download it from Aiven Console → MySQL → Overview → CA Certificate');
+  process.exit(1);
+}
+
+// -------------------------------------------------------------------
+// Connection pool (Aiven MySQL)
 // -------------------------------------------------------------------
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -24,7 +33,10 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ssl: { rejectUnauthorized: true },
+  ssl: {
+    ca: fs.readFileSync(CA_PATH),
+    rejectUnauthorized: true,
+  },
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -33,41 +45,35 @@ const pool = mysql.createPool({
 });
 
 // -------------------------------------------------------------------
-// Startup connectivity check (non-fatal warning)
+// Startup connectivity check
 // -------------------------------------------------------------------
 (async () => {
   try {
     const conn = await pool.getConnection();
     await conn.query('SELECT 1');
     conn.release();
-    console.log('✅ MySQL (ClickHouse) pool ready');
+    console.log('✅ MySQL pool ready');
   } catch (err) {
-    console.error('⚠️  MySQL pool connectivity check failed:', err.message);
-    console.error('   → Check DB_HOST / DB_PORT=3306 / DB_USER=mysql4... / SSL');
+    console.error('❌ MySQL pool connectivity check failed:', err.message);
+    console.error('   Check DB_HOST / DB_PORT=13397 / DB_USER=avnadmin / DB_PASSWORD / ca.pem');
+    process.exit(1);
   }
 })();
 
 // -------------------------------------------------------------------
 // executeQuery
 //   - SELECT / SHOW / DESCRIBE / WITH  → returns rows array
-//   - everything else                  → returns { affectedRows }
+//   - INSERT / UPDATE / DELETE / DDL   → returns { affectedRows, insertId }
 //
-// Notes for ClickHouse's MySQL shim:
-//   • No transactions (BEGIN/COMMIT/ROLLBACK are invalid)
-//   • No AUTO_INCREMENT — pass id values explicitly
-//   • UPDATE/DELETE need ALTER TABLE ... UPDATE/DELETE ... WHERE ...
-//   • LIMIT x, y is unsupported — use LIMIT y OFFSET x
+// Real MySQL (Aiven): transactions, AUTO_INCREMENT, foreign keys,
+// LIMIT x, y all work normally.
 // -------------------------------------------------------------------
 async function executeQuery(query, params = []) {
   let connection;
   try {
     connection = await pool.getConnection();
-
     const [result] = await connection.query(query, params);
 
-    // mysql2 returns:
-    //   - array of RowDataPacket for SELECT/SHOW/DESCRIBE
-    //   - ResultSetHeader { affectedRows, insertId, ... } for writes
     if (Array.isArray(result)) {
       return result;
     }
