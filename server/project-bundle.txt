@@ -1,0 +1,3973 @@
+================================================================================
+PROJECT BUNDLE
+================================================================================
+Root:        C:\Users\sami\Desktop\projects\TeachMe\server
+Package:     project
+Type:        Node server
+Generated:   2026-11-04T00:10:32.889Z
+Directories: 105 (2 not scanned)
+Files:       300 (30 read, 270 listed only)
+
+================================================================================
+1. DIRECTORY TREE
+================================================================================
+server/
+├── config/
+│   └── db.js
+├── controllers/
+│   ├── stu_controller.js
+│   └── teacher_controller.js
+├── db/
+│   ├── 01_project_teacher.sql
+│   ├── 02_project_student.sql
+│   ├── 03_project_cours.sql
+│   ├── 04_project_relater.sql
+│   ├── 05_project_relater2.sql
+│   ├── 06_project_lectures.sql
+│   ├── 07_project_routines.sql
+│   └── 08_project_code.sql
+├── dist/  (exists, not scanned)
+├── images/
+│   ├── 100/
+│   │   └── 1715967321310AWF085~1.JPG/
+│   │       └── 1715967321310AWF085~1.JPG  (binary/media file - exists, content not read)
+│   ├── 103/
+│   ├── 105/
+│   │   └── 171638802760200b8048d-635e-4e56-b182-071fb24eea32.jpg  (binary/media file - exists, content not read)
+│   ├── 107/
+│   ├── 109/
+│   │   └── 1716729489186self.jpg  (binary/media file - exists, content not read)
+│   ├── 111/
+│   │   ├── 1716729503064self.jpg  (binary/media file - exists, content not read)
+│   │   └── 1716729508056self.jpg  (binary/media file - exists, content not read)
+│   ├── 113/
+│   │   ├── 1716729527548self.jpg  (binary/media file - exists, content not read)
+│   │   └── 1716729532255self.jpg  (binary/media file - exists, content not read)
+│   ├── 114/
+│   │   └── 1716729539773self.jpg  (binary/media file - exists, content not read)
+│   ├── 115/
+│   │   └── 1716729554087self.jpg  (binary/media file - exists, content not read)
+│   ├── 124/
+│   │   └── 1716740335147self.jpg  (binary/media file - exists, content not read)
+│   ├── 127/
+│   │   └── 1717683826145self.jpg  (binary/media file - exists, content not read)
+│   ├── 128/
+│   │   └── 171800620600920240308_214616.jpg  (binary/media file - exists, content not read)
+│   ├── 130/
+│   │   └── 130
+│   ├── 131.jpg/
+│   │   └── 131
+│   ├── 132/
+│   │   └── 132.jpg  (binary/media file - exists, content not read)
+│   ├── 133/
+│   │   └── 133.jpg  (binary/media file - exists, content not read)
+│   ├── 134/
+│   │   └── 134.jpg  (binary/media file - exists, content not read)
+│   ├── 137/
+│   │   └── 137.jpg  (binary/media file - exists, content not read)
+│   ├── 138/
+│   │   └── 138.jpg  (binary/media file - exists, content not read)
+│   ├── 139/
+│   │   └── 139.jpg  (binary/media file - exists, content not read)
+│   ├── 143/
+│   │   └── 143.jpg  (binary/media file - exists, content not read)
+│   ├── 144/
+│   │   └── 144.jpg  (binary/media file - exists, content not read)
+│   ├── 145/
+│   │   └── 145.jpg  (binary/media file - exists, content not read)
+│   ├── 148/
+│   │   └── 148.jpg  (binary/media file - exists, content not read)
+│   ├── 156/
+│   │   └── 156.jpg  (binary/media file - exists, content not read)
+│   ├── 158/
+│   │   └── 158.jpg  (binary/media file - exists, content not read)
+│   ├── 159/
+│   │   └── 159.jpg  (binary/media file - exists, content not read)
+│   ├── 160/
+│   │   └── 160.jpg  (binary/media file - exists, content not read)
+│   ├── 161/
+│   │   └── 161.jpg  (binary/media file - exists, content not read)
+│   ├── 162/
+│   │   └── 162.jpg  (binary/media file - exists, content not read)
+│   ├── 166/
+│   │   └── 166.jpg  (binary/media file - exists, content not read)
+│   ├── 167/
+│   │   └── 167.jpg  (binary/media file - exists, content not read)
+│   ├── 60/
+│   │   └── 1715555803852WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715555803852WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 61/
+│   │   └── 1715555838059WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715555838059WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 62/
+│   │   └── 1715555899444WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715555899444WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 64/
+│   │   └── 1715555934167WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715555934167WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 65/
+│   │   └── 1715555956310WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715555956310WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 66/
+│   │   └── 1715556060785WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715556060785WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 68/
+│   │   └── 1715556091599WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715556091599WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 69/
+│   │   └── 1715556103786WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715556103786WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 70/
+│   │   └── 1715556130055WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715556130055WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 71/
+│   │   └── 1715634032226WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715634032226WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 72/
+│   │   └── 1715634143317WIN_20231017_20_10_17_Pro.jpg/
+│   │       └── 1715634143317WIN_20231017_20_10_17_Pro.jpg  (binary/media file - exists, content not read)
+│   ├── 74/
+│   │   └── 1715964822898self.jpg/
+│   │       ├── 1715964746279self.jpg  (binary/media file - exists, content not read)
+│   │       ├── 1715964793165self.jpg  (binary/media file - exists, content not read)
+│   │       └── 1715964822898self.jpg  (binary/media file - exists, content not read)
+│   ├── 75/
+│   │   └── 75.jpg  (binary/media file - exists, content not read)
+│   ├── 76/
+│   │   └── 76.jpg  (binary/media file - exists, content not read)
+│   ├── 79/
+│   │   └── 79.jpg  (binary/media file - exists, content not read)
+│   ├── 80/
+│   │   └── 80.jpg  (binary/media file - exists, content not read)
+│   ├── 81/
+│   │   └── 1715965852096AWU5EF~4.JPG/
+│   │       ├── 1715965830975AWU5EF~4.JPG  (binary/media file - exists, content not read)
+│   │       └── 1715965852096AWU5EF~4.JPG  (binary/media file - exists, content not read)
+│   ├── 82/
+│   │   └── 1715966025247AWFDE2~1.JPG/
+│   │       └── 1715966025247AWFDE2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 83/
+│   │   └── 1715966038223AWFDE2~1.JPG/
+│   │       └── 1715966038223AWFDE2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 84/
+│   │   └── 1715966118939AWU5EF~2.JPG/
+│   │       └── 1715966118939AWU5EF~2.JPG  (binary/media file - exists, content not read)
+│   ├── 85/
+│   │   └── 1715966152864AWU5EF~2.JPG/
+│   │       └── 1715966152864AWU5EF~2.JPG  (binary/media file - exists, content not read)
+│   ├── 86/
+│   │   └── 1715966269174AWFDE2~1.JPG/
+│   │       └── 1715966269174AWFDE2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 88/
+│   │   └── 1715966361929AW09F2~1.JPG/
+│   │       ├── 1715966337247AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   │       └── 1715966361929AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 90/
+│   │   └── 1715966381767AW09F2~1.JPG/
+│   │       ├── 1715966364282AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   │       └── 1715966381767AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 92/
+│   │   └── 1715966404369AW09F2~1.JPG/
+│   │       ├── 1715966384196AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   │       └── 1715966404369AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 94/
+│   │   └── 1715966425620AW09F2~1.JPG/
+│   │       ├── 1715966406755AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   │       └── 1715966425620AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 95/
+│   │   └── 1715966436346AW09F2~1.JPG/
+│   │       └── 1715966436346AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 96/
+│   │   └── 1715966463471AW09F2~1.JPG/
+│   │       └── 1715966463471AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 97/
+│   │   └── 1715966490186AW09F2~1.JPG/
+│   │       └── 1715966490186AW09F2~1.JPG  (binary/media file - exists, content not read)
+│   ├── 98/
+│   │   └── 1715966855044AWF085~1.JPG/
+│   │       └── 1715966855044AWF085~1.JPG  (binary/media file - exists, content not read)
+│   ├── 99/
+│   │   └── 1715967179583AWF085~1.JPG/
+│   │       └── 1715967179583AWF085~1.JPG  (binary/media file - exists, content not read)
+│   └── undefined/
+│       └── undefined.jpg  (binary/media file - exists, content not read)
+├── lectures/
+│   ├── 105/
+│   │   └── arabic  (too large (1.1 MB) - content not read)
+│   └── 78/
+│       ├── 1_computer vision
+│       └── lecture 1  (too large (337.6 KB) - content not read)
+├── models/
+│   ├── call.js
+│   ├── course.js
+│   ├── get_id.js
+│   ├── relater.js
+│   ├── student.js
+│   └── teacher.js
+├── node_modules/  (exists, not scanned)
+├── routes/
+│   ├── student_router.js
+│   └── teacher_router.js
+├── snapshots/
+│   ├── 1726847631353-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847631752-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847669900-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847677807-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847715893-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847723259-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847723445-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847723453-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847732600-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847747540-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847766399-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847774969-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847779387-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847800864-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847800867-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847804800-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847817399-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847826236-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847826760-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847833779-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847839606-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847843787-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847854747-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847854910-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847860123-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847860125-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847860715-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847865285-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847876442-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847876868-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847884973-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847895868-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847903666-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847903671-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847916239-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847925189-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847926308-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847927662-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847929395-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847948220-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847949395-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847959882-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847972196-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847972663-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847978803-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726847981481-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848001505-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848001508-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848009091-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848009132-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848023604-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848046448-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848048651-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848056785-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848082730-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848085981-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848088142-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848092950-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848093825-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848100933-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848110034-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848126902-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848136862-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848146969-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848155609-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848156495-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848162924-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848179614-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848183269-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848186542-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848188771-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848190077-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848203751-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848207087-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848252559-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848253286-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848262135-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848262417-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848262420-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1726848262492-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363185574-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363187610-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363195598-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363209509-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363240766-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363266546-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363278330-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363288638-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363299627-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363310422-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363471901-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363475565-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363487864-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363495597-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363501825-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363766917-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363786614-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727363794739-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383515648-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383527391-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383549088-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383651579-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383727661-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383754897-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383769694-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383866338-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383867291-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383873238-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383903757-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383907247-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383925887-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383928608-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383942678-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727383942696-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727384230222-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727384239088-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727384277102-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727384278077-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727384286194-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727384287133-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727387751785-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727387768747-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727387768881-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388000133-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388004012-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388038405-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388039213-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388169500-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388172390-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388177409-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388187452-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388234722-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388252547-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388284996-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388285970-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388290966-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388307961-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388308080-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727388315993-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389012603-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389013067-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389025862-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389028340-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389028865-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389029999-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389031368-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389033936-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389034952-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389039594-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389051362-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389052927-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389062861-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389075421-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389076934-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389077889-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389081960-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389088938-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389120359-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389137446-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389150448-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389170569-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389178902-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389180403-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389181458-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389181984-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1727389182432-144.jpg  (binary/media file - exists, content not read)
+│   ├── 1790281457952-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790281462086-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790281465603-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790281467318-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790281470428-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790281472521-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790615341873-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790615342688-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790615348928-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790615354706-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790615376330-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790615382864-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790615388820-167.jpg  (binary/media file - exists, content not read)
+│   ├── 1790615402914-167.jpg  (binary/media file - exists, content not read)
+│   └── 1790615414221-167.jpg  (binary/media file - exists, content not read)
+├── uploads/
+│   ├── 1793492434263sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793492744944sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793492904441sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793493227217sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793493252474sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793493253920sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793493254484sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793493254805sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793493255081sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793493255359sami khaleel.jpg  (binary/media file - exists, content not read)
+│   ├── 1793493255896sami khaleel.jpg  (binary/media file - exists, content not read)
+│   └── 1793493256819sami khaleel.jpg  (binary/media file - exists, content not read)
+├── .env  (secrets file - exists, content not read)
+├── .gitignore
+├── bundler.cjs  (this script)
+├── ca.crt
+├── ca.key  (secrets file - exists, content not read)
+├── ca.pem  (secrets file - exists, content not read)
+├── cert.crt
+├── cert.key  (secrets file - exists, content not read)
+├── index.js
+├── package-lock.json  (generated/lock file - exists, content not read)
+├── package.json
+├── socketHandler.js
+├── test.js
+└── utilities.js
+
+================================================================================
+2. ALL DIRECTORIES
+================================================================================
+config/
+controllers/
+db/
+dist/   (exists, not scanned)
+images/
+images/100/
+images/100/1715967321310AWF085~1.JPG/
+images/103/
+images/105/
+images/107/
+images/109/
+images/111/
+images/113/
+images/114/
+images/115/
+images/124/
+images/127/
+images/128/
+images/130/
+images/131.jpg/
+images/132/
+images/133/
+images/134/
+images/137/
+images/138/
+images/139/
+images/143/
+images/144/
+images/145/
+images/148/
+images/156/
+images/158/
+images/159/
+images/160/
+images/161/
+images/162/
+images/166/
+images/167/
+images/60/
+images/60/1715555803852WIN_20231017_20_10_17_Pro.jpg/
+images/61/
+images/61/1715555838059WIN_20231017_20_10_17_Pro.jpg/
+images/62/
+images/62/1715555899444WIN_20231017_20_10_17_Pro.jpg/
+images/64/
+images/64/1715555934167WIN_20231017_20_10_17_Pro.jpg/
+images/65/
+images/65/1715555956310WIN_20231017_20_10_17_Pro.jpg/
+images/66/
+images/66/1715556060785WIN_20231017_20_10_17_Pro.jpg/
+images/68/
+images/68/1715556091599WIN_20231017_20_10_17_Pro.jpg/
+images/69/
+images/69/1715556103786WIN_20231017_20_10_17_Pro.jpg/
+images/70/
+images/70/1715556130055WIN_20231017_20_10_17_Pro.jpg/
+images/71/
+images/71/1715634032226WIN_20231017_20_10_17_Pro.jpg/
+images/72/
+images/72/1715634143317WIN_20231017_20_10_17_Pro.jpg/
+images/74/
+images/74/1715964822898self.jpg/
+images/75/
+images/76/
+images/79/
+images/80/
+images/81/
+images/81/1715965852096AWU5EF~4.JPG/
+images/82/
+images/82/1715966025247AWFDE2~1.JPG/
+images/83/
+images/83/1715966038223AWFDE2~1.JPG/
+images/84/
+images/84/1715966118939AWU5EF~2.JPG/
+images/85/
+images/85/1715966152864AWU5EF~2.JPG/
+images/86/
+images/86/1715966269174AWFDE2~1.JPG/
+images/88/
+images/88/1715966361929AW09F2~1.JPG/
+images/90/
+images/90/1715966381767AW09F2~1.JPG/
+images/92/
+images/92/1715966404369AW09F2~1.JPG/
+images/94/
+images/94/1715966425620AW09F2~1.JPG/
+images/95/
+images/95/1715966436346AW09F2~1.JPG/
+images/96/
+images/96/1715966463471AW09F2~1.JPG/
+images/97/
+images/97/1715966490186AW09F2~1.JPG/
+images/98/
+images/98/1715966855044AWF085~1.JPG/
+images/99/
+images/99/1715967179583AWF085~1.JPG/
+images/undefined/
+lectures/
+lectures/105/
+lectures/78/
+models/
+node_modules/   (exists, not scanned)
+routes/
+snapshots/
+uploads/
+
+================================================================================
+3. ALL FILES (location, size, status)
+================================================================================
+config/db.js  [3.2 KB]  READ
+controllers/stu_controller.js  [15.1 KB]  READ
+controllers/teacher_controller.js  [20.3 KB]  READ
+db/01_project_teacher.sql  [2.2 KB]  READ
+db/02_project_student.sql  [2.3 KB]  READ
+db/03_project_cours.sql  [2.2 KB]  READ
+db/04_project_relater.sql  [2.4 KB]  READ
+db/05_project_relater2.sql  [2.4 KB]  READ
+db/06_project_lectures.sql  [2.1 KB]  READ
+db/07_project_routines.sql  [3.2 KB]  READ
+db/08_project_code.sql  [1.9 KB]  READ
+images/100/1715967321310AWF085~1.JPG/1715967321310AWF085~1.JPG  [81.1 KB]  LISTED - binary/media file - exists, content not read
+images/105/171638802760200b8048d-635e-4e56-b182-071fb24eea32.jpg  [14.8 KB]  LISTED - binary/media file - exists, content not read
+images/109/1716729489186self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/111/1716729503064self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/111/1716729508056self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/113/1716729527548self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/113/1716729532255self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/114/1716729539773self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/115/1716729554087self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/124/1716740335147self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/127/1717683826145self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/128/171800620600920240308_214616.jpg  [2.5 MB]  LISTED - binary/media file - exists, content not read
+images/130/130  [34.6 KB]  READ
+images/131.jpg/131  [34.6 KB]  READ
+images/132/132.jpg  [127.8 KB]  LISTED - binary/media file - exists, content not read
+images/133/133.jpg  [3.2 MB]  LISTED - binary/media file - exists, content not read
+images/134/134.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/137/137.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/138/138.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/139/139.jpg  [94.2 KB]  LISTED - binary/media file - exists, content not read
+images/143/143.jpg  [94.2 KB]  LISTED - binary/media file - exists, content not read
+images/144/144.jpg  [94.2 KB]  LISTED - binary/media file - exists, content not read
+images/145/145.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/148/148.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/156/156.jpg  [330.3 KB]  LISTED - binary/media file - exists, content not read
+images/158/158.jpg  [330.3 KB]  LISTED - binary/media file - exists, content not read
+images/159/159.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/160/160.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+images/161/161.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+images/162/162.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+images/166/166.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+images/167/167.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+images/60/1715555803852WIN_20231017_20_10_17_Pro.jpg/1715555803852WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/61/1715555838059WIN_20231017_20_10_17_Pro.jpg/1715555838059WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/62/1715555899444WIN_20231017_20_10_17_Pro.jpg/1715555899444WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/64/1715555934167WIN_20231017_20_10_17_Pro.jpg/1715555934167WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/65/1715555956310WIN_20231017_20_10_17_Pro.jpg/1715555956310WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/66/1715556060785WIN_20231017_20_10_17_Pro.jpg/1715556060785WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/68/1715556091599WIN_20231017_20_10_17_Pro.jpg/1715556091599WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/69/1715556103786WIN_20231017_20_10_17_Pro.jpg/1715556103786WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/70/1715556130055WIN_20231017_20_10_17_Pro.jpg/1715556130055WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/71/1715634032226WIN_20231017_20_10_17_Pro.jpg/1715634032226WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/72/1715634143317WIN_20231017_20_10_17_Pro.jpg/1715634143317WIN_20231017_20_10_17_Pro.jpg  [161.2 KB]  LISTED - binary/media file - exists, content not read
+images/74/1715964822898self.jpg/1715964746279self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/74/1715964822898self.jpg/1715964793165self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/74/1715964822898self.jpg/1715964822898self.jpg  [34.6 KB]  LISTED - binary/media file - exists, content not read
+images/75/75.jpg  [330.3 KB]  LISTED - binary/media file - exists, content not read
+images/76/76.jpg  [38.5 KB]  LISTED - binary/media file - exists, content not read
+images/79/79.jpg  [330.3 KB]  LISTED - binary/media file - exists, content not read
+images/80/80.jpg  [38.5 KB]  LISTED - binary/media file - exists, content not read
+images/81/1715965852096AWU5EF~4.JPG/1715965830975AWU5EF~4.JPG  [64.1 KB]  LISTED - binary/media file - exists, content not read
+images/81/1715965852096AWU5EF~4.JPG/1715965852096AWU5EF~4.JPG  [64.1 KB]  LISTED - binary/media file - exists, content not read
+images/82/1715966025247AWFDE2~1.JPG/1715966025247AWFDE2~1.JPG  [52.3 KB]  LISTED - binary/media file - exists, content not read
+images/83/1715966038223AWFDE2~1.JPG/1715966038223AWFDE2~1.JPG  [52.3 KB]  LISTED - binary/media file - exists, content not read
+images/84/1715966118939AWU5EF~2.JPG/1715966118939AWU5EF~2.JPG  [49.8 KB]  LISTED - binary/media file - exists, content not read
+images/85/1715966152864AWU5EF~2.JPG/1715966152864AWU5EF~2.JPG  [49.8 KB]  LISTED - binary/media file - exists, content not read
+images/86/1715966269174AWFDE2~1.JPG/1715966269174AWFDE2~1.JPG  [52.3 KB]  LISTED - binary/media file - exists, content not read
+images/88/1715966361929AW09F2~1.JPG/1715966337247AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/88/1715966361929AW09F2~1.JPG/1715966361929AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/90/1715966381767AW09F2~1.JPG/1715966364282AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/90/1715966381767AW09F2~1.JPG/1715966381767AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/92/1715966404369AW09F2~1.JPG/1715966384196AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/92/1715966404369AW09F2~1.JPG/1715966404369AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/94/1715966425620AW09F2~1.JPG/1715966406755AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/94/1715966425620AW09F2~1.JPG/1715966425620AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/95/1715966436346AW09F2~1.JPG/1715966436346AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/96/1715966463471AW09F2~1.JPG/1715966463471AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/97/1715966490186AW09F2~1.JPG/1715966490186AW09F2~1.JPG  [72.0 KB]  LISTED - binary/media file - exists, content not read
+images/98/1715966855044AWF085~1.JPG/1715966855044AWF085~1.JPG  [81.1 KB]  LISTED - binary/media file - exists, content not read
+images/99/1715967179583AWF085~1.JPG/1715967179583AWF085~1.JPG  [81.1 KB]  LISTED - binary/media file - exists, content not read
+images/undefined/undefined.jpg  [330.3 KB]  LISTED - binary/media file - exists, content not read
+lectures/105/arabic  [1.1 MB]  LISTED - too large (1.1 MB) - content not read
+lectures/78/1_computer vision  [56.5 KB]  READ
+lectures/78/lecture 1  [337.6 KB]  LISTED - too large (337.6 KB) - content not read
+models/call.js  [1.8 KB]  READ
+models/course.js  [3.4 KB]  READ
+models/get_id.js  [3.4 KB]  READ
+models/relater.js  [505 B]  READ
+models/student.js  [2.1 KB]  READ
+models/teacher.js  [2.8 KB]  READ
+routes/student_router.js  [1.1 KB]  READ
+routes/teacher_router.js  [1.2 KB]  READ
+snapshots/1726847631353-144.jpg  [246.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847631752-144.jpg  [245.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847669900-144.jpg  [249.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847677807-144.jpg  [246.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847715893-144.jpg  [248.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847723259-144.jpg  [251.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847723445-144.jpg  [250.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847723453-144.jpg  [250.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847732600-144.jpg  [243.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847747540-144.jpg  [240.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847766399-144.jpg  [238.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847774969-144.jpg  [239.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847779387-144.jpg  [239.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847800864-144.jpg  [241.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847800867-144.jpg  [243.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847804800-144.jpg  [243.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847817399-144.jpg  [243.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847826236-144.jpg  [243.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847826760-144.jpg  [245.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847833779-144.jpg  [241.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847839606-144.jpg  [241.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847843787-144.jpg  [240.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847854747-144.jpg  [240.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847854910-144.jpg  [238.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847860123-144.jpg  [236.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847860125-144.jpg  [236.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847860715-144.jpg  [236.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847865285-144.jpg  [240.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847876442-144.jpg  [235.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847876868-144.jpg  [236.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847884973-144.jpg  [236.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847895868-144.jpg  [242.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847903666-144.jpg  [244.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847903671-144.jpg  [223.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847916239-144.jpg  [241.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847925189-144.jpg  [244.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847926308-144.jpg  [244.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847927662-144.jpg  [243.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847929395-144.jpg  [243.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847948220-144.jpg  [244.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847949395-144.jpg  [243.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847959882-144.jpg  [223.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847972196-144.jpg  [243.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847972663-144.jpg  [244.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847978803-144.jpg  [242.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726847981481-144.jpg  [240.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848001505-144.jpg  [237.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848001508-144.jpg  [240.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848009091-144.jpg  [240.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848009132-144.jpg  [239.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848023604-144.jpg  [240.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848046448-144.jpg  [242.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848048651-144.jpg  [241.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848056785-144.jpg  [241.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848082730-144.jpg  [241.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848085981-144.jpg  [237.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848088142-144.jpg  [236.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848092950-144.jpg  [239.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848093825-144.jpg  [240.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848100933-144.jpg  [238.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848110034-144.jpg  [239.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848126902-144.jpg  [238.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848136862-144.jpg  [239.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848146969-144.jpg  [249.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848155609-144.jpg  [245.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848156495-144.jpg  [249.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848162924-144.jpg  [244.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848179614-144.jpg  [240.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848183269-144.jpg  [243.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848186542-144.jpg  [241.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848188771-144.jpg  [244.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848190077-144.jpg  [240.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848203751-144.jpg  [242.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848207087-144.jpg  [242.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848252559-144.jpg  [241.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848253286-144.jpg  [239.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848262135-144.jpg  [237.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848262417-144.jpg  [239.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848262420-144.jpg  [237.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1726848262492-144.jpg  [238.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363185574-144.jpg  [348.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363187610-144.jpg  [345.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363195598-144.jpg  [344.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363209509-144.jpg  [349.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363240766-144.jpg  [347.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363266546-144.jpg  [348.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363278330-144.jpg  [350.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363288638-144.jpg  [349.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363299627-144.jpg  [344.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363310422-144.jpg  [303.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363471901-144.jpg  [370.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363475565-144.jpg  [370.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363487864-144.jpg  [369.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363495597-144.jpg  [365.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363501825-144.jpg  [364.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363766917-144.jpg  [237.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363786614-144.jpg  [246.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727363794739-144.jpg  [244.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383515648-144.jpg  [389.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383527391-144.jpg  [378.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383549088-144.jpg  [219.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383651579-144.jpg  [219.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383727661-144.jpg  [389.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383754897-144.jpg  [371.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383769694-144.jpg  [160.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383866338-144.jpg  [214.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383867291-144.jpg  [214.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383873238-144.jpg  [403.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383903757-144.jpg  [245.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383907247-144.jpg  [241.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383925887-144.jpg  [252.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383928608-144.jpg  [250.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383942678-144.jpg  [143.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727383942696-144.jpg  [191.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727384230222-144.jpg  [211.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727384239088-144.jpg  [255.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727384277102-144.jpg  [243.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727384278077-144.jpg  [246.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727384286194-144.jpg  [214.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727384287133-144.jpg  [212.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727387751785-144.jpg  [371.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727387768747-144.jpg  [370.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727387768881-144.jpg  [369.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388000133-144.jpg  [218.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388004012-144.jpg  [214.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388038405-144.jpg  [345.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388039213-144.jpg  [378.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388169500-144.jpg  [215.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388172390-144.jpg  [214.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388177409-144.jpg  [215.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388187452-144.jpg  [215.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388234722-144.jpg  [215.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388252547-144.jpg  [214.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388284996-144.jpg  [214.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388285970-144.jpg  [215.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388290966-144.jpg  [335.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388307961-144.jpg  [383.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388308080-144.jpg  [384.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727388315993-144.jpg  [378.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389012603-144.jpg  [214.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389013067-144.jpg  [212.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389025862-144.jpg  [211.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389028340-144.jpg  [211.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389028865-144.jpg  [210.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389029999-144.jpg  [210.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389031368-144.jpg  [211.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389033936-144.jpg  [210.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389034952-144.jpg  [211.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389039594-144.jpg  [211.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389051362-144.jpg  [211.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389052927-144.jpg  [211.5 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389062861-144.jpg  [209.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389075421-144.jpg  [209.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389076934-144.jpg  [209.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389077889-144.jpg  [210.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389081960-144.jpg  [210.2 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389088938-144.jpg  [209.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389120359-144.jpg  [213.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389137446-144.jpg  [379.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389150448-144.jpg  [234.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389170569-144.jpg  [221.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389178902-144.jpg  [211.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389180403-144.jpg  [210.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389181458-144.jpg  [210.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389181984-144.jpg  [211.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1727389182432-144.jpg  [213.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790281457952-167.jpg  [335.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790281462086-167.jpg  [339.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790281465603-167.jpg  [339.3 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790281467318-167.jpg  [340.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790281470428-167.jpg  [339.7 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790281472521-167.jpg  [340.8 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615341873-167.jpg  [308.6 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615342688-167.jpg  [308.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615348928-167.jpg  [290.0 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615354706-167.jpg  [297.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615376330-167.jpg  [293.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615382864-167.jpg  [309.4 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615388820-167.jpg  [302.9 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615402914-167.jpg  [294.1 KB]  LISTED - binary/media file - exists, content not read
+snapshots/1790615414221-167.jpg  [296.7 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793492434263sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793492744944sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793492904441sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493227217sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493252474sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493253920sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493254484sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493254805sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493255081sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493255359sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493255896sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+uploads/1793493256819sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
+.env  [1.1 KB]  LISTED - secrets file - exists, content not read
+.gitignore  [93 B]  READ
+bundler.cjs  [8.0 KB]  SKIPPED - this script
+ca.crt  [1.2 KB]  READ
+ca.key  [1.7 KB]  LISTED - secrets file - exists, content not read
+ca.pem  [1.5 KB]  LISTED - secrets file - exists, content not read
+cert.crt  [2.4 KB]  READ
+cert.key  [1.7 KB]  LISTED - secrets file - exists, content not read
+index.js  [7.1 KB]  READ
+package-lock.json  [65.4 KB]  LISTED - generated/lock file - exists, content not read
+package.json  [2.9 KB]  READ
+socketHandler.js  [12.5 KB]  READ
+test.js  [4.4 KB]  READ
+utilities.js  [702 B]  READ
+
+================================================================================
+4. FILE CONTENTS
+================================================================================
+
+--- FILE: config/db.js ---
+const mysql = require('mysql2/promise');
+const fs = require('fs');
+const path = require('path');
+require('dotenv').config();
+
+// -------------------------------------------------------------------
+// Validate required env vars early
+// -------------------------------------------------------------------
+const required = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
+for (const key of required) {
+  if (!process.env[key]) {
+    console.error(`❌ Missing required env var: ${key}`);
+    process.exit(1);
+  }
+}
+
+// -------------------------------------------------------------------
+// CA certificate (Aiven MySQL requires TLS with their CA)
+// -------------------------------------------------------------------
+const CA_PATH = path.join(__dirname,'../', 'ca.pem');
+if (!fs.existsSync(CA_PATH)) {
+  console.error(`❌ CA certificate not found at ${CA_PATH}`);
+  console.error('   Download it from Aiven Console → MySQL → Overview → CA Certificate');
+  process.exit(1);
+}
+
+// -------------------------------------------------------------------
+// Connection pool (Aiven MySQL)
+// -------------------------------------------------------------------
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT) || 3306,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  ssl: {
+    ca: fs.readFileSync(CA_PATH),
+    rejectUnauthorized: true,
+  },
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 10000,
+});
+
+// -------------------------------------------------------------------
+// Startup connectivity check
+// -------------------------------------------------------------------
+(async () => {
+  try {
+    const conn = await pool.getConnection();
+    await conn.query('SELECT 1');
+    conn.release();
+    console.log('✅ MySQL pool ready');
+  } catch (err) {
+    console.error('❌ MySQL pool connectivity check failed:', err.message);
+    console.error('   Check DB_HOST / DB_PORT=13397 / DB_USER=avnadmin / DB_PASSWORD / ca.pem');
+    process.exit(1);
+  }
+})();
+
+// -------------------------------------------------------------------
+// executeQuery
+//   - SELECT / SHOW / DESCRIBE / WITH  → returns rows array
+//   - INSERT / UPDATE / DELETE / DDL   → returns { affectedRows, insertId }
+//
+// Real MySQL (Aiven): transactions, AUTO_INCREMENT, foreign keys,
+// LIMIT x, y all work normally.
+// -------------------------------------------------------------------
+async function executeQuery(query, params = []) {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const [result] = await connection.query(query, params);
+
+    if (Array.isArray(result)) {
+      return result;
+    }
+    return {
+      affectedRows: result.affectedRows ?? 0,
+      insertId: result.insertId ?? null,
+    };
+  } catch (error) {
+    console.error('❌ Query error:', error.message);
+    console.error('   SQL:', query.trim().slice(0, 200));
+    throw error;
+  } finally {
+    if (connection) connection.release();
+  }
+}
+
+module.exports = executeQuery;
+--- END: config/db.js ---
+
+--- FILE: controllers/stu_controller.js ---
+require("dotenv").config();
+
+const studentmodels = require("../models/student");
+const teachermodels = require("../models/teacher");
+const get_id = require("../models/get_id");
+const https = require("https");
+const util = require("util");
+const FormData = require("form-data");
+const executeQuery = require("../config/db");
+const { createReadStream } = require("fs");
+const axios = require("axios");
+const Call = require("../models/call");
+const course_model = require("../models/course");
+const multer = require("multer");
+const fs = require("fs/promises");
+const path = require("path");
+const nodemailer = require("nodemailer");
+
+// =====================================================================
+// 🔹 Helper: Safely call the Flask AI service.
+//    Returns the response data OR null. Never throws.
+// =====================================================================
+async function callAiService(endpoint, formData, timeoutMs = 5000) {
+  const aiBaseUrl = process.env.AI_SERVICE_URL || "https://127.0.0.1:5000";
+  const url = `${aiBaseUrl}${endpoint}`;
+  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
+  try {
+    const response = await axios.post(url, formData, {
+      httpsAgent,
+      headers: formData.getHeaders(),
+      timeout: timeoutMs,
+    });
+    console.log(`✅ AI service responded: ${endpoint}`);
+    return response.data;
+  } catch (err) {
+    if (err.code === "ECONNREFUSED") {
+      console.warn(
+        `⚠️  AI service not running at ${aiBaseUrl} — skipping ${endpoint}`
+      );
+    } else if (err.code === "ECONNABORTED") {
+      console.warn(
+        `⚠️  AI service timed out after ${timeoutMs}ms — skipping ${endpoint}`
+      );
+    } else {
+      console.warn(`⚠️  AI service error at ${endpoint}:`, err.message);
+    }
+    return null;
+  }
+}
+
+class studentcontroller {
+  static giveObservationTitle(message) {
+    let observationTitle = null;
+    switch (message) {
+      case "attentive":
+        observationTitle = "student is attentive";
+        break;
+      case "notAttentive":
+        observationTitle = "student is not attentive";
+        break;
+      case "usingPhone":
+        observationTitle = "student is using his phone";
+        break;
+      default:
+        break;
+    }
+    return observationTitle;
+  }
+
+  static addObservation(call, studentId, observationTitle, date) {
+    studentId = studentId.split(".")[0];
+    for (let student of call.students) {
+      if (student.studentId == studentId) {
+        let foundOneFlag = false;
+        for (let observation of student.observations) {
+          if (observation?.title != observationTitle) continue;
+          foundOneFlag = true;
+          observation.occurrencesDates.push(date);
+          break;
+        }
+        if (!foundOneFlag) {
+          student.observations.push({
+            title: observationTitle,
+            occurrencesDates: [date],
+          });
+        }
+      }
+      student.checkOccurrences.push(date);
+    }
+    return call;
+  }
+
+  static async checkFrame(req, res) {
+    const storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, "./snapshots");
+      },
+      filename: function (req, file, cb) {
+        req.filepath = path.join(
+          __dirname,
+          "..",
+          "snapshots",
+          `${Date.now()}-${file.originalname}`
+        );
+        cb(null, `${Date.now()}-${file.originalname}`);
+      },
+    });
+
+    const upload = multer({ storage }).single("file");
+    const uploadPromise = util.promisify(upload);
+
+    try {
+      await uploadPromise(req, res);
+
+      let call = await Call.findById(req.body.callId);
+      const file = req?.file;
+      let date = req.body?.date;
+
+      if (!file) {
+        console.log("No file was received");
+        return res.json({ success: true, observation: "attentive" });
+      }
+
+      const formData = new FormData();
+      formData.append("file", createReadStream(req.filepath));
+
+      // 🔹 Ask the AI service (optional — returns null if down)
+      const aiResponse = await callAiService("/api/observation", formData);
+
+      if (!aiResponse) {
+        // AI service unavailable → treat as attentive and continue
+        return res
+          .status(200)
+          .json({ success: true, observation: "attentive" });
+      }
+
+      const message = aiResponse.message;
+
+      if (message === "attentive" || !message) {
+        return res
+          .status(200)
+          .json({ success: true, observation: "attentive" });
+      }
+
+      // Extract student ID from filename
+      const studentId = req.file.filename.split("-")[1];
+
+      for (let student of call.students) {
+        if (student.studentId != studentId) continue;
+        student.checkOccurrences.push(date);
+      }
+
+      call = studentcontroller.addObservation(call, studentId, message, date);
+      await call.save();
+
+      return res.json({ warningFlag: true, observation: message });
+    } catch (error) {
+      console.error("checkFrame error:", error.message);
+      return res.status(500).json({ success: false, message: error.message });
+    } finally {
+      if (req.filepath) {
+        fs.unlink(req.filepath).catch((err) =>
+          console.error("Failed to delete temp file:", err)
+        );
+      }
+    }
+  }
+
+  static async getStudentsByCourse(req, res) {
+    try {
+      const { courseId } = req.query;
+      if (!courseId)
+        return res.status(400).json({ message: "no course id was sent" });
+      const result = await studentmodels.getstudents_by_course_id(courseId);
+      return res.json(result);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async findCall(req, res) {
+    try {
+      const { courseId } = req.query;
+      if (!courseId)
+        return res.status(400).json({ message: "no course id was sent" });
+      const calls = await Call.find({ courseId, onGoing: true }).sort({
+        createdAt: 1,
+      });
+      if (calls.length == 0)
+        return res
+          .status(404)
+          .json({ message: "no call are onGoing at the momemnt" });
+      if (calls.length > 1) console.log("more than a call is taking place");
+      return res.json(calls[0]);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async sendImage(req, res) {
+    try {
+      const { imageName, studentId } = req.query;
+      if (!imageName || !studentId)
+        return res.status(400).json({
+          success: false,
+          message: "no data about the image was provided",
+        });
+      return res.sendFile(
+        path.join(__dirname, "..", "images", studentId, studentId + ".jpg")
+      );
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ success: false, message: "internal server error" });
+    }
+  }
+
+  static async verifyCode(req, res) {
+    try {
+      const { code } = req.query;
+      const codeObject = await get_id.findCode(code);
+      const user = await get_id.findUserByCode(codeObject.idcode);
+      return res.json(user);
+    } catch (error) {
+      return res.status(500).json({ message: "intenral server error" });
+    }
+  }
+
+  static async sendCode(req, res) {
+    try {
+      const role = req.query.role;
+      const email = req.query.email;
+
+      if (!email || !role) {
+        return res
+          .status(400)
+          .json({ message: "email and role are required" });
+      }
+
+      const id = await get_id.verifyEmail(email, role);
+      const code = Math.floor(1000000 * Math.random());
+
+      if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+        console.error("❌ GMAIL credentials missing in .env");
+        return res
+          .status(500)
+          .json({ message: "email service is not configured" });
+      }
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD,
+        },
+      });
+
+      const emailOptions = {
+        from: process.env.GMAIL_USER,
+        to: email,
+        subject: "Teach-Me — Account Verification",
+        text: `Your verification code is: ${code}\n\nThis code will expire soon.`,
+      };
+
+      await transporter.sendMail(emailOptions);
+      await get_id.saveCode(code, id, role);
+
+      return res.json({ message: "email was sent" });
+    } catch (err) {
+      console.error("❌ sendCode error:", err.message);
+      return res.status(500).json({ message: "internal server error" });
+    }
+  }
+
+  static async addnewstudent(req, res) {
+    try {
+      const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, "./uploads");
+        },
+        filename: function (req, file, cb) {
+          cb(null, Date.now() + file.originalname);
+        },
+      });
+      const upload = multer({ storage }).single("file");
+
+      await upload(req, res, async (err) => {
+        try {
+          if (err) {
+            console.log(err.message);
+            return res.status(500).json({
+              message: "internal error handling the image",
+              m: err.message,
+            });
+          }
+
+          const { firstname, lastname, email, password } = req.body;
+
+          // 1. Create the student in MySQL
+          const student = await studentmodels.addstudent(
+            firstname,
+            lastname,
+            email,
+            password
+          );
+
+          // 2. Move the uploaded image to the student's folder
+          const destinationDir = path.join("./images", String(student.id));
+          await fs.mkdir(destinationDir, { recursive: true });
+
+          const filesNames = await fs.readdir(path.join("./", "uploads"));
+          for (const fileName of filesNames) {
+            const finalPath = path.join(
+              destinationDir,
+              String(student.id) + ".jpg"
+            );
+            await fs.rename(
+              path.join("./", "uploads", fileName),
+              finalPath
+            );
+          }
+
+          // 3. Save the image URL in MySQL
+          const url = `/api/student/image?studentId=${student.id}&imageName=${
+            req.file?.filename || student.id + ".jpg"
+          }`;
+          await studentmodels.addImageUrl(url, student.id);
+
+          // 4. Register the student's face with the AI service (optional)
+          const formData = new FormData();
+          formData.append(
+            "file",
+            createReadStream(
+              path.join(destinationDir, String(student.id) + ".jpg")
+            )
+          );
+
+          const aiResult = await callAiService("/api/store_image", formData);
+          if (aiResult) {
+            console.log(`👤 Face registered for student ${student.id}`);
+          }
+
+          // 5. Always return the student — signup succeeds regardless of AI
+          return res.json(student);
+        } catch (err) {
+          console.error("addnewstudent inner error:", err);
+          return res.status(500).json({ success: false, message: err.message });
+        }
+      });
+    } catch (err) {
+      console.error("addnewstudent outer error:", err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async reinsert(req, res) {
+    try {
+      const { email } = req.query;
+      var password = req.headers.password;
+      var student = await studentmodels.reinsert(email, password);
+      res.json(student);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async get_courses(req, res) {
+    try {
+      var results = await studentmodels.get_courses();
+      for (let course of results) {
+        const id_teacher = await executeQuery(
+          "select id_teacher from relater where id_cours=?",
+          [course.id_cours]
+        );
+        const teacher = await executeQuery(
+          "select id_teacher,first_name,last_name,email from teacher where id_teacher=?",
+          [id_teacher[0].id_teacher]
+        );
+        course.teacher = { ...teacher[0] };
+      }
+      res.send(results);
+    } catch (err) {
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async course_info(req, res) {
+    try {
+      var id_course = req.query.id_course;
+      var result = await studentmodels.course_info(id_course);
+      res.json(result);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async login_course(req, res) {
+    try {
+      var email = req.headers.email;
+      var password = req.headers.password;
+      var id_student = req.body.id_student;
+      var id_course = req.body.id_course;
+      var student_id = await get_id.student(email, password);
+
+      if (req.body.id_student != student_id.id_stu)
+        return res.status(400).json({ message: "ids do not match" });
+
+      var results = await studentmodels.login_course(id_student, id_course);
+      res.send(results);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async searchcourse_bycoursename(req, res) {
+    try {
+      var course_name = req.query?.course_name;
+      if (!course_name)
+        return res
+          .status(400)
+          .json({ success: false, message: "no query was sent" });
+
+      var results = await course_model.searchcourse_bycoursename(course_name);
+      res.send(results);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async get_my_courses(req, res) {
+    try {
+      var email = req.headers.email;
+      var password = req.headers.password;
+      var id = req.query.id;
+
+      var g_i = await get_id.student(email, password);
+      if (req.query.id != g_i.id_stu)
+        return res.status(400).json({ message: "ids do not match" });
+
+      var id_course = await course_model.get_idcourse_forstudent(id);
+      var results = await course_model.get_courses(id_course);
+      res.send(results);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async reset_password(req, res) {
+    try {
+      var role = req.body.role;
+      var password2 = req.body.password;
+      var password = req.headers.password;
+      var email = req.headers.email;
+      if (role == "teacher") {
+        var id_teacher = await get_id.teacher(email, password);
+        await teachermodels.update_password(password2, id_teacher.id_teacher);
+      } else {
+        var id_student = await get_id.student(email, password);
+        await studentmodels.update_password(password2, id_student.id_stu);
+      }
+
+      return res.json("rsest password is finish");
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+}
+
+module.exports = studentcontroller;
+--- END: controllers/stu_controller.js ---
+
+--- FILE: controllers/teacher_controller.js ---
+const course_model = require("../models/course");
+const teacher_model = require("../models/teacher");
+const get_id = require("../models/get_id");
+const relater_model = require("../models/relater");
+const Student = require("../models/student");
+const multer = require("multer");
+const studentmodels = require("../models/student");
+const { validatedates } = require("../models/course");
+const path=require('path')
+const Call = require("../models/call");
+const course = require("../models/course");
+const executeQuery = require("../config/db");
+const fs=require('fs/promises')
+class teacher_controller {
+
+  static async delete_lecture(req,res){
+    try {
+
+// Check if the file exists
+const filePath = path.join(__dirname, '../lectures', req.query.courseId,req.query.file_name)
+await fs.access(filePath);
+console.log(`File ${filePath} exists, deleting...`);
+// Delete the file
+await fs.unlink(filePath);
+
+console.log(`File ${filePath} deleted successfully!`);
+const delete_lecture = await course_model.delete_leceture(req.query.courseId,req.query.file_name)
+
+// Example usage
+return res.send('done')
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message:'internal server error'})
+    }
+}
+
+
+  static async get_lectures(req, res) {
+    try {
+        console.log('hello')
+      const courseId = req.query.courseId;
+      
+     const lectures= await course_model.get_lectures_by_course_id(courseId)
+     res.json(lectures)
+     
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+
+  static async get_lectures_by_course(req, res) {
+    try {
+      const courseId = req.query.courseId;
+      const lectureName = req.query.lectureName;
+     
+        const filePath = path.join(__dirname, `../lectures/${courseId}/${lectureName}`);
+        console.log(filePath)
+        res.download(filePath, lectureName, (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(400).json({ message: err.message });
+          }
+        });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async add_lecture(req,res){
+
+    try {
+        const storage = multer.diskStorage({
+          destination: function (req, file, cb) {
+            cb(null, './uploads')
+          },
+          filename: function (req, file, cb) {
+            cb(null,file.originalname)
+          }
+        })
+        const upload = multer({ storage }).single('file')
+        
+        await upload(req, res, async (err) => {
+          if (err) {
+            console.log(err.message)
+            return res.status(500).json({ message: 'internal error handling the file', m: err.message })
+          }
+          const email =req.headers.email;
+          const password =req.headers.password;
+          const id_course=req.body.id_course;
+          const id_teacher=req.body.id_teacher;
+          var idteacher = await get_id.teacher(email, password);
+        if (req.body.id_teacher != idteacher.id_teacher)
+            return res.status(400).json({ message: "ids do not match" })
+
+           let {id}= await teacher_model.add_idCourse(id_course)
+            let lectureId=id
+           const destinationDir = path.join('./lectures', String(id_course)); // Create directory based on product ID
+          await fs.mkdir(destinationDir, { recursive: true }); // Ensure directory exists
+          const filesNames= await fs.readdir(path.join('./','uploads'))
+          for (const fileName of filesNames) {
+            const finalPath = path.join(destinationDir,req.body?.fileName);
+            await fs.rename(path.join('./','uploads',fileName), finalPath); // Move each file
+          }
+          
+          const url = `https://127.0.0.1:3000/api/teacher/download_lecture?courseId=${id_course}&lectureName=${req.file.filename}`
+          await teacher_model.addlectureUrl(req.body.fileName, lectureId)
+          
+          return res.json("ok baby")
+        })
+  
+      }
+      catch (err) {
+        // console.log(err)
+        return res.status(400).json({ message: err.message })
+      }
+
+
+
+
+
+ }
+  static async create_test_call(req, res) {
+    try {
+      const call = await Call.create(req.body);
+      return res.json(call.id);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ success: false, err: "internal server error" });
+    }
+  }
+  static getStartAndEndOfDay = (date) => {
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
+
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999); // Set the time to 23:59:59.999
+
+    return { start, end };
+  };
+
+  static calculateTotalLectureTime = (calls) => {
+    return calls.reduce((total, call) => {
+      if (call.endedAt) {
+        total += new Date(call.endedAt) - new Date(call.createdAt);
+      }
+      return total;
+    }, 0);
+  };
+
+  static formatDuration = (milliseconds) => {
+    const hours = Math.floor(milliseconds / 3600000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
+    return `${hours} hours, ${minutes} minutes`;
+  };
+  static processStudentLogs = (students) => {
+    const studentReports = {};
+
+    students.forEach((student) => {
+      if (!studentReports[student.studentId]) {
+        studentReports[student.studentId] = {
+          studentId: student.studentId,
+          loginCount: 0,
+          totalTimeAttending: 0,
+          logs: [],
+          observations: {
+            "student had been using his phone": [],
+            "student was not attentive": [],
+            "student had gotten out of the cameras range": [],
+            "students face had not matched": []
+          },
+        };
+      }
+
+      const report = studentReports[student.studentId];
+
+      // Count logins and total time connected
+      student.studentLogs.forEach((log) => {
+        if (log.connectedAt && log.disconnectedAt) {
+          report.loginCount += 1;
+          report.totalTimeAttending +=
+            new Date(log.disconnectedAt) - new Date(log.connectedAt);
+          report.logs.push(log);
+        }
+      });
+      report.totalTimeAttending = teacher_controller.formatDuration(
+        report.totalTimeAttending
+      );
+      if (student.observations.length == 1) return studentReports;
+      // Process observations
+      student.observations.forEach((obs) => {
+        console.log(obs);
+        if (obs.title !== "attentive") {
+          let tempObservation = null;
+          if (obs.title == "notAttentive")
+            tempObservation = "student was not attentive";
+          if (obs.title == "usingPhone")
+            tempObservation = "student had been using his phone";
+          if (obs.title == "noFace")
+            tempObservation = "student had gotten out of the cameras range";
+          if (obs.title == "facesDoNotMatch")
+            tempObservation = "students face had not matched";
+          console.log(tempObservation);
+          let occurrenceCount = 0;
+          let timeDifference = 0;
+          for (
+            let observationStart = 0;
+            observationStart < obs.occurrencesDates.length - 1;
+            observationStart++
+          ) {
+            for (
+              let observationEnd = observationStart + 1;
+              observationEnd < obs.occurrencesDates.length;
+              observationEnd++
+            ) {
+              let timeJump =
+                (new Date(obs.occurrencesDates[observationEnd]) -
+                  new Date(obs.occurrencesDates[observationEnd - 1])) /
+                1000;
+              if (timeJump > 1) {
+                timeDifference =
+                (new Date(obs.occurrencesDates[observationEnd]) -
+                  new Date(obs.occurrencesDates[observationStart])) /
+                1000;
+              if (timeDifference < 2) continue;
+
+              studentReports[student.studentId].observations[
+                tempObservation
+              ].push({
+                from: obs.occurrencesDates[observationStart],
+                to: obs.occurrencesDates[observationEnd],
+              });
+                console.log("time jump ", timeJump, obs.title);
+                observationStart = --observationEnd;
+                timeDifference = 0;
+                
+                break;
+              }
+              
+            }
+          }
+          // if (occurrenceCount > 1)
+          //   studentReports[student.studentId].observations.push(
+          //     `${tempObservation} ${occurrenceCount} times`
+          //   );
+          // if (occurrenceCount == 1)
+          //   studentReports[student.studentId].observations.push(
+          //     `${tempObservation} once`
+          //   );
+        }
+      });
+    });
+    return studentReports;
+  };
+  static async get_days_report(req, res) {
+    try {
+      const { email, password } = req.headers;
+      console.log(email, password);
+      const teacher = await teacher_model.get_teacher(email, password);
+      let reports = [];
+      const { date, courseId } = req.query;
+      if (!date || !courseId) {
+        return res.status(400).send("Date and courseId are required");
+      }
+
+      const { start, end } = teacher_controller.getStartAndEndOfDay(
+        new Date(date)
+      );
+      const calls = await Call.find({
+        createdAt: {
+          $gte: start,
+          $lte: end,
+        },
+        courseId: courseId,
+      }).sort({ createdAt: -1 });
+      console.log(calls);
+      if (!calls.length) {
+        return res
+          .status(404)
+          .send("No calls found for the specified date and courseId");
+      }
+      for (let call of calls) {
+        const totalLectureTime =
+          new Date(call.endedAt) - new Date(call.createdAt);
+        // const studentReports = teacher_controller.processStudentLogs(
+        //   call.students
+        //   // calls.flatMap((call) => call.students)
+        // );
+        const report = {
+          totalLectureTime: teacher_controller.formatDuration(totalLectureTime),
+          numberOfAttendences: call.students.filter((stu) =>
+            stu?.studentLogs?.length ? true : false
+          ).length,
+          startedAt: call.createdAt,
+          endedAt: call.endedAt,
+          callId: call.id,
+          // students: Object.values(studentReports),
+        };
+        reports.push(report);
+      }
+      return res.json(reports);
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  }
+  static get_report = async (req, res) => {
+    try {
+      const { email, password } = req.headers;
+      const teacher = await teacher_model.get_teacher(email, password);
+      // const { date, courseId } = req.query;
+      const { callId } = req.query;
+      const call = await Call.findById(callId);
+      if (!call) return res.status(404).json({ message: "no call was found" });
+      const totalLectureTime =
+        new Date(call.endedAt) - new Date(call.createdAt);
+      // const totalLectureTime = teacher_controller.calculateTotalLectureTime(calls);
+      const studentReports = teacher_controller.processStudentLogs(
+        call.students
+        // calls.flatMap((call) => call.students)
+      );
+
+      let report = {
+        totalLectureTime: teacher_controller.formatDuration(totalLectureTime),
+        students: Object.values(studentReports),
+      };
+      for (let student of report.students) {
+        const result = await executeQuery(
+          `select first_name_stu,last_name_stu,email_stu,image_url from student where id_stu=${student.studentId}`
+        );
+        if (!result.length) {
+          console.log("did not find student");
+          throw new Error(
+            `did not find the student with the id of ${student.studentId}`
+          );
+        }
+        student.name = result[0].first_name_stu + " " + result[0].last_name_stu;
+        student.email = result[0].email_stu;
+        student.image_url = result[0].image_url;
+      }
+
+      return res.json(report);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("An error occurred while fetching the report");
+    }
+  };
+  static async getCoursesStudents(req, res) {
+    try {
+      const { courseId } = req.query;
+      const ids = await relater_model.get_students(courseId);
+      return res.json(ids);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ message: err.message });
+    }
+  }
+  static async createLesson(req, res) {
+  try {
+    const { courseId, teacherId } = req.body;
+    const { email, password } = req.headers;
+    const objectId = await get_id.teacher(email, password);
+    if (objectId.id_teacher != teacherId)
+      return res.status(400).json({ message: "ids do not match" });
+
+    // Shut down any ongoing calls for this teacher
+    let calls = await Call.find({ teacherId, onGoing: true });
+    console.log(`found ${calls?.length} calls ongoing shutting them down ...`);
+    for (let call of calls) {
+      call.onGoing = false;
+      call.endedAt = new Date();
+      await call.save();
+    }
+
+    // Verify the teacher actually teaches this course
+    await course_model.checkTeacherGivesCourse(courseId, teacherId);
+
+    const students = await studentmodels.getstudents_by_course_id(courseId);
+    const ids = students.map((student) => ({ studentId: student.id_stu }));
+
+    const call = await Call.create({
+      courseId,
+      teacherId,
+      students: ids,
+      onGoing: true,
+    });
+    return res.json(call);
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({ message: err.message });
+  }
+}
+
+  static async checkTeacherGivesCourse(req, res) {
+    try {
+      var email = req.headers.email;
+      var password = req.headers.password;
+      var courseId = req.query.courseId;
+      var id_teacher = await get_id.teacher(email, password);
+      if (req.query.id != id_teacher.id_teacher)
+        return res.status(400).json({ message: "ids do not match" });
+
+      let teacher_id = await teacher_model.get_teacher_id(course_id);
+      let teacher = await teacher_model.get_teacher_by_id(teacher_id);
+      let students = await studentmodels.getstudents_by_course_id(course_id);
+      course.teacher = teacher;
+      course.students = students;
+      console.log(course.teacher);
+      return res.json({ course, teacher, students });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async get_course_info(req, res) {
+    try {
+      var email = req.headers.email;
+      var password = req.headers.password;
+      var id = req.query.id;
+      const course_id = req.query.course_id;
+      var id_teacher = await get_id.teacher(email, password);
+      if (req.query.id != id_teacher.id_teacher)
+        return res.status(400).json({ message: "ids do not match" });
+
+      let course = await teacher_model.get_course(course_id);
+      let teacher_id = await teacher_model.get_teacher_id(course_id);
+      let teacher = await teacher_model.get_teacher_by_id(teacher_id);
+      let students = await studentmodels.getstudents_by_course_id(course_id);
+      course.teacher = teacher;
+      course.students = students;
+      console.log(course.teacher);
+      return res.json({ course, teacher, students });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async insert_teacher(req, res) {
+    try {
+      const email = req.headers.email;
+      const password = req.headers.password;
+      console.log(email, password);
+      const result = await teacher_model.get_teacher(email, password);
+      return res.json(result);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  //************************************************************************* */
+  static async add_course(req, res) {
+    try {
+      var email = req.headers.email;
+      var password = req.headers.password;
+      var course_name = req.body.course_name;
+      var course_discription = req.body.course_discription;
+      var first_course = req.body.first_course;
+      var end_course = req.body.end_course;
+      var date2 = req.body.date2;
+      var date1 = req.body.date1;
+      course_model.validatedates(first_course, end_course);
+      var teacher = await get_id.teacher(email, password);
+      var course_id = await teacher_model.add_course(
+        course_name,
+        course_discription,
+        first_course,
+        end_course,
+        date1,
+        date2
+      );
+      const relation = await relater_model.add_relation(
+        course_id,
+        teacher.id_teacher
+      );
+      console.log("hello");
+      return res.json(course_id);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async get_courses(req, res) {
+    try {
+      var email = req.headers.email;
+      var password = req.headers.password;
+
+      const id_teacher = req.query.id_teacher;
+      var teacher_id = await get_id.teacher(email, password);
+      if (req.query.id_teacher != teacher_id.id_teacher)
+        return res.status(400).json({ message: "ids do not match" });
+      const teacher = await teacher_model.get_teacher_by_id(id_teacher);
+      const id_courses = await course_model.get_courses_id(id_teacher);
+      const courses = await course_model.get_courses(id_courses);
+
+      return res.json({ courses, teacher });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async update_date(req, res) {
+    try {
+      console.log(req.body);
+      const id_teacher = req.body.id_teacher;
+      const id_course = req.body.id_course;
+      const first_course = req.body.first_course;
+      const end_course = req.body.end_course;
+      const date1 = req.body.date1;
+      const date2 = req.body.date2;
+      var email = req.headers.email;
+      var password = req.headers.password;
+      var teacher_id = await get_id.teacher(email, password);
+      if (req.body.id_teacher != teacher_id.id_teacher)
+        return res.status(400).json({ message: "ids do not match" });
+      const validatedates = await course_model.validatedates(
+        first_course,
+        end_course
+      );
+      const update_d = await course_model.update(
+        first_course,
+        end_course,
+        date1,
+        date2,
+        id_course
+      );
+      console.log(update_d);
+      return res.json(update_d);
+    } catch (err) {
+      // console.log(err)
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async delete_course(req, res) {
+    try {
+      var id = req.query.id;
+      const id_course = req.query.id_course;
+      var email = req.headers.email;
+      var password = req.headers.password;
+      var teacher_id = await get_id.teacher(email, password);
+      if (req.query.id != teacher_id.id_teacher)
+        return res.status(400).json({ message: "ids do not match" });
+      const dlt_course = await course_model.delete_course(id_course);
+      return res.json("delete succes");
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+  static async get_courses_mystudent(req, res) {
+    try {
+      const id_stu = req.query.id_stu;
+      const id_teacher = req.query.id_teacher;
+      var email = req.headers.email;
+      var password = req.headers.password;
+      var teacher_id = await get_id.teacher(email, password);
+      if (req.query.id_teacher != teacher_id.id_teacher)
+        return res.status(400).json({ message: "ids do not match" });
+
+      const id_courses = await course_model.get_courses_mystudent_id(
+        id_stu,
+        id_teacher
+      );
+      const courses_mystudent = await course_model.get_courses(id_courses);
+      return res.json(courses_mystudent);
+    } catch (err) {
+      // console.log(err)
+      return res.status(400).json({ message: err.message });
+    }
+  }
+
+
+  //*********************************************************** */
+
+
+}
+module.exports = teacher_controller;
+--- END: controllers/teacher_controller.js ---
+
+--- FILE: db/01_project_teacher.sql ---
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: project
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `teacher`
+--
+
+DROP TABLE IF EXISTS `teacher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `teacher` (
+  `id_teacher` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_teacher`),
+  UNIQUE KEY `password_UNIQUE` (`password`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `teacher`
+--
+
+LOCK TABLES `teacher` WRITE;
+/*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
+INSERT INTO `teacher` VALUES (100,'sami','khaleel','242','samihellstrong@gmail.com');
+/*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-25  1:08:47
+--- END: db/01_project_teacher.sql ---
+
+--- FILE: db/02_project_student.sql ---
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: project
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `student`
+--
+
+DROP TABLE IF EXISTS `student`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `student` (
+  `id_stu` int NOT NULL AUTO_INCREMENT,
+  `first_name_stu` varchar(45) NOT NULL,
+  `last_name_stu` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `email_stu` varchar(200) NOT NULL,
+  `image_url` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id_stu`),
+  UNIQUE KEY `password_UNIQUE` (`password`),
+  UNIQUE KEY `email_stu_UNIQUE` (`email_stu`)
+) ENGINE=InnoDB AUTO_INCREMENT=168 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `student`
+--
+
+LOCK TABLES `student` WRITE;
+/*!40000 ALTER TABLE `student` DISABLE KEYS */;
+INSERT INTO `student` VALUES (167,'sami','khaleel','242','sami000khaleel@gmail.com','/api/student/image?studentId=167&imageName=1790278859077sami khaleel.jpg');
+/*!40000 ALTER TABLE `student` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-25  1:08:47
+--- END: db/02_project_student.sql ---
+
+--- FILE: db/03_project_cours.sql ---
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: project
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `cours`
+--
+
+DROP TABLE IF EXISTS `cours`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cours` (
+  `id_cours` int NOT NULL AUTO_INCREMENT,
+  `cours_name` varchar(45) NOT NULL,
+  `cours_discription` varchar(500) DEFAULT NULL,
+  `first_cours` date DEFAULT NULL,
+  `end_cours` date DEFAULT NULL,
+  `date1` varchar(100) DEFAULT NULL,
+  `date2` varchar(100) DEFAULT NULL,
+  `hours` int DEFAULT NULL,
+  PRIMARY KEY (`id_cours`)
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cours`
+--
+
+LOCK TABLES `cours` WRITE;
+/*!40000 ALTER TABLE `cours` DISABLE KEYS */;
+INSERT INTO `cours` VALUES (108,'java','java fundamentals','2026-09-10','2029-01-29','Thursday 10:00 AM','Saturday 3:00 PM',NULL);
+/*!40000 ALTER TABLE `cours` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-25  1:08:46
+--- END: db/03_project_cours.sql ---
+
+--- FILE: db/04_project_relater.sql ---
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: project
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `relater`
+--
+
+DROP TABLE IF EXISTS `relater`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `relater` (
+  `id_relater` int NOT NULL AUTO_INCREMENT,
+  `id_stu` int DEFAULT NULL,
+  `id_teacher` int DEFAULT NULL,
+  `id_cours` int DEFAULT NULL,
+  PRIMARY KEY (`id_relater`),
+  UNIQUE KEY `id_timer_UNIQUE` (`id_relater`),
+  KEY `idd_stu_idx` (`id_stu`),
+  KEY `idd_teacher_idx` (`id_teacher`),
+  KEY `idd_cours_idx` (`id_cours`),
+  CONSTRAINT `idd_cours` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
+  CONSTRAINT `idd_stu` FOREIGN KEY (`id_stu`) REFERENCES `student` (`id_stu`),
+  CONSTRAINT `idd_teacher` FOREIGN KEY (`id_teacher`) REFERENCES `teacher` (`id_teacher`)
+) ENGINE=InnoDB AUTO_INCREMENT=175 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `relater`
+--
+
+LOCK TABLES `relater` WRITE;
+/*!40000 ALTER TABLE `relater` DISABLE KEYS */;
+INSERT INTO `relater` VALUES (173,NULL,100,108),(174,167,NULL,108);
+/*!40000 ALTER TABLE `relater` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-25  1:08:47
+--- END: db/04_project_relater.sql ---
+
+--- FILE: db/05_project_relater2.sql ---
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: project
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `relater2`
+--
+
+DROP TABLE IF EXISTS `relater2`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `relater2` (
+  `idrelater2` int NOT NULL AUTO_INCREMENT,
+  `id_stu` int DEFAULT NULL,
+  `id_teacher` int DEFAULT NULL,
+  `id_code` int DEFAULT NULL,
+  PRIMARY KEY (`idrelater2`),
+  UNIQUE KEY `idrelater2_UNIQUE` (`idrelater2`),
+  KEY `id_stu_idx` (`id_stu`),
+  KEY `id_teacher_idx` (`id_teacher`),
+  KEY `id_code_idx` (`id_code`),
+  CONSTRAINT `id_code` FOREIGN KEY (`id_code`) REFERENCES `code` (`idcode`),
+  CONSTRAINT `id_stu` FOREIGN KEY (`id_stu`) REFERENCES `student` (`id_stu`),
+  CONSTRAINT `id_teacher` FOREIGN KEY (`id_teacher`) REFERENCES `teacher` (`id_teacher`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `relater2`
+--
+
+LOCK TABLES `relater2` WRITE;
+/*!40000 ALTER TABLE `relater2` DISABLE KEYS */;
+/*!40000 ALTER TABLE `relater2` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-25  1:08:46
+--- END: db/05_project_relater2.sql ---
+
+--- FILE: db/06_project_lectures.sql ---
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: project
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `lectures`
+--
+
+DROP TABLE IF EXISTS `lectures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lectures` (
+  `id_lecture` int NOT NULL AUTO_INCREMENT,
+  `lecture` varchar(500) DEFAULT NULL,
+  `id_course` int DEFAULT NULL,
+  PRIMARY KEY (`id_lecture`),
+  UNIQUE KEY `id_lecture_UNIQUE` (`id_lecture`),
+  KEY `id_course_idx` (`id_course`),
+  CONSTRAINT `id_course` FOREIGN KEY (`id_course`) REFERENCES `cours` (`id_cours`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lectures`
+--
+
+LOCK TABLES `lectures` WRITE;
+/*!40000 ALTER TABLE `lectures` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lectures` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-25  1:08:47
+--- END: db/06_project_lectures.sql ---
+
+--- FILE: db/07_project_routines.sql ---
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: project
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Temporary view structure for view `cours_view`
+--
+
+DROP TABLE IF EXISTS `cours_view`;
+/*!50001 DROP VIEW IF EXISTS `cours_view`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `cours_view` AS SELECT 
+ 1 AS `id_relater`,
+ 1 AS `first_name_stu`,
+ 1 AS `last_name_stu`,
+ 1 AS `id_cours`,
+ 1 AS `cours_name`,
+ 1 AS `first_cours`,
+ 1 AS `end_cours`,
+ 1 AS `date1`,
+ 1 AS `date2`,
+ 1 AS `name_teacher`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `cours_view`
+--
+
+/*!50001 DROP VIEW IF EXISTS `cours_view`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `cours_view` AS select `relater`.`id_relater` AS `id_relater`,`student`.`first_name_stu` AS `first_name_stu`,`student`.`last_name_stu` AS `last_name_stu`,`cours`.`id_cours` AS `id_cours`,`cours`.`cours_name` AS `cours_name`,`cours`.`first_cours` AS `first_cours`,`cours`.`end_cours` AS `end_cours`,`cours`.`date1` AS `date1`,`cours`.`date2` AS `date2`,`teacher`.`first_name` AS `name_teacher` from (((`relater` left join `student` on((`relater`.`id_stu` = `student`.`id_stu`))) left join `cours` on((`relater`.`id_cours` = `cours`.`id_cours`))) left join `teacher` on((`relater`.`id_teacher` = `teacher`.`id_teacher`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-25  1:08:48
+--- END: db/07_project_routines.sql ---
+
+--- FILE: db/08_project_code.sql ---
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: project
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `code`
+--
+
+DROP TABLE IF EXISTS `code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `code` (
+  `idcode` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(45) DEFAULT NULL,
+  `codeDate` date DEFAULT NULL,
+  PRIMARY KEY (`idcode`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `code`
+--
+
+LOCK TABLES `code` WRITE;
+/*!40000 ALTER TABLE `code` DISABLE KEYS */;
+/*!40000 ALTER TABLE `code` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-09-25  1:08:47
+--- END: db/08_project_code.sql ---
+
+--- FILE: images/130/130 --- [binary content detected, not included]
+
+
+--- FILE: images/131.jpg/131 --- [binary content detected, not included]
+
+
+--- FILE: lectures/78/1_computer vision --- [binary content detected, not included]
+
+
+--- FILE: models/call.js ---
+const mongoose = require("mongoose");
+const userSchema = new mongoose.Schema(
+  {
+    offer: mongoose.Schema.Types.Mixed,
+    teacherId: {
+      type: String,
+      required: true,
+    },
+    teacherCandidate: mongoose.Schema.Types.Mixed,
+    courseId: {
+      type: String,
+      required: true,
+    },
+    messages: [
+      {
+        content: { type: String, required: true },
+        studentId: { type: String, required: true },
+        studentName: { type: String, required: true },
+        studentImage: { type: String, required: true },
+      },
+    ],
+    students: [
+      {
+        checkOccurrences:[{
+          type:Date,
+          required:true,
+        }],
+        studentLogs: [
+          {
+            connectedAt: Date,
+            disconnectedAt: Date,
+          },
+        ],
+        observations: [
+          {
+            title: {
+              type: String,
+              enum: [
+                "notAttentive",
+                "usingPhone",
+                "noFace",
+                "facesDoNotMatch"
+              ],
+              required: true,
+            },
+            occurrencesDates: [
+              {
+                  type: Date,
+                  default: Date.now(),
+                  required: true,
+              },
+            ],
+          },
+        ],
+        studentId: {
+          type: String,
+          required: true,
+        },
+        answer: mongoose.Schema.Types.Mixed,
+        candidate: mongoose.Schema.Types.Mixed,
+      },
+    ],
+    onGoing: {
+      type: Boolean,
+      default: false,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    endedAt: {
+      type: Date,
+    },
+  },
+  { versionKey: false }
+);
+module.exports = mongoose.model("Call", userSchema);
+--- END: models/call.js ---
+
+--- FILE: models/course.js ---
+const executeQuery = require('../config/db');
+class course {
+
+    static async delete_leceture(courseId,file_name){
+        console.log(courseId,file_name)
+        const result = await executeQuery('delete from lectures where id_course=? and lecture=?',[courseId,file_name])
+    }
+
+    static async get_lectures_by_course_id(id_course){
+        console.log('uysd')
+        const result =await executeQuery('select *from lectures where id_course=?',[id_course]);
+        return result
+
+
+    }
+
+    static validatedates(date1, date2) {
+        const d1 = new Date(date1);
+        const d2 = new Date(date2);
+        const currentDate = new Date();
+        if (d2 <= d1)
+            throw new Error('dates are not valid')
+        if (d1 < currentDate || d2 <= currentDate)
+            throw new Error('dates are not valid')
+    }
+    static async get_courses_id(id_teacher) {
+        const res = await executeQuery('select id_cours from relater where id_teacher=?', [id_teacher]);
+        console.log(res)
+        let ids = []
+
+        for (let i = 0; i < res.length; i++) {
+            ids.push(res[i].id_cours)
+        }
+        console.log(ids)
+        return ids
+    }
+    static async get_courses(ids) {
+        let courses = []
+        for (let i = 0; i < ids.length; i++) {
+            let result = await executeQuery('select * from cours where id_cours=?', [ids[i]])
+            courses.push({... result[0]})
+        }
+
+        return courses
+    }
+    static async checkTeacherGivesCourse(courseId,teacherId) {
+            
+        let result = await executeQuery('select * from relater where id_cours=? and id_teacher=?', [courseId,teacherId])
+        if(!result.length)
+            throw new Error('you are not the teacher of this course')
+            
+    }
+
+
+    static async update(first_course, end_course, date1, date2, id_course) {
+        const res = await executeQuery('update cours set first_cours=? ,end_cours=?,date1=?,date2=? where id_cours=?', [first_course, end_course, date1, date2, id_course]);
+        return res[0];
+    }
+
+    static async delete_course(id_course) {
+        const d_fromrelater = await executeQuery('delete from relater where id_cours=?', [id_course]);
+
+        const d_fromcourse = await executeQuery('delete from cours where id_cours=?', [id_course]);
+    }
+
+
+
+
+
+
+    static async searchcourse_bycoursename(course_name) {
+        var courses = await executeQuery('select * from cours;')
+        console.log(course_name.length)
+        courses=courses.filter(course=>course['cours_name'].substring(0,course_name.length).toLowerCase()==course_name.toLowerCase())
+        return courses;
+    }
+
+
+
+
+    static async get_courses_mystudent_id(id_stu, id_teacher) {
+        const res = await executeQuery('select id_cours from relater where id_stu=? and id_teacher=?', [id_stu, id_teacher]);
+        console.log(res)
+        let ids = []
+
+        for (let i = 0; i < res.length; i++) {
+            ids.push(res[i].id_cours)
+        }
+        console.log(ids)
+        return ids
+    }
+
+
+
+    static async get_idcourse_forstudent(id_student) {
+        const res = await executeQuery('select id_cours from relater where id_stu=? ', [id_student]);
+        let ids = []
+
+        for (let i = 0; i < res.length; i++) {
+            ids.push(res[i].id_cours)
+        }
+        return ids
+    }
+
+
+}
+module.exports = course
+--- END: models/course.js ---
+
+--- FILE: models/get_id.js ---
+const executeQuery = require('../config/db');
+
+
+class gett_id {
+  static async findUserByCode(codeId) {
+    const relatorRow = await executeQuery('select * from relater2 where id_code=?', [codeId])
+    console.log(relatorRow[0])
+    let response=null
+    let id = null
+    let user=null
+    if (!relatorRow[0]?.id_stu) { 
+      id = relatorRow[0].id_teacher
+      response=await executeQuery('select * from teacher where id_teacher=?',[id])
+      user=response[0]
+    }
+    if (!relatorRow[0]?.id_teacher)
+    {  
+      id = relatorRow[0]?.id_stu
+      response=await executeQuery('select * from student where id_stu=?',[id])
+      user=response[0]
+    }
+    return user
+  }
+  static async findCode(code) {
+    const result = await executeQuery('select * from code where code=?', [code])
+    return result[0]
+  }
+  static async saveCode(code, id, role) {
+    console.log(id, code, role)
+    const { insertId } = await executeQuery('insert into code (code,codeDate) values(?,?)', [code, new Date()]);
+    console.log('codeId', insertId)
+    if (role == 'teacher') {
+      await executeQuery("insert into relater2 (id_,id_teacher_code) values(?,?);", [id, insertId])
+
+    }
+    if (role == 'student') {
+      await executeQuery("insert into relater2 (id_stu,id_code) values(?,?);", [id, insertId]);
+    }
+  }
+  static async student(email, password) {
+
+    const result = await executeQuery('select id_stu from student where email_stu=? and password=?', [email, password]);
+    if (!result)
+      throw new Error("one field was wrong")
+    return result[0];
+
+
+  }
+  //********************************************************************************************************** */
+
+  static async teacher(email, password) {
+    const result = await executeQuery('select * from teacher where email = ? and password=?', [email, password]);
+    if (!result[0])
+      throw new Error("one field was wrong")
+    return result[0];
+
+
+  }
+  static async verifyEmail(email, role) {
+    let result = null
+    if (role == 'teacher')
+      result = await executeQuery('select * from teacher where email = ? ', [email]);
+    if (role == 'student')
+      result = await executeQuery('select * from student where email_stu = ? ', [email]);
+    console.log(result)
+    if (!result)
+      throw new Error('email was not')
+    console.log(result)
+    if (!result[0])
+      throw new Error("one field was wrong")
+    const id = result[0][Object.keys(result[0])[0]]
+    return id;
+
+
+  }
+  //***************************************************************************** */
+
+  //////////////////////////////////////
+  static async confirm_account_teacher(id, password) {
+    try {
+      const result = await executeQuery('select id_teacher from teacher where id_teacher = ? and password=?', [id, password]);
+
+      return ("htis is same teacher");
+    }
+    catch (err) {
+      console.log(err)
+      return res.status(400).json({ message: err.message })
+    }
+
+  }
+
+  static async confirm_account_student(id, password) {
+    try {
+      const result = await executeQuery('select id_stu from student where id_stu = ? and password=?', [id, password]);
+
+      return ("htis is same student");
+    }
+    catch (err) {
+      console.log(err)
+      return res.status(400).json({ message: err.message })
+    }
+
+  }
+
+}
+
+
+
+
+
+
+
+
+module.exports = gett_id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--- END: models/get_id.js ---
+
+--- FILE: models/relater.js ---
+const executeQuery=require ('../config/db');
+
+class relater_model{
+static async get_students(courseId){
+  let result=await executeQuery('select id_stu from relater where id_cours=? and id_stu is not ?',[courseId,null])
+  result=result.map(el=>el.id_stu)
+  return result
+}
+static async add_relation(course_id,teacher_id){
+    let result= await executeQuery('insert into relater (id_cours,id_teacher) values(?,?)',[course_id,teacher_id]);
+  return result;
+} 
+
+}
+
+module.exports=relater_model;
+--- END: models/relater.js ---
+
+--- FILE: models/student.js ---
+const executeQuery=require ('../config/db');
+
+
+class studentmodels{
+    static async getstudents_by_course_id(course_id){
+      let results =await executeQuery('select id_stu from relater where id_cours=?',[course_id])
+      let students=[]
+      for (let i = 0; i < results.length; i++) {
+        let res=await executeQuery('select * from student where id_stu=?',[results[i].id_stu])
+        if(res[0])
+        students.push(res[0])
+      }  
+      return students
+    }
+    
+    //************************************ */
+
+static async addstudent(firstname,lastname,email,password)
+{
+
+  const result= await executeQuery('insert into student (first_name_stu,last_name_stu,email_stu,password) values(?,?,?,?)',[firstname,lastname,email,password]);
+  if (result) 
+  return {id:result.insertId,firstname:firstname,lastname:lastname,email,password };
+}
+//************************************ */
+static async addImageUrl(imageUrl,studentId){
+  await executeQuery(`update student set image_url=? where id_stu=?`, [imageUrl, studentId])
+}
+//**************************************** */
+static async reinsert(email,password)
+{
+ const result = await  executeQuery('select *from student where email_stu=? and password=?',[email,password]);
+  if (!result.length)
+      throw new Error('student was not found')
+ if(result)
+return result[0];
+}
+
+//****************************************** */
+
+static async get_courses(){
+  const res=await executeQuery('select  * from cours',[]);
+  if(res)
+  return res;
+}
+
+//***************************************** */
+
+
+static async course_info(id_course){
+  const res=await executeQuery('select  *from cours where id_cours=?',[id_course]);
+  if(res)
+  return res;
+}
+
+
+static async login_course(id_student,id_course)
+{
+
+  const result= await executeQuery('insert into relater (id_stu,id_cours) values(?,?)',[id_student,id_course]);
+  if (result) 
+  return result;
+}
+
+
+
+static async update_password(password2,id_student) {
+  const res = await executeQuery('update student set password=? where id_stu=?', [password2,id_student]);
+  return res[0];
+}
+
+
+}
+module.exports = studentmodels
+--- END: models/student.js ---
+
+--- FILE: models/teacher.js ---
+
+const executeQuery = require('../config/db')
+class teacher {
+  static async get_teacher_id(course_id) {
+    let result = await executeQuery('select id_teacher from relater where id_cours=?', [course_id])
+    console.log(result)
+    if (!result.length)
+      throw new Error('no teacher was found')
+    return result[0].id_teacher
+  }
+  static async get_teacher_by_id(teacher_id) {
+    const result = await executeQuery('select first_name ,last_name, email, id_teacher from teacher where id_teacher=?', [teacher_id])
+    return result[0]
+  }
+  static async get_teacher(email, password) {
+    const result = await executeQuery('select  * from teacher where  email=? and password=?', [email, password]);//كمالة الكويري
+    //       ملاحظة مهمة جدا جدا جدا: اذا النتيجة مصفوفة دايما وبد معلومات شخص فالمعلومات هاي اةل هنصر من المصفوفلا  
+    // result[0]
+    // هون النتيجة ممكن تكون مصفوفة من غرص واحد اوغرض واحد لهيك بدك تشوف شو النتيجة شكلها
+
+    if (result.length > 0) {
+      return result[0]
+    }
+    else   // تا نشوف اذا المصفوفة فاظية او لا
+      throw new Error('no user was found'); // تعليمة مهمة لاعطاء خطا بس رح ينكمش بالتابع يلي استدعاه
+
+    return result
+  }
+  static async get_course(course_id) {
+    // await executeQuery('SELECT first_name_stu,last_name_stu,cours_name,first_cours,end_cours,date1,date2,name_teacher from cours_view where id_cours = ? ',[course_id]);  
+    const result = await executeQuery('select * from cours where id_cours=? ', [course_id])
+    if (!result.length)
+      throw new Error('no course was found')
+    return result;
+
+  }
+
+  //****************************************************** */
+
+
+  static async add_course(course_name, course_discription, first_course, end_course, date1, date2) {
+
+
+    const result = await executeQuery('insert into cours (cours_name,cours_discription,first_cours,end_cours,date1,date2) values(?,?,?,?,?,?)', [course_name, course_discription, first_course, end_course, date1, date2]);
+
+    return result.insertId;
+
+  }
+
+
+  static async update_password(password2,id_teacher) {
+    const res = await executeQuery('update teacher set password=? where id_teacher=?', [password2,id_teacher]);
+    return res[0];
+}
+
+
+static async add_idCourse(id_course)
+{
+
+  const result= await executeQuery('insert into lectures (id_course) values(?)',[id_course]);
+  if (result) 
+  return {id:result.insertId};
+}
+static async addlectureUrl(lectureUrl,id_lecture){
+  await executeQuery(`update lectures set lecture=? where id_lecture=?`, [lectureUrl,id_lecture])
+}
+
+
+
+}
+module.exports = teacher
+--- END: models/teacher.js ---
+
+--- FILE: routes/student_router.js ---
+const router=require('express').Router();
+const student_controller =require('../controllers/stu_controller')
+router.post('/addstudent',student_controller.addnewstudent)
+router.get('/reinsert',student_controller.reinsert)
+router.get('/get_courses',student_controller.get_courses)
+router.get('/course_info',student_controller.course_info)
+//****************************************************************************** */
+router.post('/login_course',student_controller.login_course)
+router.get('/searchcourse_bycoursename',student_controller.searchcourse_bycoursename)
+router.get('/get_my_courses',student_controller.get_my_courses)
+router.get('/send_code',student_controller.sendCode)
+router.get('/verify_code',student_controller.verifyCode)
+router.patch('/reset_password',student_controller.reset_password)
+router.get('/image',student_controller.sendImage)
+router.get('/request_call',student_controller.findCall)
+router.get('/get_students_by_course',student_controller.getStudentsByCourse)
+//********************************* */
+router.post('/check_frame',student_controller.checkFrame)
+module.exports = router ;
+--- END: routes/student_router.js ---
+
+--- FILE: routes/teacher_router.js ---
+const express=require('express')
+const teacher_controller=require('../controllers/teacher_controller')
+const router=express.Router()
+router.get('/get-course-info',teacher_controller.get_course_info)
+router.get('/insert_teacher',teacher_controller.insert_teacher)
+router.post('/add_course',teacher_controller.add_course)
+router.get('/get_courses',teacher_controller.get_courses)
+router.patch('/update_date',teacher_controller.update_date)
+router.delete('/delete_course',teacher_controller.delete_course)
+router.get('/get_courses_where_mystudent_insert_it',teacher_controller.get_courses_mystudent)
+router.post('/create_lesson',teacher_controller.createLesson)
+router.get('/get_courses_students',teacher_controller.getCoursesStudents)
+router.get('/get_report',teacher_controller.get_report)
+router.get('/get_days_report',teacher_controller.get_days_report)
+router.post('/test/create_call',teacher_controller.create_test_call)
+router.post('/add_lecture',teacher_controller.add_lecture)
+router.get('/download_lecture',teacher_controller.get_lectures_by_course)
+router.get('/get_lectures',teacher_controller.get_lectures)
+router.delete('/delete_lecture',teacher_controller.delete_lecture)
+module.exports=router
+--- END: routes/teacher_router.js ---
+
+--- FILE: .gitignore ---
+.env
+uploads
+snapshots
+*.crt
+*.key
+*.pem
+script.js
+images
+db
+node_modules
+script.js
+--- END: .gitignore ---
+
+--- FILE: ca.crt ---
+-----BEGIN CERTIFICATE-----
+MIIDXzCCAkegAwIBAgIGMTA3MDIwMA0GCSqGSIb3DQEBCwUAMF4xEDAOBgNVBAMT
+B1Rlc3QgQ0ExCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYD
+VQQHEw1TYW4gRnJhbmNpc2NvMRAwDgYDVQQKEwdUZXN0IENBMB4XDTI0MDYwOTE0
+NDQ1OVoXDTI1MDYwOTE0NDQ1OVowXjEQMA4GA1UEAxMHVGVzdCBDQTELMAkGA1UE
+BhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lz
+Y28xEDAOBgNVBAoTB1Rlc3QgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQDFjzRrV+nrJ7C6HhTwFAq4ja1E85REWA6960hx7xV2SYNkJ41pY/kWVXUO
+qd/WhlrtAJJgmMrSqveFdDBT/s4gZtc2JJmz44BQp7UMfeolgp0rJ7Iqu4hG0qU5
+nl/I+7tnYR6V1n/KRGBQtRsFN7JFDjzLv2LSF9EDrw1sBeLsxUN2JpCZhrnPlEI1
++kFr+jaGTFVSovTTFewNWBocmospgq0KWJvlARmPEfc4nwU8N7nM/wdYRrQN1pfV
+7JEvGCy4Xo4MQ3O0UEu2+UzYaLLBhy16rkTHrAEWrJgzSVpGLgktiUcsDTiPWUZm
+78i9k1XyMFCIoEENQCS9no9pcpG7AgMBAAGjIzAhMA8GA1UdEwEB/wQFMAMBAf8w
+DgYDVR0PAQH/BAQDAgIEMA0GCSqGSIb3DQEBCwUAA4IBAQAtu/Wv6+DslR3/SsRL
+BmohVDd9qFm4EFlcZ9+n0Oppc84R5hkyohwOdMs5Dh5Zr44mlPG0WeX/Gc1rcOMD
+6YxzXhIUzJZjUtIbyldQNHcjSeN0imwHS5zAEyDZHduQBOdbpspFHciVZZB1FlEu
+0unYhyIkWcSRtwCGpZbs55BOT5tKF0e3O8UMFjHPMp+rquIOfp4vyeZcMJwfpUXr
+6SikXRtzPGtNSl8DF+t986bFJxBq0TcEZMWo4EKdfos8KrdueY2V4vTus3hkiHpS
+PJMqSZF/9al5noNto8xmcl9mQ70+cIoOvssTO8R7davIRTPLYlQLaLdkJZxcwFt0
+ACpr
+-----END CERTIFICATE-----
+--- END: ca.crt ---
+
+--- FILE: cert.crt ---
+-----BEGIN CERTIFICATE-----
+MIIDTTCCAjWgAwIBAgIGMTIwOTYxMA0GCSqGSIb3DQEBCwUAMF4xEDAOBgNVBAMT
+B1Rlc3QgQ0ExCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYD
+VQQHEw1TYW4gRnJhbmNpc2NvMRAwDgYDVQQKEwdUZXN0IENBMB4XDTI0MDYwOTE0
+NDUxM1oXDTI1MDYwOTE0NDUxM1owFDESMBAGA1UEAxMJbG9jYWxob3N0MIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmHXMCiSoLcRlC8jjHMVq39McTnYu
+3II3Q0+jLN9MI3F0RV/AA8JBmqMVpRXuFaPYDN86OvcLDkXxzo3ZWrxfpC0E9qSo
+gs3INuTVk4il+e76c0dE5m0hLDH3Iym8faqbnBE0WtwuMJpp11MfB4VRluO6i3oB
+tFQIzH+uMx+rc4ToBW+hht6Cvl31YxbuP+Re2Y5UMrf5HzWjM/TgQF9r4nFeK2ig
+yII99Lvuff45ryZQguplIuPioCO1yK7E3wWWdYcVWnUIfAZNCDLz6CJ95IZkFcSb
+YcJrp8yXymIYcaYHsIq6aYk0uq/Yn+lAK2c5oV8roMX19brP0zVFpqjDswIDAQAB
+o1swWTAMBgNVHRMBAf8EAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggr
+BgEFBQcDAQYIKwYBBQUHAwIwGgYDVR0RBBMwEYIJbG9jYWxob3N0hwR/AAABMA0G
+CSqGSIb3DQEBCwUAA4IBAQAerHYSt+wBQmdwLFLSQ/87dBt7qCdrVLezP6ssAewF
+AgrZe+Le/wVMopsG8REz5HsurvdXNz6iRzt14S/hgum1Fy9AkjiT/7bwS6aIEVmr
+bu2Jo+fkQMsR/FvgH0zDSECsVt+Y8IwQ0V0d+po5YcdgPzWs+4LGBq+6aJ2rrCW1
+xo2NH96aFMOkzmkRD+SCtu9oTw7Sd4WKCVbM4TCB1KcWGGhlckoBVrPVShZBIarX
+W4Mz2thvMYgw+jAGt6HjZDiFfPGDdDR33i7fe/OrtJXKez6ggesBf5dCfsYdqMh4
+JHYvWIKdE/y43pAr1/3Osf3sAhBOdl+zcRJ9pwASlTcB
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIIDXzCCAkegAwIBAgIGMTA3MDIwMA0GCSqGSIb3DQEBCwUAMF4xEDAOBgNVBAMT
+B1Rlc3QgQ0ExCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYD
+VQQHEw1TYW4gRnJhbmNpc2NvMRAwDgYDVQQKEwdUZXN0IENBMB4XDTI0MDYwOTE0
+NDQ1OVoXDTI1MDYwOTE0NDQ1OVowXjEQMA4GA1UEAxMHVGVzdCBDQTELMAkGA1UE
+BhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lz
+Y28xEDAOBgNVBAoTB1Rlc3QgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQDFjzRrV+nrJ7C6HhTwFAq4ja1E85REWA6960hx7xV2SYNkJ41pY/kWVXUO
+qd/WhlrtAJJgmMrSqveFdDBT/s4gZtc2JJmz44BQp7UMfeolgp0rJ7Iqu4hG0qU5
+nl/I+7tnYR6V1n/KRGBQtRsFN7JFDjzLv2LSF9EDrw1sBeLsxUN2JpCZhrnPlEI1
++kFr+jaGTFVSovTTFewNWBocmospgq0KWJvlARmPEfc4nwU8N7nM/wdYRrQN1pfV
+7JEvGCy4Xo4MQ3O0UEu2+UzYaLLBhy16rkTHrAEWrJgzSVpGLgktiUcsDTiPWUZm
+78i9k1XyMFCIoEENQCS9no9pcpG7AgMBAAGjIzAhMA8GA1UdEwEB/wQFMAMBAf8w
+DgYDVR0PAQH/BAQDAgIEMA0GCSqGSIb3DQEBCwUAA4IBAQAtu/Wv6+DslR3/SsRL
+BmohVDd9qFm4EFlcZ9+n0Oppc84R5hkyohwOdMs5Dh5Zr44mlPG0WeX/Gc1rcOMD
+6YxzXhIUzJZjUtIbyldQNHcjSeN0imwHS5zAEyDZHduQBOdbpspFHciVZZB1FlEu
+0unYhyIkWcSRtwCGpZbs55BOT5tKF0e3O8UMFjHPMp+rquIOfp4vyeZcMJwfpUXr
+6SikXRtzPGtNSl8DF+t986bFJxBq0TcEZMWo4EKdfos8KrdueY2V4vTus3hkiHpS
+PJMqSZF/9al5noNto8xmcl9mQ70+cIoOvssTO8R7davIRTPLYlQLaLdkJZxcwFt0
+ACpr
+-----END CERTIFICATE-----
+--- END: cert.crt ---
+
+--- FILE: index.js ---
+// ===================================================================
+// TeachMe — Node.js server entry point (PRODUCTION / Render-only)
+//   • REST routes under /api/student and /api/teacher
+//   • Socket.IO for realtime messaging
+//   • Serves built React frontend from ./dist
+//   • MongoDB (Mongoose) + MySQL (via db.js)
+//
+// TLS: Render terminates TLS at its edge and forwards plain HTTP.
+//      This file NEVER creates an HTTPS server. Do not add USE_HTTPS.
+// ===================================================================
+
+require("dotenv").config();
+
+const express = require("express");
+const path = require("path");
+const http = require("http");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const helmet = require("helmet");
+
+const { localIpAddress } = require("./utilities");
+const student_router = require("./routes/student_router");
+const teacher_router = require("./routes/teacher_router");
+const socketHandler = require("./socketHandler");
+
+// -------------------------------------------------------------------
+// Configuration
+// -------------------------------------------------------------------
+
+function parseOrigins(raw) {
+  if (!raw || raw.trim() === "*") return "*";
+  return raw.split(",").map((s) => s.trim()).filter(Boolean);
+}
+
+const CLIENT_ORIGIN = parseOrigins(process.env.CLIENT_ORIGIN);
+const ALLOW_CREDENTIALS = CLIENT_ORIGIN !== "*";
+
+function buildMongoUri() {
+  if (process.env.MONGO_CLUSTER) {
+    const user = process.env.MONGO_USER || "";
+    const pass = process.env.MONGO_PASSWORD || "";
+    const db = process.env.MONGO_DB || "teachMe";
+    const cluster = process.env.MONGO_CLUSTER;
+    return user && pass
+      ? `mongodb+srv://${user}:${encodeURIComponent(pass)}@${cluster}/${db}?retryWrites=true&w=majority`
+      : `mongodb+srv://${cluster}/${db}?retryWrites=true&w=majority`;
+  }
+  if (process.env.MONGO_URI) return process.env.MONGO_URI;
+
+  const host = process.env.MONGO_HOST || "127.0.0.1";
+  const port = process.env.MONGO_PORT || "27017";
+  const db = process.env.MONGO_DB || process.env.MONGO_INITDB_DATABASE || "teachMe";
+  const user = process.env.MONGO_USER || process.env.MONGO_INITDB_ROOT_USERNAME;
+  const pass = process.env.MONGO_PASSWORD || process.env.MONGO_INITDB_ROOT_PASSWORD;
+  return user && pass
+    ? `mongodb://${user}:${encodeURIComponent(pass)}@${host}:${port}/${db}?authSource=admin`
+    : `mongodb://${host}:${port}/${db}`;
+}
+
+function redactUri(uri) {
+  return uri
+    .replace(/\/\/[^@]*@/, "//***:***@")
+    .replace(/([?&](?:password|token|secret)=)[^&]+/gi, "$1***");
+}
+
+// -------------------------------------------------------------------
+// Express app
+// -------------------------------------------------------------------
+
+const app = express();
+app.set("trust proxy", 1); // Render's reverse proxy
+app.use(helmet());
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+    credentials: ALLOW_CREDENTIALS,
+  })
+);
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
+
+// -------------------------------------------------------------------
+// MongoDB
+// -------------------------------------------------------------------
+
+const MONGO_URI = buildMongoUri();
+console.log(`🔌 Connecting to MongoDB at ${redactUri(MONGO_URI)}`);
+
+mongoose
+  .connect(MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => {
+    console.error("❌ MongoDB connection failed:", err.message);
+    // Do NOT process.exit in production — let Render keep the process
+    // alive and restart it cleanly if Mongo is temporarily unreachable.
+  });
+
+// -------------------------------------------------------------------
+// HTTP server (always plain HTTP — Render handles TLS)
+// -------------------------------------------------------------------
+
+const server = http.createServer(app);
+console.log("🔓 HTTP server enabled (TLS terminated by Render proxy)");
+
+// -------------------------------------------------------------------
+// Socket.IO
+// -------------------------------------------------------------------
+
+const io = require("socket.io")(server, {
+  cors: {
+    origin: CLIENT_ORIGIN,
+    methods: ["GET", "POST"],
+    credentials: ALLOW_CREDENTIALS,
+  },
+});
+
+io.on("connection", (socket) => {
+  socketHandler(socket);
+});
+
+// -------------------------------------------------------------------
+// Routes
+// -------------------------------------------------------------------
+
+app.use("/api/student", student_router);
+app.use("/api/teacher", teacher_router);
+
+// -------------------------------------------------------------------
+// Serve built React frontend
+// -------------------------------------------------------------------
+
+const distDir = path.join(__dirname, "dist");
+app.use(express.static(distDir));
+
+app.get(/^\/(?!api\/).*/, (req, res) => {
+  res.sendFile(path.join(distDir, "index.html"));
+});
+
+// -------------------------------------------------------------------
+// Startup
+// -------------------------------------------------------------------
+
+const PORT = Number(process.env.PORT) || 3000;
+const HOST = "0.0.0.0";
+
+server.listen(PORT, HOST, () => {
+  console.log(`🚀 Server listening on http://${HOST}:${PORT}`);
+  if (localIpAddress) console.log("   Local IPs:", localIpAddress);
+
+  const aiUrl = process.env.AI_SERVICE_URL;
+  if (!aiUrl) {
+    console.warn("⚠️  AI_SERVICE_URL not set — face observation will be skipped");
+    return;
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+
+  fetch(aiUrl, { method: "HEAD", signal: controller.signal })
+    .then(() => console.log(`✅ AI service reachable at ${aiUrl}`))
+    .catch((err) => {
+      const reason = err.name === "AbortError" ? "timed out" : err.message;
+      console.warn(
+        `⚠️  AI service NOT reachable at ${aiUrl} (${reason}) — face observation will be skipped`
+      );
+    })
+    .finally(() => clearTimeout(timeout));
+});
+
+// -------------------------------------------------------------------
+// Graceful shutdown
+// -------------------------------------------------------------------
+
+async function shutdown(signal) {
+  console.log(`\n${signal} received — shutting down gracefully...`);
+  io.close();
+  server.close(async () => {
+    try {
+      await mongoose.connection.close();
+      console.log("✅ MongoDB connection closed");
+    } catch (err) {
+      console.error("⚠️  Error closing MongoDB:", err.message);
+    }
+    process.exit(0);
+  });
+
+  setTimeout(() => {
+    console.error("⚠️  Forced exit after timeout");
+    process.exit(1);
+  }, 10000).unref();
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
+
+process.on("uncaughtException", (err) => {
+  console.error("❌ Uncaught Exception:", err);
+});
+process.on("unhandledRejection", (reason) => {
+  console.error("❌ Unhandled Rejection:", reason);
+});
+
+module.exports = { app, server, io };
+--- END: index.js ---
+
+--- FILE: package.json ---
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@clickhouse/client": "^1.24.1",
+    "accepts": "^1.3.8",
+    "ansi-styles": "^4.3.0",
+    "array-flatten": "^1.1.1",
+    "async": "^3.2.4",
+    "axios": "^1.7.2",
+    "balanced-match": "^1.0.2",
+    "basic-auth": "^2.0.1",
+    "bignumber.js": "^9.0.0",
+    "body-parser": "^1.20.2",
+    "brace-expansion": "^1.1.11",
+    "bytes": "^3.1.2",
+    "call-bind": "^1.0.2",
+    "chalk": "^4.1.2",
+    "color-convert": "^2.0.1",
+    "color-name": "^1.1.4",
+    "concat-map": "^0.0.1",
+    "content-disposition": "^0.5.4",
+    "content-type": "^1.0.5",
+    "cookie": "^0.4.1",
+    "cookie-parser": "^1.4.6",
+    "cookie-signature": "^1.0.6",
+    "core-util-is": "^1.0.3",
+    "cors": "^2.8.5",
+    "cryptr": "^6.2.0",
+    "debug": "^2.6.9",
+    "depd": "^1.1.2",
+    "destroy": "^1.2.0",
+    "dotenv": "^18.0.3",
+    "ee-first": "^1.1.1",
+    "ejs": "^3.1.9",
+    "encodeurl": "^1.0.2",
+    "escape-html": "^1.0.3",
+    "etag": "^1.8.1",
+    "express": "^4.18.2",
+    "filelist": "^1.0.4",
+    "finalhandler": "^1.2.0",
+    "form-data": "^4.0.0",
+    "forwarded": "^0.2.0",
+    "fresh": "^0.5.2",
+    "function-bind": "^1.1.1",
+    "get-intrinsic": "^1.2.1",
+    "has": "^1.0.3",
+    "has-flag": "^4.0.0",
+    "has-proto": "^1.0.1",
+    "has-symbols": "^1.0.3",
+    "helmet": "^8.3.0",
+    "http-errors": "^1.6.3",
+    "iconv-lite": "^0.4.24",
+    "inherits": "^2.0.3",
+    "ipaddr.js": "^1.9.1",
+    "isarray": "^1.0.0",
+    "jake": "^10.8.7",
+    "media-typer": "^0.3.0",
+    "merge-descriptors": "^1.0.1",
+    "methods": "^1.1.2",
+    "mime": "^1.6.0",
+    "mime-db": "^1.52.0",
+    "mime-types": "^2.1.35",
+    "minimatch": "^3.1.2",
+    "mongoose": "^8.4.0",
+    "morgan": "^1.9.1",
+    "ms": "^2.0.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.2",
+    "negotiator": "^0.6.3",
+    "nodemailer": "^6.9.3",
+    "object-inspect": "^1.12.3",
+    "on-finished": "^2.3.0",
+    "on-headers": "^1.0.2",
+    "parseurl": "^1.3.3",
+    "path-to-regexp": "^0.1.7",
+    "process-nextick-args": "^2.0.1",
+    "proxy-addr": "^2.0.7",
+    "qs": "^6.11.0",
+    "range-parser": "^1.2.1",
+    "raw-body": "^2.5.2",
+    "readable-stream": "^2.3.7",
+    "safe-buffer": "^5.1.2",
+    "safer-buffer": "^2.1.2",
+    "send": "^0.18.0",
+    "serve-static": "^1.15.0",
+    "setprototypeof": "^1.1.0",
+    "side-channel": "^1.0.4",
+    "socket.io": "^4.7.5",
+    "sqlstring": "^2.3.1",
+    "statuses": "^1.4.0",
+    "string_decoder": "^1.1.1",
+    "supports-color": "^7.2.0",
+    "toidentifier": "^1.0.1",
+    "type-is": "^1.6.18",
+    "unpipe": "^1.0.0",
+    "util-deprecate": "^1.0.2",
+    "utils-merge": "^1.0.1",
+    "vary": "^1.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "node index.js"
+
+  },
+  "author": "",
+  "license": "ISC"
+}
+--- END: package.json ---
+
+--- FILE: socketHandler.js ---
+const Call = require("./models/call");
+const get_id = require("./models/get_id");
+const Course = require("./models/course");
+
+let connectedSockets = [];
+async function socketHandler(socket) {
+  try {
+    let call;
+    let userId;
+    let studentsIds;
+    const { auth } = socket.handshake; // Accessing the query parameters
+    const { role, email, password, id } = auth;
+
+    if (!role) {
+      throw new Error("A role must be sent");
+    }
+
+    if (role === "teacher") {
+      const { id_teacher } = await get_id.teacher(email, password);
+      console.log("connected ", role);
+      if (id_teacher != id) {
+        throw new Error("Error validating the teacher");
+      }
+      userId = id_teacher;
+    } else if (role === "student") {
+      const student = await get_id.student(email, password);
+      userId = student.id_stu;
+      let coursesIds = await Course.get_idcourse_forstudent(userId);
+      console.log("connected ", role);
+      socket.emit("student-connected", { message: "student connected" });
+    } else {
+      throw new Error("Invalid role");
+    }
+
+    connectedSockets.push({
+      socketId: socket.id,
+      role,
+      userId,
+    });
+    socket.on("request-offer", async ({ callId }) => {
+      call = await Call.findById(callId).catch((err) => {
+        socket.emit("error", { message: "call was not found" });
+      });
+      if (!call) return;
+      for (let connectedSocket of connectedSockets) {
+        if (connectedSocket.userId == call.teacherId)
+          socket
+            .to(connectedSocket.socketId)
+            .emit("request-offer", { studentId: userId });
+        console.log("student requested offer");
+      }
+    });
+    socket.on("ask-me-for-offer", async ({ callId }) => {
+      call = await Call.findById(callId).catch((err) => console.log(err));
+      if (!call?.students?.length) return;
+      studentsIds = call.students.map((stu) => stu.studentId);
+      for (let connectedSocket of connectedSockets) {
+        for (let id of studentsIds) {
+          if (id == connectedSocket.userId) {
+            console.log(connectedSocket.userId);
+            socket
+              .to(connectedSocket.socketId)
+              .emit("ask-me-for-offer", { callId });
+          }
+        }
+      }
+    });
+    socket.on("request-messages", async ({ callId }) => {
+      call = await Call.findById(callId);
+      if (!call) return;
+      const { messages } = call;
+      socket.emit("recieve-messages", { messages });
+    });
+    socket.on("teacher-end-call", async ({ callId }) => {
+      let calls = await Call.find({ teacherId: userId, onGoing: true });
+      if (!calls?.length) return;
+      for (let call of calls) {
+        call.onGoing = false;
+        call.endedAt = new Date();
+        for (let student of call.students) {
+          if (!student?.studentLogs?.length) continue;
+          student.studentLogs[student.studentLogs.length - 1].disconnectedAt =
+            call.endedAt;
+        }
+        await call.save();
+      }
+      if (!call?.students?.length) return;
+      studentsIds = call?.students?.map((stu) => stu.studentId);
+
+      for (let connectedSocket of connectedSockets)
+        if (studentsIds?.includes(String(connectedSocket.userId))) {
+          socket
+            .to(connectedSocket.socketId)
+            .emit("teacher-end-call", { callId });
+        }
+    });
+    socket.on("message", async ({ message, callId }) => {
+      if (
+        !message?.content ||
+        !message?.studentId ||
+        !message?.studentName ||
+        !message?.studentImage
+      )
+        return;
+      console.log("got message");
+      const call = await Call.findById(callId);
+      if (!call) return;
+      if (!call?.students?.length) return;
+      call.messages.push(message);
+      await call.save();
+      studentsIds = call.students.map((stu) => stu.studentId);
+      const teacherSocket = connectedSockets.find(
+        (socket) => socket.userId == call.teacherId
+      );
+      socket.to(teacherSocket.socketId).emit("message", { message });
+      socket.emit("message", { message, callId });
+
+      for (let connectedSocket of connectedSockets) {
+        if (studentsIds.includes(String(connectedSocket.userId))) {
+          console.log("found it ", connectedSocket.socketId);
+          socket.to(connectedSocket.socketId).emit("message", { message });
+        }
+      }
+    });
+    socket.on("teacher-offer", async ({ callId, offer }) => {
+      call = await Call.findById(callId).catch((err) => {
+        socket.emit("error", { message: "call was not found" });
+        throw err;
+      });
+
+      if (call.teacherId != userId) {
+        throw new Error("This teacher does not give this course");
+      }
+
+      studentsIds = call.students.map((stu) => stu.studentId);
+
+      call.offer = offer;
+      call.onGoing = true;
+
+      await call.save().catch((err) => {
+        socket.emit("error", { message: "Call could not be saved" });
+        throw err;
+      });
+      console.log(studentsIds);
+      for (let connectedSocket of connectedSockets) {
+        if (studentsIds.includes(String(connectedSocket.userId))) {
+          console.log(connectedSocket);
+          socket
+            .to(connectedSocket.socketId)
+            .emit("teacher-offer", { offer, callId });
+        }
+      }
+    });
+
+    socket.on("teacher-candidate", async ({ teacherId, callId, candidate }) => {
+      call = await Call.findById(callId).catch((err) => {
+        socket.emit("error", { message: "call was not found" });
+        throw err;
+      });
+
+      if (call.teacherId != userId) {
+        throw new Error("Teacher is not the owner of this call");
+      }
+
+      call.teacherCandidate = candidate;
+
+      await call.save().catch((err) => {
+        socket.emit("error", { message: "Call could not be saved" });
+        throw err;
+      });
+
+      for (let connectedSocket of connectedSockets) {
+        if (studentsIds?.includes(String(connectedSocket.userId))) {
+          socket.to(connectedSocket.socketId).emit("teacher-candidate", {
+            candidate,
+            callId,
+            courseId: call.courseId,
+          });
+        }
+      }
+    });
+    socket.on("student-answer", async ({ callId, answer }) => {
+      call = await Call.findById(callId).catch((err) => {
+        socket.emit("error", { message: "call was not found" });
+        throw err;
+      });
+      for (let student of call.students) {
+        if (student.studentId == userId) {
+          student.answer = answer;
+          await call.save();
+        }
+      }
+      for (let connectedSocket of connectedSockets) {
+        if (connectedSocket.userId == Number(call.teacherId))
+          socket
+            .to(connectedSocket.socketId)
+            .emit("student-answer", { answer, studentId: userId });
+        console.log("student answer was sent");
+      }
+    });
+    socket.on("student-candidate", async ({ callId, candidate }) => {
+      const call = await Call.findById(callId).catch((err) => {
+        socket.emit("error", { message: "call was not found" });
+        throw err;
+      });
+      for (let student of call.students) {
+        if (student.studentId == userId) {
+          student.candidate = candidate;
+          await call.save();
+        }
+      }
+      for (let connectedSocket of connectedSockets) {
+        if (connectedSocket.userId == call.teacherId)
+          socket
+            .to(connectedSocket.socketId)
+            .emit("student-candidate", { candidate, studentId: userId });
+        console.log("student canidiate was sent");
+      }
+    });
+    socket.on("student-ask-for-call", async ({ courseId }) => {
+      if (!userId) return;
+      let calls = await Call.find({ courseId, onGoing: true }).sort({
+        createdAt: -1,
+      });
+      // console.log(calls.length, " number of ongoing calls");
+      if (!calls?.length)
+        return socket.emit("no-calls", { message: "no calls are being made" });
+      call = calls[0];
+
+      if (call?.offer) {
+        socket.emit("teacher-offer", { offer: call.offer, callId: call._id });
+        // console.log('offer sent to student',call.offer)
+      }
+      if (call?.teacherCandidate) {
+        socket.emit("teacher-candidate", { candidate: call.teacherCandidate });
+        // console.log('candidate sent to student',call.teacherCandidate)
+      }
+    });
+    socket.on("student-request-call", async ({ callId, teacherId }) => {
+      for (let connectedSocket of connectedSockets) {
+        if (connectedSocket.userId == call.teacherId)
+          socket
+            .to(connectedSocket.socketId)
+            .emit("student-request-call", { studentId: userId });
+        console.log("student-request-call");
+      }
+    });
+    socket.on("student-exit-call", async () => {
+      if (call)
+        for (let connectedSocket of connectedSockets) {
+          if (connectedSocket.userId == call.teacherId)
+            socket
+              .to(connectedSocket.socketId)
+              .emit("student-exit-call", { studentId: userId });
+          console.log("student-exited");
+        }
+    });
+    socket.on("disconnect", async () => {
+      console.log("Disconnected");
+      connectedSockets = connectedSockets.filter(
+        (cs) => cs.socketId !== socket.id
+      );
+      if (role === "teacher" && call?._id) {
+        let calls = await Call.find({
+          teacherId: socket.userId,
+          onGoing: true,
+        });
+        for (let call of calls) {
+          call.onGoing = false;
+          call.endedAt = new Date();
+          await call.save();
+        }
+        if (call.onGoing) {
+          call.onGoing = false;
+          call.endedAt = new Date();
+          for (let student of call.students) {
+            if (!student?.studentLogs?.length) continue;
+            student.studentLogs[student.studentLogs.length - 1].disconnectedAt =
+              call.endedAt;
+          }
+          await call.save();
+        }
+        studentsIds = call.students.map((stu) => stu.studentId);
+
+        for (let connectedSocket of connectedSockets) {
+          for (let id of studentsIds) {
+            if (id == connectedSocket.userId) {
+              console.log(connectedSocket.userId);
+              socket
+                .to(connectedSocket.socketId)
+                .emit("teacher-disconnected", { teacherId: call.teacherId });
+            }
+          }
+        }
+      }
+      if (call?._id) {
+        if (role == "student") {
+          console.log("student disconnected");
+
+          await handleStudentOut(call, socket);
+          // Emit event to teacher that student has disconnected
+          for (let connectedSocket of connectedSockets) {
+            if (connectedSocket.userId == call.teacherId) {
+              {
+                socket
+                  .to(connectedSocket.userId)
+                  .emit("student-disconnected", { studentId: userId });
+              }
+            }
+          }
+        }
+      }
+    });
+    socket.on("student-out", async ({ studentId, callId }) => {
+      console.log('student is out')
+        call = await Call.findById(callId);
+      if (!call) return;
+      for(let student of call.students){
+        if(student.studentId==studentId){
+            console.log(student.studentLogs[student.studentLogs.length-1])
+            student.studentLogs[student.studentLogs.length - 1].disconnectedAt = new Date();
+        }
+      }
+      await call.save()
+    });
+    socket.on("student-joined-call", async ({ studentId, callId }) => {
+      call = await Call.findById(callId);
+      if (!call) return;
+      for (let student of call.students) {
+          if (student.studentId == studentId) {
+            console.log("student joined");
+          student.studentLogs.push({
+            connectedAt: new Date(),
+            disconnectedAt: null,
+          });
+        }
+      }
+      await call.save()
+    });
+  } catch (err) {
+    console.log(err);
+    socket.emit("error", { message: err.message });
+  }
+}
+async function handleStudentOut(call, socket) {
+  for (let student of call.students) {
+    if (student.studentId != socket.userId) continue;
+    student.studentLogs[student.studentLogs.length - 1].disconnectedAt =
+      new Date();
+  }
+  await call.save();
+}
+async function handleStudentIn(call, socket) {
+  for (let student of call.students) {
+    if (student.studentId != socket.userId) continue;
+    student.studentLogs.push({ connectedAt: new Date(), disconnectedAt: null });
+  }
+  await call.save();
+}
+module.exports = socketHandler;
+--- END: socketHandler.js ---
+
+--- FILE: test.js ---
+// Utility functions and processStudentLogs function
+processStudentLogs = (students) => {
+  const studentReports = {};
+
+  students.forEach((student) => {
+    if (!studentReports[student.studentId]) {
+      studentReports[student.studentId] = {
+        studentId: student.studentId,
+        loginCount: 0,
+        totalTime: 0,
+        logs: [],
+        observations: [],
+      };
+    }
+
+    const report = studentReports[student.studentId];
+
+    // Count logins and total time connected
+    student.studentLogs.forEach((log) => {
+      if (log.connectedAt && log.disconnectedAt) {
+        report.loginCount += 1;
+        report.totalTime +=
+          new Date(log.disconnectedAt) - new Date(log.connectedAt);
+        report.logs.push(log);
+      }
+    });
+    if (student.observations.length == 1) return studentReports;
+    // Process observations
+    student.observations.forEach((obs) => {
+      if (obs.title !== "student is attentive") {
+        let tempObservation = null;
+        if (obs.title == "student is not attentive")
+          tempObservation = "student was not attentive";
+        if (obs.title == "student is using his phone")
+          tempObservation = "student had been using his phone";
+
+        let occurrenceCount = 0;
+        let timeDifference = 0;
+        for (
+          let observationStart = 0;
+          observationStart < obs.occurrencesDates.length - 1;
+          observationStart++
+        ) {
+          for (
+            let observationEnd = observationStart + 1;
+            observationEnd < obs.occurrencesDates.length;
+            observationEnd++
+          ) {
+            timeDifference =
+              (new Date(obs.occurrencesDates[observationEnd]) -
+                new Date(obs.occurrencesDates[observationStart])) /
+              1000;
+            // he must be caught in the act for 5 seconds
+            if (timeDifference < 5) continue;
+            let timeJump =
+              (new Date(obs.occurrencesDates[observationEnd]) -
+                new Date(obs.occurrencesDates[observationEnd - 1])) /
+              1000;
+            // ensures there is a linear action
+            if (timeJump > 2) {
+              observationStart = --observationEnd;
+            timeDifference = 0;
+              break
+            }
+
+            occurrenceCount++;
+            observationStart = --observationEnd;
+            console.log(timeDifference);
+            timeDifference = 0;
+            break;
+          }
+        }
+        if (occurrenceCount > 1)
+          studentReports[student.studentId].observations.push(
+            `${tempObservation} ${occurrenceCount} times`
+          );
+        if (occurrenceCount == 1)
+          studentReports[student.studentId].observations.push(
+            `${tempObservation} once`
+          );
+      }
+    });
+  });
+  return studentReports;
+};
+
+// Data generation function
+const generateTestData = () => {
+  return [
+    {
+      studentId: "student1",
+      studentLogs: [
+        {
+          connectedAt: new Date("2023-06-01T10:00:00Z"),
+          disconnectedAt: new Date("2023-06-01T10:30:00Z"),
+        },
+        {
+          connectedAt: new Date("2023-06-01T11:00:00Z"),
+          disconnectedAt: new Date("2023-06-01T11:15:00Z"),
+        },
+      ],
+      observations: [
+        {
+          title: "student is not attentive",
+          occurrencesDates: [
+            new Date("2023-06-01T11:05:00.000Z"),
+            new Date("2023-06-01T11:05:02.000Z"),
+            new Date(   "2023-06-01T11:05:05.000Z"),
+            new Date(   "2023-06-01T11:05:07.000Z"),
+            new Date(   "2023-06-01T11:05:09.000Z"),
+            new Date(   "2023-06-01T11:05:10.000Z"),
+          ],
+        },
+        {
+          title: "student is using his phone",
+          occurrencesDates: [
+            new Date("2023-06-01T11:05:00Z"),
+            new Date("2023-06-01T11:05:02Z"),
+            new Date("2023-06-01T11:05:03Z"),
+            new Date("2023-06-01T11:05:05Z"),
+            new Date("2023-06-01T11:05:12Z"),
+            new Date("2023-06-01T11:05:14Z"),
+            new Date("2023-06-01T11:05:16Z"),
+          ],
+        },
+      ],
+    },
+  ];
+};
+
+// Test function
+const testProcessStudentLogs = () => {
+  const testData = generateTestData();
+  const studentReports = processStudentLogs(testData);
+  console.log(studentReports["student1"].observations);
+};
+
+// Run the test
+testProcessStudentLogs();
+--- END: test.js ---
+
+--- FILE: utilities.js ---
+const { networkInterfaces } = require('os');
+
+const nets = networkInterfaces();
+const results = Object.create(null); // Or just '{}', an empty object
+
+for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+        // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+        // 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
+        const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+        if (net.family === familyV4Value && !net.internal) {
+            if (!results[name]) {
+                results[name] = [];
+            }
+            results[name].push(net.address);
+        }
+    }
+}
+let localIpAddress=results
+module.exports={localIpAddress}
+--- END: utilities.js ---

@@ -20,6 +20,7 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 
 const { localIpAddress } = require("./utilities");
+const r2 = require("./config/r2");
 const student_router = require("./routes/student_router");
 const teacher_router = require("./routes/teacher_router");
 const socketHandler = require("./socketHandler");
@@ -70,7 +71,19 @@ function redactUri(uri) {
 
 const app = express();
 app.set("trust proxy", 1); // Render's reverse proxy
-app.use(helmet());
+// Helmet's default CSP only allows images from 'self' and data: — profile
+// images now live on Cloudflare R2, so that origin must be allowed too.
+const r2Origin = r2.publicOrigin();
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": ["'self'", "data:", "blob:", ...(r2Origin ? [r2Origin] : [])],
+      },
+    },
+  })
+);
 app.use(
   cors({
     origin: CLIENT_ORIGIN,
@@ -147,25 +160,6 @@ const HOST = "0.0.0.0";
 server.listen(PORT, HOST, () => {
   console.log(`🚀 Server listening on http://${HOST}:${PORT}`);
   if (localIpAddress) console.log("   Local IPs:", localIpAddress);
-
-  const aiUrl = process.env.AI_SERVICE_URL;
-  if (!aiUrl) {
-    console.warn("⚠️  AI_SERVICE_URL not set — face observation will be skipped");
-    return;
-  }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
-
-  fetch(aiUrl, { method: "HEAD", signal: controller.signal })
-    .then(() => console.log(`✅ AI service reachable at ${aiUrl}`))
-    .catch((err) => {
-      const reason = err.name === "AbortError" ? "timed out" : err.message;
-      console.warn(
-        `⚠️  AI service NOT reachable at ${aiUrl} (${reason}) — face observation will be skipped`
-      );
-    })
-    .finally(() => clearTimeout(timeout));
 });
 
 // -------------------------------------------------------------------

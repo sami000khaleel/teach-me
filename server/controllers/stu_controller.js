@@ -3,170 +3,33 @@ require("dotenv").config();
 const studentmodels = require("../models/student");
 const teachermodels = require("../models/teacher");
 const get_id = require("../models/get_id");
-const https = require("https");
-const util = require("util");
-const FormData = require("form-data");
 const executeQuery = require("../config/db");
-const { createReadStream } = require("fs");
-const axios = require("axios");
 const Call = require("../models/call");
 const course_model = require("../models/course");
 const multer = require("multer");
-const fs = require("fs/promises");
-const path = require("path");
 const nodemailer = require("nodemailer");
+const r2 = require("../config/r2");
 
 // =====================================================================
-// 🔹 Helper: Safely call the Flask AI service.
-//    Returns the response data OR null. Never throws.
+// 🔹 Profile image upload
+//    memoryStorage → the file never touches Render's (ephemeral) disk,
+//    it goes straight from the request into Cloudflare R2.
 // =====================================================================
-async function callAiService(endpoint, formData, timeoutMs = 5000) {
-  const aiBaseUrl = process.env.AI_SERVICE_URL || "https://127.0.0.1:5000";
-  const url = `${aiBaseUrl}${endpoint}`;
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5 MB
 
-  try {
-    const response = await axios.post(url, formData, {
-      httpsAgent,
-      headers: formData.getHeaders(),
-      timeout: timeoutMs,
-    });
-    console.log(`✅ AI service responded: ${endpoint}`);
-    return response.data;
-  } catch (err) {
-    if (err.code === "ECONNREFUSED") {
-      console.warn(
-        `⚠️  AI service not running at ${aiBaseUrl} — skipping ${endpoint}`
-      );
-    } else if (err.code === "ECONNABORTED") {
-      console.warn(
-        `⚠️  AI service timed out after ${timeoutMs}ms — skipping ${endpoint}`
-      );
-    } else {
-      console.warn(`⚠️  AI service error at ${endpoint}:`, err.message);
-    }
-    return null;
-  }
+const profileImageUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_IMAGE_BYTES, files: 1 },
+  fileFilter: (req, file, cb) => cb(null, r2.ALLOWED_MIME_TYPES.has(file.mimetype)),
+}).single("file");
+
+function parseProfileImage(req, res) {
+  return new Promise((resolve, reject) => {
+    profileImageUpload(req, res, (err) => (err ? reject(err) : resolve()));
+  });
 }
 
 class studentcontroller {
-  static giveObservationTitle(message) {
-    let observationTitle = null;
-    switch (message) {
-      case "attentive":
-        observationTitle = "student is attentive";
-        break;
-      case "notAttentive":
-        observationTitle = "student is not attentive";
-        break;
-      case "usingPhone":
-        observationTitle = "student is using his phone";
-        break;
-      default:
-        break;
-    }
-    return observationTitle;
-  }
-
-  static addObservation(call, studentId, observationTitle, date) {
-    studentId = studentId.split(".")[0];
-    for (let student of call.students) {
-      if (student.studentId == studentId) {
-        let foundOneFlag = false;
-        for (let observation of student.observations) {
-          if (observation?.title != observationTitle) continue;
-          foundOneFlag = true;
-          observation.occurrencesDates.push(date);
-          break;
-        }
-        if (!foundOneFlag) {
-          student.observations.push({
-            title: observationTitle,
-            occurrencesDates: [date],
-          });
-        }
-      }
-      student.checkOccurrences.push(date);
-    }
-    return call;
-  }
-
-  static async checkFrame(req, res) {
-    const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, "./snapshots");
-      },
-      filename: function (req, file, cb) {
-        req.filepath = path.join(
-          __dirname,
-          "..",
-          "snapshots",
-          `${Date.now()}-${file.originalname}`
-        );
-        cb(null, `${Date.now()}-${file.originalname}`);
-      },
-    });
-
-    const upload = multer({ storage }).single("file");
-    const uploadPromise = util.promisify(upload);
-
-    try {
-      await uploadPromise(req, res);
-
-      let call = await Call.findById(req.body.callId);
-      const file = req?.file;
-      let date = req.body?.date;
-
-      if (!file) {
-        console.log("No file was received");
-        return res.json({ success: true, observation: "attentive" });
-      }
-
-      const formData = new FormData();
-      formData.append("file", createReadStream(req.filepath));
-
-      // 🔹 Ask the AI service (optional — returns null if down)
-      const aiResponse = await callAiService("/api/observation", formData);
-
-      if (!aiResponse) {
-        // AI service unavailable → treat as attentive and continue
-        return res
-          .status(200)
-          .json({ success: true, observation: "attentive" });
-      }
-
-      const message = aiResponse.message;
-
-      if (message === "attentive" || !message) {
-        return res
-          .status(200)
-          .json({ success: true, observation: "attentive" });
-      }
-
-      // Extract student ID from filename
-      const studentId = req.file.filename.split("-")[1];
-
-      for (let student of call.students) {
-        if (student.studentId != studentId) continue;
-        student.checkOccurrences.push(date);
-      }
-
-      call = studentcontroller.addObservation(call, studentId, message, date);
-      await call.save();
-
-      return res.json({ warningFlag: true, observation: message });
-    } catch (error) {
-      console.error("checkFrame error:", error.message);
-      return res.status(500).json({ success: false, message: error.message });
-    } finally {
-      if (req.filepath) {
-        fs.unlink(req.filepath).catch((err) =>
-          console.error("Failed to delete temp file:", err)
-        );
-      }
-    }
-  }
-
   static async getStudentsByCourse(req, res) {
     try {
       const { courseId } = req.query;
@@ -199,6 +62,10 @@ class studentcontroller {
     }
   }
 
+  // Legacy route: old rows in the DB still hold
+  //   /api/student/image?studentId=<id>&imageName=...
+  // New signups store the full R2 URL, so this only redirects old rows
+  // (after their images were copied to R2 as profiles/<id>.jpg).
   static async sendImage(req, res) {
     try {
       const { imageName, studentId } = req.query;
@@ -207,9 +74,16 @@ class studentcontroller {
           success: false,
           message: "no data about the image was provided",
         });
-      return res.sendFile(
-        path.join(__dirname, "..", "images", studentId, studentId + ".jpg")
-      );
+      if (!/^\d+$/.test(String(studentId)))
+        return res
+          .status(400)
+          .json({ success: false, message: "invalid student id" });
+      if (!r2.configured)
+        return res
+          .status(503)
+          .json({ success: false, message: "image storage is not configured" });
+
+      return res.redirect(302, r2.publicUrlFor(`profiles/${studentId}.jpg`));
     } catch (err) {
       console.log(err);
       return res
@@ -276,83 +150,60 @@ class studentcontroller {
   }
 
   static async addnewstudent(req, res) {
+    // 1. Read the multipart body (profile image stays in memory)
     try {
-      const storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-          cb(null, "./uploads");
-        },
-        filename: function (req, file, cb) {
-          cb(null, Date.now() + file.originalname);
-        },
-      });
-      const upload = multer({ storage }).single("file");
-
-      await upload(req, res, async (err) => {
-        try {
-          if (err) {
-            console.log(err.message);
-            return res.status(500).json({
-              message: "internal error handling the image",
-              m: err.message,
-            });
-          }
-
-          const { firstname, lastname, email, password } = req.body;
-
-          // 1. Create the student in MySQL
-          const student = await studentmodels.addstudent(
-            firstname,
-            lastname,
-            email,
-            password
-          );
-
-          // 2. Move the uploaded image to the student's folder
-          const destinationDir = path.join("./images", String(student.id));
-          await fs.mkdir(destinationDir, { recursive: true });
-
-          const filesNames = await fs.readdir(path.join("./", "uploads"));
-          for (const fileName of filesNames) {
-            const finalPath = path.join(
-              destinationDir,
-              String(student.id) + ".jpg"
-            );
-            await fs.rename(
-              path.join("./", "uploads", fileName),
-              finalPath
-            );
-          }
-
-          // 3. Save the image URL in MySQL
-          const url = `/api/student/image?studentId=${student.id}&imageName=${
-            req.file?.filename || student.id + ".jpg"
-          }`;
-          await studentmodels.addImageUrl(url, student.id);
-
-          // 4. Register the student's face with the AI service (optional)
-          const formData = new FormData();
-          formData.append(
-            "file",
-            createReadStream(
-              path.join(destinationDir, String(student.id) + ".jpg")
-            )
-          );
-
-          const aiResult = await callAiService("/api/store_image", formData);
-          if (aiResult) {
-            console.log(`👤 Face registered for student ${student.id}`);
-          }
-
-          // 5. Always return the student — signup succeeds regardless of AI
-          return res.json(student);
-        } catch (err) {
-          console.error("addnewstudent inner error:", err);
-          return res.status(500).json({ success: false, message: err.message });
-        }
-      });
+      await parseProfileImage(req, res);
     } catch (err) {
-      console.error("addnewstudent outer error:", err);
-      return res.status(400).json({ message: err.message });
+      console.log(err.message);
+      if (err.code === "LIMIT_FILE_SIZE")
+        return res
+          .status(400)
+          .json({ message: "the image is too large (max 5 MB)" });
+      return res.status(500).json({
+        message: "internal error handling the image",
+        m: err.message,
+      });
+    }
+
+    if (!req.file)
+      return res.status(400).json({
+        message: "a profile image is required (jpg, png, webp or gif, max 5 MB)",
+      });
+
+    try {
+      const { firstname, lastname, email, password } = req.body;
+
+      // 2. Create the student in MySQL
+      const student = await studentmodels.addstudent(
+        firstname,
+        lastname,
+        email,
+        password
+      );
+
+      // 3. Upload the image to R2 and save its public URL in MySQL
+      let uploadedKey = null;
+      try {
+        const { key, url } = await r2.uploadProfileImage(student.id, req.file);
+        uploadedKey = key;
+        await studentmodels.addImageUrl(url, student.id);
+        // 4. Return the student (with the image url, so the UI can show it right away)
+        return res.json({ ...student, imageUrl: url });
+      } catch (err) {
+        // Roll back so the user can sign up again with the same email
+        console.error("❌ profile image upload failed:", err.message);
+        if (uploadedKey) await r2.deleteObject(uploadedKey).catch(() => {});
+        await executeQuery("delete from student where id_stu=?", [
+          student.id,
+        ]).catch((e) => console.error("rollback failed:", e.message));
+        return res.status(500).json({
+          success: false,
+          message: "could not store the profile image, please try again",
+        });
+      }
+    } catch (err) {
+      console.error("addnewstudent error:", err);
+      return res.status(500).json({ success: false, message: err.message });
     }
   }
 

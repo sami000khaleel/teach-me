@@ -14,6 +14,4 @@ router.patch('/reset_password',student_controller.reset_password)
 router.get('/image',student_controller.sendImage)
 router.get('/request_call',student_controller.findCall)
 router.get('/get_students_by_course',student_controller.getStudentsByCourse)
-//********************************* */
-router.post('/check_frame',student_controller.checkFrame)
 module.exports = router ;
