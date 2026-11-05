@@ -445,6 +445,7 @@ return res.send('done')
     try {
       const email = req.body.email;
       const password = req.body.password;
+      console.log("asdsadsad")
       console.log(email, password);
       const result = await teacher_model.get_teacher(email, password);
       return res.json(result);
