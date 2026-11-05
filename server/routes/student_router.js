@@ -1,7 +1,7 @@
 const router=require('express').Router();
 const student_controller =require('../controllers/stu_controller')
 router.post('/addstudent',student_controller.addnewstudent)
-router.get('/login',student_controller.reinsert)
+router.post('/login',student_controller.reinsert)
 router.get('/get_courses',student_controller.get_courses)
 router.get('/course_info',student_controller.course_info)
 //****************************************************************************** */
