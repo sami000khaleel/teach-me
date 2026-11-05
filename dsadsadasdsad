@@ -1,0 +1,49 @@
+[33m9f67d59[m[33m ([m[1;36mHEAD -> [m[1;32mdeployment[m[33m, [m[1;31morigin/deployment[m[33m)[m Add files via upload
+[33m2e67851[m enhance-ui
+[33mf696266[m current
+[33m6f7800e[m current
+[33m7eaafc3[m current
+[33ma7df9e9[m current
+[33m8a16776[m current
+[33m9a8b1f2[m current
+[33m98b75c1[m current
+[33me7c2eb0[m current
+[33m07bcb9f[m current
+[33m92fbca0[m fix front-end
+[33md1a4f0c[m fix front-end
+[33mff0a01f[m fix front-end
+[33m6816e5e[m enhance-ui
+[33m479afab[m fix front-end
+[33mda7800a[m fix front-end
+[33mf931b4d[m fix front-end
+[33me87b220[m fix front-end
+[33m23de1be[m fix front-end
+[33me074286[m fix front-end
+[33m6f720ab[m fix frontend
+[33m48aaa6b[m rollback
+[33m05049a1[m rollback
+[33m253dc7f[m[33m ([m[1;32mnew-deployment[m[33m)[m remove snapshots
+[33m9ad0399[m remove snapshots
+[33mb6b5e60[m R2 image upload and fetch service integration
+[33m4f9519b[m enhance UI
+[33m722859e[m deploy
+[33md17b781[m deploy
+[33m6942c04[m deploy
+[33meba0102[m deploy
+[33me875ec5[m deploy
+[33m6fb563f[m deploy
+[33mae948ff[m deploy
+[33mdfb6e5a[m deploy
+[33md80328f[m deploy
+[33mf0e8e9f[m deploy
+[33m441e918[m deploy
+[33m4b9e6db[m deploy
+[33me00502f[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m Merge branch 'main' of https://github.com/sami000khaleel/teach-me
+[33m1909003[m optimize docker
+[33mcf483c4[m set docker up
+[33m612bcc3[m Update readme.md
+[33mb22625a[m set docker up
+[33m241f0e7[m fix env security threat
+[33me3b8731[m added readme.md
+[33m613a888[m first
+[33mf686620[m last
