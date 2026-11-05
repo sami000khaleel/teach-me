@@ -29,7 +29,7 @@ static async addImageUrl(imageUrl,studentId){
 //**************************************** */
 static async reinsert(email,password)
 {
- const result = await  executeQuery('select *from student where email_stu=? and password=?',[email,password]);
+ const result = await  executeQuery('select * from student where email_stu=? and password=?',[email,password]);
   if (!result.length)
       throw new Error('student was not found')
  if(result)
