@@ -13,11 +13,12 @@ class teacher {
     return result[0]
   }
   static async get_teacher(email, password) {
+    console.log(email, password)
     const result = await executeQuery('select  * from teacher where  email=? and password=?', [email, password]);//كمالة الكويري
     //       ملاحظة مهمة جدا جدا جدا: اذا النتيجة مصفوفة دايما وبد معلومات شخص فالمعلومات هاي اةل هنصر من المصفوفلا  
     // result[0]
     // هون النتيجة ممكن تكون مصفوفة من غرص واحد اوغرض واحد لهيك بدك تشوف شو النتيجة شكلها
-
+    console.log('result:', result)
     if (result.length > 0) {
       return result[0]
     }

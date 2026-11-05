@@ -31,9 +31,13 @@ static async reinsert(email,password)
 
 
 {
+<<<<<<< HEAD
   console.log("email,password")  
   console.log(email,password)
  const result = await  executeQuery('select *from student where email_stu=? and password=?',[email,password]);
+=======
+ const result = await  executeQuery('select * from student where email_stu=? and password=?',[email,password]);
+>>>>>>> 92fbca05b1727317cebdc6e5297747b0bf6657de
   if (!result.length)
       throw new Error('student was not found')
  if(result)
