@@ -30,6 +30,42 @@ function parseProfileImage(req, res) {
 }
 
 class studentcontroller {
+ static async getStudentImage(req, res) {
+  try {
+    // accepts ?id_student=5 (what the client sends) or ?get_student_image=5
+    const id = req.query.id_student || req.query.get_student_image;
+    if (!id)
+      return res.status(400).json({ message: "no student id was sent" });
+    if (!/^\d+$/.test(String(id)))
+      return res.status(400).json({ message: "invalid student id" });
+
+    const rows = await executeQuery(
+      "select image_url from student where id_stu=?",
+      [id]
+    );
+    if (!rows.length || !rows[0].image_url)
+      return res.status(404).json({ message: "this student has no image" });
+
+    let url = rows[0].image_url;
+
+    // Old rows hold the private S3 address:
+    //   https://<account>.r2.cloudflarestorage.com/<bucket>/profiles/5.jpg
+    // Cut that part off and put the public address in front of the key instead:
+    //   https://pub-xxxx.r2.dev/profiles/5.jpg
+    if (url.includes("r2.cloudflarestorage.com")) {
+      const { pathname } = new URL(url);
+      const key = pathname
+        .replace(/^\//, "")                                   // remove leading "/"
+        .replace(new RegExp(`^${process.env.R2_BUCKET}/`), ""); // remove "<bucket>/"
+      url = r2.publicUrlFor(key);
+    }
+
+    return res.redirect(302, url);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "internal server error" });
+  }
+}
   static async getStudentsByCourse(req, res) {
     try {
       const { courseId } = req.query;
