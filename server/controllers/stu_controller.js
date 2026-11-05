@@ -7,7 +7,7 @@ const executeQuery = require("../config/db");
 const Call = require("../models/call");
 const course_model = require("../models/course");
 const multer = require("multer");
-const nodemailer = requirfe("nodemailer");
+const nodemailer = require("nodemailer");
 const r2 = require("../config/r2");
 
 // =====================================================================
