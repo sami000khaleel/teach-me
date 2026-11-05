@@ -209,8 +209,8 @@ class studentcontroller {
 
   static async reinsert(req, res) {
     try {
-      const { email } = req.query;
-      var password = req.headers.password;
+      const email  = req.body.email;
+      var password = req.body.password;
       var student = await studentmodels.reinsert(email, password);
       res.json(student);
     } catch (err) {
