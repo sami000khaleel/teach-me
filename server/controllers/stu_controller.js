@@ -14,7 +14,7 @@ const r2 = require("../config/r2");
 // 🔹 Profile image upload
 //    memoryStorage → the file never touches Render's (ephemeral) disk,
 //    it goes straight from the request into Cloudflare R2.
-// =====================================================================
+// =====================================================================ss
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 const profileImageUpload = multer({
@@ -209,8 +209,10 @@ class studentcontroller {
 
   static async reinsert(req, res) {
     try {
-      const { email } = req.query;
-      var password = req.headers.password;
+      const email  = req.body.email;
+      var password = req.body.password;
+      console.log("email,password");
+      console.log(email, password);
       var student = await studentmodels.reinsert(email, password);
       res.json(student);
     } catch (err) {

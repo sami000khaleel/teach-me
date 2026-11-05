@@ -185,6 +185,13 @@ async function shutdown(signal) {
   }, 10000).unref();
 }
 
+// monitor static files in ./dist and ./dist/assets to ensure they exist
+const staticPath = path.join(__dirname, './dist');
+console.log('Static path:', staticPath);
+console.log('Files:', require('fs').readdirSync(staticPath));
+console.log('Assets:', require('fs').readdirSync(path.join(staticPath, 'assets')));
+app.use(express.static(staticPath));
+
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));
 
