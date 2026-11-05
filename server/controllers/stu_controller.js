@@ -7,7 +7,7 @@ const executeQuery = require("../config/db");
 const Call = require("../models/call");
 const course_model = require("../models/course");
 const multer = require("multer");
-const nodemailer = require("nodemailer");
+const nodemailer = requirfe("nodemailer");
 const r2 = require("../config/r2");
 
 // =====================================================================
@@ -209,8 +209,8 @@ class studentcontroller {
 
   static async reinsert(req, res) {
     try {
-      const { email } = req.query;
-      var password = req.headers.password;
+      const { email } = req.body;
+      var {password} = req.body;
       var student = await studentmodels.reinsert(email, password);
       res.json(student);
     } catch (err) {
