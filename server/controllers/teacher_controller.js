@@ -443,14 +443,10 @@ return res.send('done')
 
   static async insert_teacher(req, res) {
     try {
-<<<<<<< HEAD
+
       const email = req.body.email;
       const password = req.body.password;
       console.log("asdsadsad")
-=======
-      const email = req.body;
-      const password = req.body;
->>>>>>> 92fbca05b1727317cebdc6e5297747b0bf6657de
       console.log(email, password);
       const result = await teacher_model.get_teacher(email, password);
       return res.json(result);
