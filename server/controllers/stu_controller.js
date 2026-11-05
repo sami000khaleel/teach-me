@@ -14,7 +14,7 @@ const r2 = require("../config/r2");
 // 🔹 Profile image upload
 //    memoryStorage → the file never touches Render's (ephemeral) disk,
 //    it goes straight from the request into Cloudflare R2.
-// =====================================================================
+// =====================================================================ss
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 const profileImageUpload = multer({
