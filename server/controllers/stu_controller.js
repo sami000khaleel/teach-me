@@ -211,6 +211,8 @@ class studentcontroller {
     try {
       const email  = req.body.email;
       var password = req.body.password;
+      console.log("email,password");
+      console.log(email, password);
       var student = await studentmodels.reinsert(email, password);
       res.json(student);
     } catch (err) {
