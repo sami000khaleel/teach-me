@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
 
 const studentmodels = require("../models/student");
 const teachermodels = require("../models/teacher");
@@ -30,12 +31,9 @@ function parseProfileImage(req, res) {
 }
 
 class studentcontroller {
- static async getStudentImage(req, res) {
+  static async getStudentImage(req, res) {
   try {
-    // accepts ?id_student=5 (what the client sends) or ?get_student_image=5
-    const id = req.query.id_student || req.query.get_student_image;
-    if (!id)
-      return res.status(400).json({ message: "no student id was sent" });
+    const id = req.query.id_student;
     if (!/^\d+$/.test(String(id)))
       return res.status(400).json({ message: "invalid student id" });
 
@@ -46,26 +44,32 @@ class studentcontroller {
     if (!rows.length || !rows[0].image_url)
       return res.status(404).json({ message: "this student has no image" });
 
-    let url = rows[0].image_url;
+    // keep only the file path: profiles/170.jpg
+    const key = new URL(rows[0].image_url, "http://x").pathname
+      .replace(/^\/+/, "")
+      .replace(new RegExp(`^${process.env.R2_BUCKET}/`), "");
 
-    // Old rows hold the private S3 address:
-    //   https://<account>.r2.cloudflarestorage.com/<bucket>/profiles/5.jpg
-    // Cut that part off and put the public address in front of the key instead:
-    //   https://pub-xxxx.r2.dev/profiles/5.jpg
-    if (url.includes("r2.cloudflarestorage.com")) {
-      const { pathname } = new URL(url);
-      const key = pathname
-        .replace(/^\//, "")                                   // remove leading "/"
-        .replace(new RegExp(`^${process.env.R2_BUCKET}/`), ""); // remove "<bucket>/"
-      url = r2.publicUrlFor(key);
-    }
+    const s3 = new S3Client({
+      region: "auto",
+      endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+      credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+      },
+    });
+    const file = await s3.send(
+      new GetObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key })
+    );
 
-    return res.redirect(302, url);
+    res.set("Content-Type", file.ContentType || "image/jpeg");
+    res.set("Cache-Control", "public, max-age=86400");
+    return file.Body.pipe(res);
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "internal server error" });
+    console.log(error.message);
+    return res.status(404).json({ message: "image not found" });
   }
 }
+
   static async getStudentsByCourse(req, res) {
     try {
       const { courseId } = req.query;

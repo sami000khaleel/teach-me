@@ -14,5 +14,5 @@ router.patch('/reset_password',student_controller.reset_password)
 router.get('/image',student_controller.sendImage)
 router.get('/request_call',student_controller.findCall)
 router.get('/get_students_by_course',student_controller.getStudentsByCourse)
-router.get('/get_student_image',student_controller.getStudentImage)
+router.get('/get_student_image', student_controller.getStudentImage)
 module.exports = router ;
