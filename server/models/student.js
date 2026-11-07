@@ -1,45 +1,30 @@
 const executeQuery=require ('../config/db');
 
+// Columns that may leave the server. NEVER select * from student for a
+// response: the row contains the password (hash).
+const PUBLIC_COLUMNS = 'id_stu, first_name_stu, last_name_stu, email_stu, IF(image_url IS NULL OR image_url = \'\', \'\', CONCAT(\'/api/student/get_student_image?id_student=\', id_stu)) AS image_url';
 
 class studentmodels{
     static async getstudents_by_course_id(course_id){
-      let results =await executeQuery('select id_stu from relater where id_cours=?',[course_id])
-      let students=[]
-      for (let i = 0; i < results.length; i++) {
-        let res=await executeQuery('select * from student where id_stu=?',[results[i].id_stu])
-        if(res[0])
-        students.push(res[0])
-      }  
-      return students
+      return executeQuery(
+        `select ${PUBLIC_COLUMNS} from student where id_stu in (select id_stu from relater where id_cours=?)`,
+        [course_id]
+      )
     }
-    
+
     //************************************ */
 
-static async addstudent(firstname,lastname,email,password)
+// `passwordHash` must already be a bcrypt hash (see models/credentials.js)
+static async addstudent(firstname,lastname,email,passwordHash)
 {
 
-  const result= await executeQuery('insert into student (first_name_stu,last_name_stu,email_stu,password) values(?,?,?,?)',[firstname,lastname,email,password]);
-  if (result) 
-  return {id:result.insertId,firstname:firstname,lastname:lastname,email,password };
+  const result= await executeQuery('insert into student (first_name_stu,last_name_stu,email_stu,password) values(?,?,?,?)',[firstname,lastname,email,passwordHash]);
+  if (result)
+  return {id:result.insertId,firstname:firstname,lastname:lastname,email };
 }
 //************************************ */
 static async addImageUrl(imageUrl,studentId){
   await executeQuery(`update student set image_url=? where id_stu=?`, [imageUrl, studentId])
-}
-//**************************************** */
-static async reinsert(email,password)
-
-
-{
-
-  console.log("email,password")  
-  console.log(email,password)
- const result = await  executeQuery('select * from student where email_stu=? and password=?',[email,password]);
-
-  if (!result.length)
-      throw new Error('student was not found')
- if(result)
-return result[0];
 }
 
 //****************************************** */
@@ -64,15 +49,15 @@ static async login_course(id_student,id_course)
 {
 
   const result= await executeQuery('insert into relater (id_stu,id_cours) values(?,?)',[id_student,id_course]);
-  if (result) 
+  if (result)
   return result;
 }
 
 
 
-static async update_password(password2,id_student) {
-  const res = await executeQuery('update student set password=? where id_stu=?', [password2,id_student]);
-  return res[0];
+// `passwordHash` must already be a bcrypt hash
+static async update_password(passwordHash,id_student) {
+  await executeQuery('update student set password=? where id_stu=?', [passwordHash,id_student]);
 }
 
 

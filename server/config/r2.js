@@ -14,6 +14,7 @@ const {
   S3Client,
   PutObjectCommand,
   DeleteObjectCommand,
+  GetObjectCommand,
 } = require("@aws-sdk/client-s3");
 
 const {
@@ -106,6 +107,30 @@ async function deleteObject(key) {
   await client.send(new DeleteObjectCommand({ Bucket: R2_BUCKET, Key: key }));
 }
 
+// Where the server serves a student's picture from (same origin, no CORS/CSP issues)
+function imageRoute(studentId) {
+  return `/api/student/get_student_image?id_student=${studentId}`;
+}
+
+// Whatever is stored in the DB — the private S3 address
+//   https://<account>.r2.cloudflarestorage.com/<bucket>/profiles/5.jpg
+// the public address  https://pub-xxx.r2.dev/profiles/5.jpg  or just the key —
+// is reduced to the object key  profiles/5.jpg
+function keyFromStoredUrl(stored) {
+  let key = String(stored || "").trim();
+  if (/^https?:\/\//i.test(key)) key = new URL(key).pathname;
+  key = key.replace(/^\/+/, "");
+  if (R2_BUCKET && key.startsWith(R2_BUCKET + "/")) key = key.slice(R2_BUCKET.length + 1);
+  return key;
+}
+
+// Reads an object with the server's own credentials (no public URL needed)
+async function getObject(key) {
+  if (!client) throw new Error("R2 is not configured on the server");
+  const out = await client.send(new GetObjectCommand({ Bucket: R2_BUCKET, Key: key }));
+  return { body: out.Body, contentType: out.ContentType };
+}
+
 module.exports = {
   configured,
   ALLOWED_MIME_TYPES,
@@ -113,4 +138,7 @@ module.exports = {
   publicOrigin,
   uploadProfileImage,
   deleteObject,
+  getObject,
+  keyFromStoredUrl,
+  imageRoute,
 };

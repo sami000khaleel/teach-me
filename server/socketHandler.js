@@ -1,6 +1,5 @@
 const Call = require("./models/call");
-const get_id = require("./models/get_id");
-const Course = require("./models/course");
+const { verifyToken } = require("./middleware/auth");
 
 let connectedSockets = [];
 async function socketHandler(socket) {
@@ -8,28 +7,20 @@ async function socketHandler(socket) {
     let call;
     let userId;
     let studentsIds;
-    const { auth } = socket.handshake; // Accessing the query parameters
-    const { role, email, password, id } = auth;
-
-    if (!role) {
-      throw new Error("A role must be sent");
+    // Identity comes from the signed JWT sent in the handshake — never from
+    // client-supplied email / password / id fields.
+    let identity;
+    try {
+      identity = verifyToken(socket.handshake.auth?.token);
+    } catch (_) {
+      socket.emit("error", { message: "authentication failed" });
+      return socket.disconnect(true);
     }
-
-    if (role === "teacher") {
-      const { id_teacher } = await get_id.teacher(email, password);
-      console.log("connected ", role);
-      if (id_teacher != id) {
-        throw new Error("Error validating the teacher");
-      }
-      userId = id_teacher;
-    } else if (role === "student") {
-      const student = await get_id.student(email, password);
-      userId = student.id_stu;
-      let coursesIds = await Course.get_idcourse_forstudent(userId);
-      console.log("connected ", role);
+    const { role, id } = identity;
+    userId = id;
+    console.log("connected ", role);
+    if (role === "student") {
       socket.emit("student-connected", { message: "student connected" });
-    } else {
-      throw new Error("Invalid role");
     }
 
     connectedSockets.push({

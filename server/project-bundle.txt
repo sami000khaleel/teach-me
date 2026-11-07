@@ -4,16 +4,17 @@ PROJECT BUNDLE
 Root:        C:\Users\sami\Desktop\projects\TeachMe\server
 Package:     project
 Type:        Node server
-Generated:   2026-11-04T00:10:32.889Z
+Generated:   2026-11-06T00:23:31.333Z
 Directories: 105 (2 not scanned)
-Files:       300 (30 read, 270 listed only)
+Files:       303 (32 read, 271 listed only)
 
 ================================================================================
 1. DIRECTORY TREE
 ================================================================================
 server/
 ├── config/
-│   └── db.js
+│   ├── db.js
+│   └── r2.js
 ├── controllers/
 │   ├── stu_controller.js
 │   └── teacher_controller.js
@@ -404,6 +405,7 @@ server/
 │   ├── 1793493255896sami khaleel.jpg  (binary/media file - exists, content not read)
 │   └── 1793493256819sami khaleel.jpg  (binary/media file - exists, content not read)
 ├── .env  (secrets file - exists, content not read)
+├── .env.example
 ├── .gitignore
 ├── bundler.cjs  (this script)
 ├── ca.crt
@@ -414,6 +416,7 @@ server/
 ├── index.js
 ├── package-lock.json  (generated/lock file - exists, content not read)
 ├── package.json
+├── project-bundle.txt  (bundle output file)
 ├── socketHandler.js
 ├── test.js
 └── utilities.js
@@ -531,7 +534,8 @@ uploads/
 3. ALL FILES (location, size, status)
 ================================================================================
 config/db.js  [3.2 KB]  READ
-controllers/stu_controller.js  [15.1 KB]  READ
+config/r2.js  [3.4 KB]  READ
+controllers/stu_controller.js  [12.2 KB]  READ
 controllers/teacher_controller.js  [20.3 KB]  READ
 db/01_project_teacher.sql  [2.2 KB]  READ
 db/02_project_student.sql  [2.3 KB]  READ
@@ -619,7 +623,7 @@ models/call.js  [1.8 KB]  READ
 models/course.js  [3.4 KB]  READ
 models/get_id.js  [3.4 KB]  READ
 models/relater.js  [505 B]  READ
-models/student.js  [2.1 KB]  READ
+models/student.js  [2.2 KB]  READ
 models/teacher.js  [2.8 KB]  READ
 routes/student_router.js  [1.1 KB]  READ
 routes/teacher_router.js  [1.2 KB]  READ
@@ -816,7 +820,8 @@ uploads/1793493255081sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - e
 uploads/1793493255359sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
 uploads/1793493255896sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
 uploads/1793493256819sami khaleel.jpg  [40.8 KB]  LISTED - binary/media file - exists, content not read
-.env  [1.1 KB]  LISTED - secrets file - exists, content not read
+.env  [1.7 KB]  LISTED - secrets file - exists, content not read
+.env.example  [418 B]  READ
 .gitignore  [93 B]  READ
 bundler.cjs  [8.0 KB]  SKIPPED - this script
 ca.crt  [1.2 KB]  READ
@@ -824,9 +829,10 @@ ca.key  [1.7 KB]  LISTED - secrets file - exists, content not read
 ca.pem  [1.5 KB]  LISTED - secrets file - exists, content not read
 cert.crt  [2.4 KB]  READ
 cert.key  [1.7 KB]  LISTED - secrets file - exists, content not read
-index.js  [7.1 KB]  READ
-package-lock.json  [65.4 KB]  LISTED - generated/lock file - exists, content not read
-package.json  [2.9 KB]  READ
+index.js  [7.2 KB]  READ
+package-lock.json  [83.4 KB]  LISTED - generated/lock file - exists, content not read
+package.json  [3.1 KB]  READ
+project-bundle.txt  [166.1 KB]  SKIPPED - bundle output file
 socketHandler.js  [12.5 KB]  READ
 test.js  [4.4 KB]  READ
 utilities.js  [702 B]  READ
@@ -931,175 +937,197 @@ async function executeQuery(query, params = []) {
 module.exports = executeQuery;
 --- END: config/db.js ---
 
---- FILE: controllers/stu_controller.js ---
+--- FILE: config/r2.js ---
+// ===================================================================
+// Cloudflare R2 (S3-compatible object storage) — profile images only
+//
+// Required env vars (Render → Environment):
+//   R2_ACCOUNT_ID         Cloudflare account id
+//   R2_ACCESS_KEY_ID      from an R2 API token (Object Read & Write)
+//   R2_SECRET_ACCESS_KEY  from the same token (shown only once)
+//   R2_BUCKET             bucket name, e.g. teachme-profiles
+//   R2_PUBLIC_URL         public base URL of the bucket, no trailing slash
+//                         e.g. https://pub-xxxxxxxxxxxxxxxx.r2.dev
+// ===================================================================
 require("dotenv").config();
+const {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
 
-const studentmodels = require("../models/student");
-const teachermodels = require("../models/teacher");
-const get_id = require("../models/get_id");
-const https = require("https");
-const util = require("util");
-const FormData = require("form-data");
-const executeQuery = require("../config/db");
-const { createReadStream } = require("fs");
-const axios = require("axios");
-const Call = require("../models/call");
-const course_model = require("../models/course");
-const multer = require("multer");
-const fs = require("fs/promises");
-const path = require("path");
-const nodemailer = require("nodemailer");
+const {
+  R2_ACCOUNT_ID,
+  R2_ACCESS_KEY_ID,
+  R2_SECRET_ACCESS_KEY,
+  R2_BUCKET,
+  R2_PUBLIC_URL,
+} = process.env;
 
-// =====================================================================
-// 🔹 Helper: Safely call the Flask AI service.
-//    Returns the response data OR null. Never throws.
-// =====================================================================
-async function callAiService(endpoint, formData, timeoutMs = 5000) {
-  const aiBaseUrl = process.env.AI_SERVICE_URL || "https://127.0.0.1:5000";
-  const url = `${aiBaseUrl}${endpoint}`;
-  const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+const configured = Boolean(
+  R2_ACCOUNT_ID &&
+    R2_ACCESS_KEY_ID &&
+    R2_SECRET_ACCESS_KEY &&
+    R2_BUCKET &&
+    R2_PUBLIC_URL
+);
 
+if (!configured) {
+  // Do not crash the whole server: everything except signup still works.
+  console.warn(
+    "⚠️  R2 is not fully configured (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, " +
+      "R2_SECRET_ACCESS_KEY, R2_BUCKET, R2_PUBLIC_URL) — signup with a profile image will fail"
+  );
+}
+
+const publicBase = (R2_PUBLIC_URL || "").trim().replace(/\/+$/, "");
+
+const client = configured
+  ? new S3Client({
+      region: "auto", // R2 ignores regions, the SDK just needs a value
+      endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+      credentials: {
+        accessKeyId: R2_ACCESS_KEY_ID,
+        secretAccessKey: R2_SECRET_ACCESS_KEY,
+      },
+      // Newer SDK versions add checksum headers by default; only send them
+      // when an operation requires it (keeps R2 happy on every SDK version).
+      requestChecksumCalculation: "WHEN_REQUIRED",
+      responseChecksumValidation: "WHEN_REQUIRED",
+    })
+  : null;
+
+const EXTENSIONS = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/gif": "gif",
+};
+
+const ALLOWED_MIME_TYPES = new Set(Object.keys(EXTENSIONS));
+
+function publicUrlFor(key) {
+  return `${publicBase}/${key}`;
+}
+
+// Origin used by the Content-Security-Policy in index.js (img-src)
+function publicOrigin() {
   try {
-    const response = await axios.post(url, formData, {
-      httpsAgent,
-      headers: formData.getHeaders(),
-      timeout: timeoutMs,
-    });
-    console.log(`✅ AI service responded: ${endpoint}`);
-    return response.data;
-  } catch (err) {
-    if (err.code === "ECONNREFUSED") {
-      console.warn(
-        `⚠️  AI service not running at ${aiBaseUrl} — skipping ${endpoint}`
-      );
-    } else if (err.code === "ECONNABORTED") {
-      console.warn(
-        `⚠️  AI service timed out after ${timeoutMs}ms — skipping ${endpoint}`
-      );
-    } else {
-      console.warn(`⚠️  AI service error at ${endpoint}:`, err.message);
-    }
+    return publicBase ? new URL(publicBase).origin : null;
+  } catch (_) {
     return null;
   }
 }
 
+/**
+ * Uploads a multer memory-storage file as profiles/<studentId>.<ext>
+ * Returns { key, url }.
+ */
+async function uploadProfileImage(studentId, file) {
+  if (!client) throw new Error("R2 is not configured on the server");
+  const ext = EXTENSIONS[file.mimetype];
+  if (!ext) throw new Error(`unsupported image type: ${file.mimetype}`);
+
+  const key = `profiles/${studentId}.${ext}`;
+  await client.send(
+    new PutObjectCommand({
+      Bucket: R2_BUCKET,
+      Key: key,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+      CacheControl: "public, max-age=86400",
+    })
+  );
+  return { key, url: publicUrlFor(key) };
+}
+
+async function deleteObject(key) {
+  if (!client) return;
+  await client.send(new DeleteObjectCommand({ Bucket: R2_BUCKET, Key: key }));
+}
+
+module.exports = {
+  configured,
+  ALLOWED_MIME_TYPES,
+  publicUrlFor,
+  publicOrigin,
+  uploadProfileImage,
+  deleteObject,
+};
+--- END: config/r2.js ---
+
+--- FILE: controllers/stu_controller.js ---
+require("dotenv").config();
+const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+
+const studentmodels = require("../models/student");
+const teachermodels = require("../models/teacher");
+const get_id = require("../models/get_id");
+const executeQuery = require("../config/db");
+const Call = require("../models/call");
+const course_model = require("../models/course");
+const multer = require("multer");
+const nodemailer = require("nodemailer");
+const r2 = require("../config/r2");
+
+// =====================================================================
+// 🔹 Profile image upload
+//    memoryStorage → the file never touches Render's (ephemeral) disk,
+//    it goes straight from the request into Cloudflare R2.
+// =====================================================================ss
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5 MB
+
+const profileImageUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_IMAGE_BYTES, files: 1 },
+  fileFilter: (req, file, cb) => cb(null, r2.ALLOWED_MIME_TYPES.has(file.mimetype)),
+}).single("file");
+
+function parseProfileImage(req, res) {
+  return new Promise((resolve, reject) => {
+    profileImageUpload(req, res, (err) => (err ? reject(err) : resolve()));
+  });
+}
+
 class studentcontroller {
-  static giveObservationTitle(message) {
-    let observationTitle = null;
-    switch (message) {
-      case "attentive":
-        observationTitle = "student is attentive";
-        break;
-      case "notAttentive":
-        observationTitle = "student is not attentive";
-        break;
-      case "usingPhone":
-        observationTitle = "student is using his phone";
-        break;
-      default:
-        break;
-    }
-    return observationTitle;
-  }
+  static async getStudentImage(req, res) {
+  try {
+    const id = req.query.id_student;
+    if (!/^\d+$/.test(String(id)))
+      return res.status(400).json({ message: "invalid student id" });
 
-  static addObservation(call, studentId, observationTitle, date) {
-    studentId = studentId.split(".")[0];
-    for (let student of call.students) {
-      if (student.studentId == studentId) {
-        let foundOneFlag = false;
-        for (let observation of student.observations) {
-          if (observation?.title != observationTitle) continue;
-          foundOneFlag = true;
-          observation.occurrencesDates.push(date);
-          break;
-        }
-        if (!foundOneFlag) {
-          student.observations.push({
-            title: observationTitle,
-            occurrencesDates: [date],
-          });
-        }
-      }
-      student.checkOccurrences.push(date);
-    }
-    return call;
-  }
+    const rows = await executeQuery(
+      "select image_url from student where id_stu=?",
+      [id]
+    );
+    if (!rows.length || !rows[0].image_url)
+      return res.status(404).json({ message: "this student has no image" });
 
-  static async checkFrame(req, res) {
-    const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, "./snapshots");
-      },
-      filename: function (req, file, cb) {
-        req.filepath = path.join(
-          __dirname,
-          "..",
-          "snapshots",
-          `${Date.now()}-${file.originalname}`
-        );
-        cb(null, `${Date.now()}-${file.originalname}`);
+    // keep only the file path: profiles/170.jpg
+    const key = new URL(rows[0].image_url, "http://x").pathname
+      .replace(/^\/+/, "")
+      .replace(new RegExp(`^${process.env.R2_BUCKET}/`), "");
+
+    const s3 = new S3Client({
+      region: "auto",
+      endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+      credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
       },
     });
+    const file = await s3.send(
+      new GetObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key })
+    );
 
-    const upload = multer({ storage }).single("file");
-    const uploadPromise = util.promisify(upload);
-
-    try {
-      await uploadPromise(req, res);
-
-      let call = await Call.findById(req.body.callId);
-      const file = req?.file;
-      let date = req.body?.date;
-
-      if (!file) {
-        console.log("No file was received");
-        return res.json({ success: true, observation: "attentive" });
-      }
-
-      const formData = new FormData();
-      formData.append("file", createReadStream(req.filepath));
-
-      // 🔹 Ask the AI service (optional — returns null if down)
-      const aiResponse = await callAiService("/api/observation", formData);
-
-      if (!aiResponse) {
-        // AI service unavailable → treat as attentive and continue
-        return res
-          .status(200)
-          .json({ success: true, observation: "attentive" });
-      }
-
-      const message = aiResponse.message;
-
-      if (message === "attentive" || !message) {
-        return res
-          .status(200)
-          .json({ success: true, observation: "attentive" });
-      }
-
-      // Extract student ID from filename
-      const studentId = req.file.filename.split("-")[1];
-
-      for (let student of call.students) {
-        if (student.studentId != studentId) continue;
-        student.checkOccurrences.push(date);
-      }
-
-      call = studentcontroller.addObservation(call, studentId, message, date);
-      await call.save();
-
-      return res.json({ warningFlag: true, observation: message });
-    } catch (error) {
-      console.error("checkFrame error:", error.message);
-      return res.status(500).json({ success: false, message: error.message });
-    } finally {
-      if (req.filepath) {
-        fs.unlink(req.filepath).catch((err) =>
-          console.error("Failed to delete temp file:", err)
-        );
-      }
-    }
+    res.set("Content-Type", file.ContentType || "image/jpeg");
+    res.set("Cache-Control", "public, max-age=86400");
+    return file.Body.pipe(res);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(404).json({ message: "image not found" });
   }
+}
 
   static async getStudentsByCourse(req, res) {
     try {
@@ -1133,6 +1161,10 @@ class studentcontroller {
     }
   }
 
+  // Legacy route: old rows in the DB still hold
+  //   /api/student/image?studentId=<id>&imageName=...
+  // New signups store the full R2 URL, so this only redirects old rows
+  // (after their images were copied to R2 as profiles/<id>.jpg).
   static async sendImage(req, res) {
     try {
       const { imageName, studentId } = req.query;
@@ -1141,9 +1173,16 @@ class studentcontroller {
           success: false,
           message: "no data about the image was provided",
         });
-      return res.sendFile(
-        path.join(__dirname, "..", "images", studentId, studentId + ".jpg")
-      );
+      if (!/^\d+$/.test(String(studentId)))
+        return res
+          .status(400)
+          .json({ success: false, message: "invalid student id" });
+      if (!r2.configured)
+        return res
+          .status(503)
+          .json({ success: false, message: "image storage is not configured" });
+
+      return res.redirect(302, r2.publicUrlFor(`profiles/${studentId}.jpg`));
     } catch (err) {
       console.log(err);
       return res
@@ -1210,83 +1249,60 @@ class studentcontroller {
   }
 
   static async addnewstudent(req, res) {
+    // 1. Read the multipart body (profile image stays in memory)
     try {
-      const storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-          cb(null, "./uploads");
-        },
-        filename: function (req, file, cb) {
-          cb(null, Date.now() + file.originalname);
-        },
-      });
-      const upload = multer({ storage }).single("file");
-
-      await upload(req, res, async (err) => {
-        try {
-          if (err) {
-            console.log(err.message);
-            return res.status(500).json({
-              message: "internal error handling the image",
-              m: err.message,
-            });
-          }
-
-          const { firstname, lastname, email, password } = req.body;
-
-          // 1. Create the student in MySQL
-          const student = await studentmodels.addstudent(
-            firstname,
-            lastname,
-            email,
-            password
-          );
-
-          // 2. Move the uploaded image to the student's folder
-          const destinationDir = path.join("./images", String(student.id));
-          await fs.mkdir(destinationDir, { recursive: true });
-
-          const filesNames = await fs.readdir(path.join("./", "uploads"));
-          for (const fileName of filesNames) {
-            const finalPath = path.join(
-              destinationDir,
-              String(student.id) + ".jpg"
-            );
-            await fs.rename(
-              path.join("./", "uploads", fileName),
-              finalPath
-            );
-          }
-
-          // 3. Save the image URL in MySQL
-          const url = `/api/student/image?studentId=${student.id}&imageName=${
-            req.file?.filename || student.id + ".jpg"
-          }`;
-          await studentmodels.addImageUrl(url, student.id);
-
-          // 4. Register the student's face with the AI service (optional)
-          const formData = new FormData();
-          formData.append(
-            "file",
-            createReadStream(
-              path.join(destinationDir, String(student.id) + ".jpg")
-            )
-          );
-
-          const aiResult = await callAiService("/api/store_image", formData);
-          if (aiResult) {
-            console.log(`👤 Face registered for student ${student.id}`);
-          }
-
-          // 5. Always return the student — signup succeeds regardless of AI
-          return res.json(student);
-        } catch (err) {
-          console.error("addnewstudent inner error:", err);
-          return res.status(500).json({ success: false, message: err.message });
-        }
-      });
+      await parseProfileImage(req, res);
     } catch (err) {
-      console.error("addnewstudent outer error:", err);
-      return res.status(400).json({ message: err.message });
+      console.log(err.message);
+      if (err.code === "LIMIT_FILE_SIZE")
+        return res
+          .status(400)
+          .json({ message: "the image is too large (max 5 MB)" });
+      return res.status(500).json({
+        message: "internal error handling the image",
+        m: err.message,
+      });
+    }
+
+    if (!req.file)
+      return res.status(400).json({
+        message: "a profile image is required (jpg, png, webp or gif, max 5 MB)",
+      });
+
+    try {
+      const { firstname, lastname, email, password } = req.body;
+
+      // 2. Create the student in MySQL
+      const student = await studentmodels.addstudent(
+        firstname,
+        lastname,
+        email,
+        password
+      );
+
+      // 3. Upload the image to R2 and save its public URL in MySQL
+      let uploadedKey = null;
+      try {
+        const { key, url } = await r2.uploadProfileImage(student.id, req.file);
+        uploadedKey = key;
+        await studentmodels.addImageUrl(url, student.id);
+        // 4. Return the student (with the image url, so the UI can show it right away)
+        return res.json({ ...student, imageUrl: url });
+      } catch (err) {
+        // Roll back so the user can sign up again with the same email
+        console.error("❌ profile image upload failed:", err.message);
+        if (uploadedKey) await r2.deleteObject(uploadedKey).catch(() => {});
+        await executeQuery("delete from student where id_stu=?", [
+          student.id,
+        ]).catch((e) => console.error("rollback failed:", e.message));
+        return res.status(500).json({
+          success: false,
+          message: "could not store the profile image, please try again",
+        });
+      }
+    } catch (err) {
+      console.error("addnewstudent error:", err);
+      return res.status(500).json({ success: false, message: err.message });
     }
   }
 
@@ -2872,8 +2888,14 @@ static async addImageUrl(imageUrl,studentId){
 }
 //**************************************** */
 static async reinsert(email,password)
+
+
 {
- const result = await  executeQuery('select *from student where email_stu=? and password=?',[email,password]);
+
+  console.log("email,password")  
+  console.log(email,password)
+ const result = await  executeQuery('select * from student where email_stu=? and password=?',[email,password]);
+
   if (!result.length)
       throw new Error('student was not found')
  if(result)
@@ -3009,8 +3031,7 @@ router.patch('/reset_password',student_controller.reset_password)
 router.get('/image',student_controller.sendImage)
 router.get('/request_call',student_controller.findCall)
 router.get('/get_students_by_course',student_controller.getStudentsByCourse)
-//********************************* */
-router.post('/check_frame',student_controller.checkFrame)
+router.get('/get_student_image', student_controller.getStudentImage)
 module.exports = router ;
 --- END: routes/student_router.js ---
 
@@ -3036,6 +3057,18 @@ router.get('/get_lectures',teacher_controller.get_lectures)
 router.delete('/delete_lecture',teacher_controller.delete_lecture)
 module.exports=router
 --- END: routes/teacher_router.js ---
+
+--- FILE: .env.example ---
+# ---- Cloudflare R2 (profile images) — add these in Render -> Environment ----
+R2_ACCOUNT_ID=your_cloudflare_account_id
+R2_ACCESS_KEY_ID=your_r2_api_token_access_key_id
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET=teachme-profiles
+# Public Development URL of the bucket (no trailing slash)
+R2_PUBLIC_URL=https://pub-xxxxxxxxxxxxxxxxxxxxxxxx.r2.dev
+
+# AI_SERVICE_URL is no longer used — you can delete it from Render.
+--- END: .env.example ---
 
 --- FILE: .gitignore ---
 .env
@@ -3142,6 +3175,7 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 
 const { localIpAddress } = require("./utilities");
+const r2 = require("./config/r2");
 const student_router = require("./routes/student_router");
 const teacher_router = require("./routes/teacher_router");
 const socketHandler = require("./socketHandler");
@@ -3192,7 +3226,19 @@ function redactUri(uri) {
 
 const app = express();
 app.set("trust proxy", 1); // Render's reverse proxy
-app.use(helmet());
+// Helmet's default CSP only allows images from 'self' and data: — profile
+// images now live on Cloudflare R2, so that origin must be allowed too.
+const r2Origin = r2.publicOrigin();
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": ["'self'", "data:", "blob:", ...(r2Origin ? [r2Origin] : [])],
+      },
+    },
+  })
+);
 app.use(
   cors({
     origin: CLIENT_ORIGIN,
@@ -3269,25 +3315,6 @@ const HOST = "0.0.0.0";
 server.listen(PORT, HOST, () => {
   console.log(`🚀 Server listening on http://${HOST}:${PORT}`);
   if (localIpAddress) console.log("   Local IPs:", localIpAddress);
-
-  const aiUrl = process.env.AI_SERVICE_URL;
-  if (!aiUrl) {
-    console.warn("⚠️  AI_SERVICE_URL not set — face observation will be skipped");
-    return;
-  }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
-
-  fetch(aiUrl, { method: "HEAD", signal: controller.signal })
-    .then(() => console.log(`✅ AI service reachable at ${aiUrl}`))
-    .catch((err) => {
-      const reason = err.name === "AbortError" ? "timed out" : err.message;
-      console.warn(
-        `⚠️  AI service NOT reachable at ${aiUrl} (${reason}) — face observation will be skipped`
-      );
-    })
-    .finally(() => clearTimeout(timeout));
 });
 
 // -------------------------------------------------------------------
@@ -3313,6 +3340,13 @@ async function shutdown(signal) {
   }, 10000).unref();
 }
 
+// monitor static files in ./dist and ./dist/assets to ensure they exist
+const staticPath = path.join(__dirname, './dist');
+console.log('Static path:', staticPath);
+console.log('Files:', require('fs').readdirSync(staticPath));
+console.log('Assets:', require('fs').readdirSync(path.join(staticPath, 'assets')));
+app.use(express.static(staticPath));
+
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));
 
@@ -3333,6 +3367,7 @@ module.exports = { app, server, io };
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.700.0",
     "@clickhouse/client": "^1.24.1",
     "accepts": "^1.3.8",
     "ansi-styles": "^4.3.0",

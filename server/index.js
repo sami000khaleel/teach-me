@@ -24,6 +24,7 @@ const r2 = require("./config/r2");
 const student_router = require("./routes/student_router");
 const teacher_router = require("./routes/teacher_router");
 const socketHandler = require("./socketHandler");
+const Visit = require("./models/visit");
 
 // -------------------------------------------------------------------
 // Configuration
@@ -70,6 +71,7 @@ function redactUri(uri) {
 // -------------------------------------------------------------------
 
 const app = express();
+app.disable("x-powered-by"); // do not advertise Express
 app.set("trust proxy", 1); // Render's reverse proxy
 // Helmet's default CSP only allows images from 'self' and data: — profile
 // images now live on Cloudflare R2, so that origin must be allowed too.
@@ -90,8 +92,9 @@ app.use(
     credentials: ALLOW_CREDENTIALS,
   })
 );
-app.use(bodyParser.json({ limit: "10mb" }));
-app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
+// JSON bodies are tiny here (files go through multer), so keep the limit small
+app.use(bodyParser.json({ limit: "100kb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "100kb" }));
 
 // -------------------------------------------------------------------
 // MongoDB
@@ -144,9 +147,35 @@ app.use("/api/teacher", teacher_router);
 // -------------------------------------------------------------------
 
 const distDir = path.join(__dirname, "dist");
-app.use(express.static(distDir));
+// index:false → "/" is NOT served by express.static, it goes through the handler below
+app.use(express.static(distDir, { index: false }));
+
+// Visit counter: when index.html is sent to a browser that has no "visited" cookie,
+// store ONE document { date } in MongoDB and set the cookie, so the same browser
+// is not counted again for a year. No IP, no user agent, no name is stored.
+// It does not prove a human opened the page: bots that look like browsers still count.
+const BOT = /bot|crawl|spider|slurp|preview|monitor|uptime|health|curl|wget|python|node-fetch|axios/i;
+
+function countVisit(req, res) {
+  try {
+    if (req.headers.cookie && req.headers.cookie.includes("visited=1")) return;
+    if (BOT.test(req.headers["user-agent"] || "")) return;
+    if (!(req.headers.accept || "").includes("text/html")) return;
+
+    res.cookie("visited", "1", {
+      maxAge: 365 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "lax",
+      secure: req.secure,
+    });
+    Visit.create({}).catch((err) => console.error("visit not saved:", err.message));
+  } catch (err) {
+    console.error("visit counter error:", err.message);
+  }
+}
 
 app.get(/^\/(?!api\/).*/, (req, res) => {
+  countVisit(req, res);
   res.sendFile(path.join(distDir, "index.html"));
 });
 
@@ -184,13 +213,6 @@ async function shutdown(signal) {
     process.exit(1);
   }, 10000).unref();
 }
-
-// monitor static files in ./dist and ./dist/assets to ensure they exist
-const staticPath = path.join(__dirname, './dist');
-console.log('Static path:', staticPath);
-console.log('Files:', require('fs').readdirSync(staticPath));
-console.log('Assets:', require('fs').readdirSync(path.join(staticPath, 'assets')));
-app.use(express.static(staticPath));
 
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));

@@ -1,134 +1,70 @@
 const executeQuery = require('../config/db');
 
+// Account-recovery codes (e-mail) — short lived and single use.
+//   saveCode    → store a new code for an account
+//   findCode    → look a code up (only if younger than 15 minutes)
+//   consumeCode → delete it after use
+// The date comparison is done by MySQL itself (NOW()) so there is no
+// time-zone mismatch between Node and the database.
+const CODE_TTL_MINUTES = 15;
 
 class gett_id {
+  // Returns { role, row } for the account a recovery code belongs to, or null
   static async findUserByCode(codeId) {
-    const relatorRow = await executeQuery('select * from relater2 where id_code=?', [codeId])
-    console.log(relatorRow[0])
-    let response=null
-    let id = null
-    let user=null
-    if (!relatorRow[0]?.id_stu) { 
-      id = relatorRow[0].id_teacher
-      response=await executeQuery('select * from teacher where id_teacher=?',[id])
-      user=response[0]
-    }
-    if (!relatorRow[0]?.id_teacher)
-    {  
-      id = relatorRow[0]?.id_stu
-      response=await executeQuery('select * from student where id_stu=?',[id])
-      user=response[0]
-    }
-    return user
-  }
-  static async findCode(code) {
-    const result = await executeQuery('select * from code where code=?', [code])
-    return result[0]
-  }
-  static async saveCode(code, id, role) {
-    console.log(id, code, role)
-    const { insertId } = await executeQuery('insert into code (code,codeDate) values(?,?)', [code, new Date()]);
-    console.log('codeId', insertId)
-    if (role == 'teacher') {
-      await executeQuery("insert into relater2 (id_,id_teacher_code) values(?,?);", [id, insertId])
+    const [relation] = await executeQuery(
+      'select id_stu, id_teacher from relater2 where id_code=? limit 1',
+      [codeId]
+    );
+    if (!relation) return null;
 
+    if (relation.id_stu) {
+      const [row] = await executeQuery('select * from student where id_stu=?', [relation.id_stu]);
+      return row ? { role: 'student', row } : null;
+    }
+    if (relation.id_teacher) {
+      const [row] = await executeQuery('select * from teacher where id_teacher=?', [relation.id_teacher]);
+      return row ? { role: 'teacher', row } : null;
+    }
+    return null;
+  }
+
+  static async findCode(code) {
+    const result = await executeQuery(
+      `select * from code where code=? and codeDate >= (NOW() - INTERVAL ${CODE_TTL_MINUTES} MINUTE) order by idcode desc limit 1`,
+      [String(code)]
+    );
+    return result[0];
+  }
+
+  static async saveCode(code, id, role) {
+    const { insertId } = await executeQuery(
+      'insert into code (code, codeDate) values(?, NOW())',
+      [String(code)]
+    );
+    if (role == 'teacher') {
+      await executeQuery('insert into relater2 (id_teacher, id_code) values(?,?)', [id, insertId]);
     }
     if (role == 'student') {
-      await executeQuery("insert into relater2 (id_stu,id_code) values(?,?);", [id, insertId]);
+      await executeQuery('insert into relater2 (id_stu, id_code) values(?,?)', [id, insertId]);
     }
   }
-  static async student(email, password) {
 
-    const result = await executeQuery('select id_stu from student where email_stu=? and password=?', [email, password]);
-    if (!result)
-      throw new Error("one field was wrong")
-    return result[0];
-
-
+  static async consumeCode(codeId) {
+    await executeQuery('delete from relater2 where id_code=?', [codeId]);
+    await executeQuery('delete from code where idcode=?', [codeId]);
   }
-  //********************************************************************************************************** */
 
-  static async teacher(email, password) {
-    const result = await executeQuery('select * from teacher where email = ? and password=?', [email, password]);
-    if (!result[0])
-      throw new Error("one field was wrong")
-    return result[0];
-
-
-  }
+  // Returns the account id for an e-mail, or throws if there is none
   static async verifyEmail(email, role) {
-    let result = null
+    let result = [];
     if (role == 'teacher')
-      result = await executeQuery('select * from teacher where email = ? ', [email]);
+      result = await executeQuery('select id_teacher as id from teacher where email = ?', [email]);
     if (role == 'student')
-      result = await executeQuery('select * from student where email_stu = ? ', [email]);
-    console.log(result)
-    if (!result)
-      throw new Error('email was not')
-    console.log(result)
+      result = await executeQuery('select id_stu as id from student where email_stu = ?', [email]);
     if (!result[0])
-      throw new Error("one field was wrong")
-    const id = result[0][Object.keys(result[0])[0]]
-    return id;
-
-
+      throw new Error('no account was found with this email');
+    return result[0].id;
   }
-  //***************************************************************************** */
-
-  //////////////////////////////////////
-  static async confirm_account_teacher(id, password) {
-    try {
-      const result = await executeQuery('select id_teacher from teacher where id_teacher = ? and password=?', [id, password]);
-
-      return ("htis is same teacher");
-    }
-    catch (err) {
-      console.log(err)
-      return res.status(400).json({ message: err.message })
-    }
-
-  }
-
-  static async confirm_account_student(id, password) {
-    try {
-      const result = await executeQuery('select id_stu from student where id_stu = ? and password=?', [id, password]);
-
-      return ("htis is same student");
-    }
-    catch (err) {
-      console.log(err)
-      return res.status(400).json({ message: err.message })
-    }
-
-  }
-
 }
 
-
-
-
-
-
-
-
-module.exports = gett_id
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = gett_id;

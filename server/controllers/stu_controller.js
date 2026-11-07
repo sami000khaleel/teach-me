@@ -1,6 +1,6 @@
 require("dotenv").config();
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
 
+const crypto = require("crypto");
 const studentmodels = require("../models/student");
 const teachermodels = require("../models/teacher");
 const get_id = require("../models/get_id");
@@ -10,12 +10,14 @@ const course_model = require("../models/course");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 const r2 = require("../config/r2");
+const { authenticate, hashPassword, validatePassword, storeHash } = require("../models/credentials");
+const { authResponse } = require("../middleware/auth");
 
 // =====================================================================
 // 🔹 Profile image upload
 //    memoryStorage → the file never touches Render's (ephemeral) disk,
 //    it goes straight from the request into Cloudflare R2.
-// =====================================================================ss
+// =====================================================================
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 const profileImageUpload = multer({
@@ -31,44 +33,21 @@ function parseProfileImage(req, res) {
 }
 
 class studentcontroller {
-  static async getStudentImage(req, res) {
-  try {
-    const id = req.query.id_student;
-    if (!/^\d+$/.test(String(id)))
-      return res.status(400).json({ message: "invalid student id" });
-
-    const rows = await executeQuery(
-      "select image_url from student where id_stu=?",
-      [id]
-    );
-    if (!rows.length || !rows[0].image_url)
-      return res.status(404).json({ message: "this student has no image" });
-
-    // keep only the file path: profiles/170.jpg
-    const key = new URL(rows[0].image_url, "http://x").pathname
-      .replace(/^\/+/, "")
-      .replace(new RegExp(`^${process.env.R2_BUCKET}/`), "");
-
-    const s3 = new S3Client({
-      region: "auto",
-      endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-      credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY_ID,
-        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-      },
-    });
-    const file = await s3.send(
-      new GetObjectCommand({ Bucket: process.env.R2_BUCKET, Key: key })
-    );
-
-    res.set("Content-Type", file.ContentType || "image/jpeg");
-    res.set("Cache-Control", "public, max-age=86400");
-    return file.Body.pipe(res);
-  } catch (error) {
-    console.log(error.message);
-    return res.status(404).json({ message: "image not found" });
+  // POST /api/student/login   { email, password }  →  { id, firstname, ..., role, token }
+  static async login(req, res) {
+    try {
+      const { email, password } = req.body || {};
+      const row = await authenticate("student", email, password);
+      if (!row)
+        return res
+          .status(401)
+          .json({ message: "one or both of the fields are wrong" });
+      return res.json(authResponse("student", row));
+    } catch (err) {
+      console.error("❌ student login error:", err.message);
+      return res.status(500).json({ message: "internal server error" });
+    }
   }
-}
 
   static async getStudentsByCourse(req, res) {
     try {
@@ -102,43 +81,57 @@ class studentcontroller {
     }
   }
 
-  // Legacy route: old rows in the DB still hold
-  //   /api/student/image?studentId=<id>&imageName=...
-  // New signups store the full R2 URL, so this only redirects old rows
-  // (after their images were copied to R2 as profiles/<id>.jpg).
-  static async sendImage(req, res) {
+  // GET /api/student/get_student_image?id_student=5
+  // Reads the picture from R2 with the server's own keys and streams it to the browser,
+  // so it works whatever address is stored in the DB (private S3 address, public address, or key).
+  static async getStudentImage(req, res) {
     try {
-      const { imageName, studentId } = req.query;
-      if (!imageName || !studentId)
-        return res.status(400).json({
-          success: false,
-          message: "no data about the image was provided",
-        });
-      if (!/^\d+$/.test(String(studentId)))
-        return res
-          .status(400)
-          .json({ success: false, message: "invalid student id" });
-      if (!r2.configured)
-        return res
-          .status(503)
-          .json({ success: false, message: "image storage is not configured" });
+      const id = req.query.id_student;
+      if (!/^\d+$/.test(String(id)))
+        return res.status(400).json({ message: "invalid student id" });
 
-      return res.redirect(302, r2.publicUrlFor(`profiles/${studentId}.jpg`));
-    } catch (err) {
-      console.log(err);
-      return res
-        .status(500)
-        .json({ success: false, message: "internal server error" });
+      const rows = await executeQuery(
+        "select image_url from student where id_stu=?",
+        [id]
+      );
+      if (!rows.length || !rows[0].image_url)
+        return res.status(404).json({ message: "this student has no image" });
+
+      const { body, contentType } = await r2.getObject(
+        r2.keyFromStoredUrl(rows[0].image_url)
+      );
+      res.set("Content-Type", contentType || "image/jpeg");
+      res.set("Cache-Control", "public, max-age=86400");
+      body.on("error", () => res.destroy());
+      return body.pipe(res);
+    } catch (error) {
+      if (error.name === "NoSuchKey")
+        return res.status(404).json({ message: "image file not found in the bucket" });
+      console.log(error.message);
+      return res.status(500).json({ message: "internal server error" });
     }
   }
 
   static async verifyCode(req, res) {
     try {
-      const { code } = req.query;
+      const code = String(req.query.code || "").trim();
+      if (!/^\d{6}$/.test(code))
+        return res.status(400).json({ message: "code is not correct" });
+
       const codeObject = await get_id.findCode(code);
-      const user = await get_id.findUserByCode(codeObject.idcode);
-      return res.json(user);
+      if (!codeObject)
+        return res
+          .status(400)
+          .json({ message: "code is not correct or has expired" });
+
+      const found = await get_id.findUserByCode(codeObject.idcode);
+      await get_id.consumeCode(codeObject.idcode); // single use
+      if (!found)
+        return res.status(400).json({ message: "code is not correct" });
+
+      return res.json(authResponse(found.role, found.row));
     } catch (error) {
+      console.error("❌ verifyCode error:", error.message);
       return res.status(500).json({ message: "intenral server error" });
     }
   }
@@ -148,14 +141,11 @@ class studentcontroller {
       const role = req.query.role;
       const email = req.query.email;
 
-      if (!email || !role) {
+      if (!email || !["student", "teacher"].includes(role)) {
         return res
           .status(400)
           .json({ message: "email and role are required" });
       }
-
-      const id = await get_id.verifyEmail(email, role);
-      const code = Math.floor(1000000 * Math.random());
 
       if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
         console.error("❌ GMAIL credentials missing in .env");
@@ -163,6 +153,10 @@ class studentcontroller {
           .status(500)
           .json({ message: "email service is not configured" });
       }
+
+      const id = await get_id.verifyEmail(email, role);
+      // 6 digits from a cryptographically secure source
+      const code = String(crypto.randomInt(100000, 1000000));
 
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -176,7 +170,7 @@ class studentcontroller {
         from: process.env.GMAIL_USER,
         to: email,
         subject: "Teach-Me — Account Verification",
-        text: `Your verification code is: ${code}\n\nThis code will expire soon.`,
+        text: `Your verification code is: ${code}\n\nThis code expires in 15 minutes and can be used once.`,
       };
 
       await transporter.sendMail(emailOptions);
@@ -185,6 +179,8 @@ class studentcontroller {
       return res.json({ message: "email was sent" });
     } catch (err) {
       console.error("❌ sendCode error:", err.message);
+      if (err.message === "no account was found with this email")
+        return res.status(404).json({ message: err.message });
       return res.status(500).json({ message: "internal server error" });
     }
   }
@@ -210,15 +206,28 @@ class studentcontroller {
         message: "a profile image is required (jpg, png, webp or gif, max 5 MB)",
       });
 
+    const firstname = String(req.body.firstname || "").trim();
+    const lastname = String(req.body.lastname || "").trim();
+    const email = String(req.body.email || "").trim();
+    if (!firstname || !lastname || !email)
+      return res
+        .status(400)
+        .json({ message: "first name, last name and email are required" });
+    if (!/^\S+@\S+\.\S+$/.test(email))
+      return res.status(400).json({ message: "this email is not valid" });
     try {
-      const { firstname, lastname, email, password } = req.body;
+      validatePassword(req.body.password);
+    } catch (err) {
+      return res.status(400).json({ message: err.message });
+    }
 
-      // 2. Create the student in MySQL
+    try {
+      // 2. Create the student in MySQL (password is stored as a bcrypt hash)
       const student = await studentmodels.addstudent(
         firstname,
         lastname,
         email,
-        password
+        await hashPassword(req.body.password)
       );
 
       // 3. Upload the image to R2 and save its public URL in MySQL
@@ -227,8 +236,16 @@ class studentcontroller {
         const { key, url } = await r2.uploadProfileImage(student.id, req.file);
         uploadedKey = key;
         await studentmodels.addImageUrl(url, student.id);
-        // 4. Return the student (with the image url, so the UI can show it right away)
-        return res.json({ ...student, imageUrl: url });
+        // 4. Respond with the new user + a login token (never the password)
+        return res.json(
+          authResponse("student", {
+            id_stu: student.id,
+            first_name_stu: firstname,
+            last_name_stu: lastname,
+            email_stu: email,
+            image_url: url, // publicUser turns this into the /get_student_image route
+          })
+        );
       } catch (err) {
         // Roll back so the user can sign up again with the same email
         console.error("❌ profile image upload failed:", err.message);
@@ -242,20 +259,14 @@ class studentcontroller {
         });
       }
     } catch (err) {
+      if (err.code === "ER_DUP_ENTRY")
+        return res
+          .status(409)
+          .json({ message: "an account with this email already exists" });
       console.error("addnewstudent error:", err);
-      return res.status(500).json({ success: false, message: err.message });
-    }
-  }
-
-  static async reinsert(req, res) {
-    try {
-      const { email } = req.query;
-      var password = req.headers.password;
-      var student = await studentmodels.reinsert(email, password);
-      res.json(student);
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ message: err.message });
+      return res
+        .status(500)
+        .json({ success: false, message: "internal server error" });
     }
   }
 
@@ -267,6 +278,10 @@ class studentcontroller {
           "select id_teacher from relater where id_cours=?",
           [course.id_cours]
         );
+        if (!id_teacher.length) {
+          course.teacher = null; // a course without a teacher must not crash the whole list
+          continue;
+        }
         const teacher = await executeQuery(
           "select id_teacher,first_name,last_name,email from teacher where id_teacher=?",
           [id_teacher[0].id_teacher]
@@ -290,18 +305,14 @@ class studentcontroller {
     }
   }
 
+  // Enroll the logged-in student in a course (id comes from the token)
   static async login_course(req, res) {
     try {
-      var email = req.headers.email;
-      var password = req.headers.password;
-      var id_student = req.body.id_student;
-      var id_course = req.body.id_course;
-      var student_id = await get_id.student(email, password);
+      const id_course = req.body?.id_course;
+      if (!id_course)
+        return res.status(400).json({ message: "no course id was sent" });
 
-      if (req.body.id_student != student_id.id_stu)
-        return res.status(400).json({ message: "ids do not match" });
-
-      var results = await studentmodels.login_course(id_student, id_course);
+      var results = await studentmodels.login_course(req.user.id, id_course);
       res.send(results);
     } catch (err) {
       console.log(err);
@@ -327,15 +338,7 @@ class studentcontroller {
 
   static async get_my_courses(req, res) {
     try {
-      var email = req.headers.email;
-      var password = req.headers.password;
-      var id = req.query.id;
-
-      var g_i = await get_id.student(email, password);
-      if (req.query.id != g_i.id_stu)
-        return res.status(400).json({ message: "ids do not match" });
-
-      var id_course = await course_model.get_idcourse_forstudent(id);
+      var id_course = await course_model.get_idcourse_forstudent(req.user.id);
       var results = await course_model.get_courses(id_course);
       res.send(results);
     } catch (err) {
@@ -344,21 +347,16 @@ class studentcontroller {
     }
   }
 
+  // PATCH /api/student/reset_password   { password }   (any logged-in role)
   static async reset_password(req, res) {
     try {
-      var role = req.body.role;
-      var password2 = req.body.password;
-      var password = req.headers.password;
-      var email = req.headers.email;
-      if (role == "teacher") {
-        var id_teacher = await get_id.teacher(email, password);
-        await teachermodels.update_password(password2, id_teacher.id_teacher);
-      } else {
-        var id_student = await get_id.student(email, password);
-        await studentmodels.update_password(password2, id_student.id_stu);
+      try {
+        validatePassword(req.body?.password);
+      } catch (err) {
+        return res.status(400).json({ message: err.message });
       }
-
-      return res.json("rsest password is finish");
+      await storeHash(req.user.role, req.user.id, req.body.password);
+      return res.json({ message: "password was reset" });
     } catch (err) {
       console.log(err);
       return res.status(400).json({ message: err.message });

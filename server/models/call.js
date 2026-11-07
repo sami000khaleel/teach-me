@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema(
             occurrencesDates: [
               {
                   type: Date,
-                  default: Date.now(),
+                  default: Date.now,
                   required: true,
               },
             ],
@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now(),
+      default: Date.now,
     },
     endedAt: {
       type: Date,

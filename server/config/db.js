@@ -16,12 +16,21 @@ for (const key of required) {
 
 // -------------------------------------------------------------------
 // CA certificate (Aiven MySQL requires TLS with their CA)
+//   .gitignore excludes *.pem / *.crt, so the file is NOT on Render.
+//   On Render put the certificate text in the env var DB_CA
+//   (Aiven Console → MySQL → CA certificate → copy everything,
+//   including the BEGIN/END lines). Locally you can keep ca.pem instead.
 // -------------------------------------------------------------------
-const CA_PATH = path.join(__dirname,'../', 'ca.pem');
-if (!fs.existsSync(CA_PATH)) {
-  console.error(`❌ CA certificate not found at ${CA_PATH}`);
-  console.error('   Download it from Aiven Console → MySQL → Overview → CA Certificate');
-  process.exit(1);
+let CA;
+if (process.env.DB_CA) {
+  CA = process.env.DB_CA.replace(/\\n/g, "\n");
+} else {
+  const CA_PATH = path.join(__dirname, "../", "ca.pem");
+  if (!fs.existsSync(CA_PATH)) {
+    console.error("❌ No CA certificate: set the DB_CA env var (Render) or add ca.pem (local)");
+    process.exit(1);
+  }
+  CA = fs.readFileSync(CA_PATH);
 }
 
 // -------------------------------------------------------------------
@@ -34,7 +43,7 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: {
-    ca: fs.readFileSync(CA_PATH),
+    ca: CA,
     rejectUnauthorized: true,
   },
   waitForConnections: true,
@@ -55,7 +64,7 @@ const pool = mysql.createPool({
     console.log('✅ MySQL pool ready');
   } catch (err) {
     console.error('❌ MySQL pool connectivity check failed:', err.message);
-    console.error('   Check DB_HOST / DB_PORT=13397 / DB_USER=avnadmin / DB_PASSWORD / ca.pem');
+    console.error('   Check DB_HOST / DB_PORT / DB_USER / DB_PASSWORD / DB_CA');
     process.exit(1);
   }
 })();

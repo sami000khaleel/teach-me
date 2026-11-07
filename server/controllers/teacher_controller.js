@@ -1,6 +1,5 @@
 const course_model = require("../models/course");
 const teacher_model = require("../models/teacher");
-const get_id = require("../models/get_id");
 const relater_model = require("../models/relater");
 const Student = require("../models/student");
 const multer = require("multer");
@@ -11,28 +10,72 @@ const Call = require("../models/call");
 const course = require("../models/course");
 const executeQuery = require("../config/db");
 const fs=require('fs/promises')
+const crypto = require("crypto");
+const { authenticate } = require("../models/credentials");
+const { authResponse } = require("../middleware/auth");
+
+// ---------------------------------------------------------------------
+// Lecture files (PDFs on local disk)
+// ---------------------------------------------------------------------
+const LECTURES_DIR = path.resolve(__dirname, "..", "lectures");
+const UPLOADS_DIR = path.resolve(__dirname, "..", "uploads");
+
+// Builds lectures/<courseId>/<fileName> and refuses anything that could
+// escape that folder (../, absolute paths, hidden files, ...).
+function lecturePath(courseId, fileName) {
+  if (!/^\d+$/.test(String(courseId))) throw new Error("invalid course id");
+  const name = String(fileName || "");
+  if (!name || name !== path.basename(name) || name.startsWith("."))
+    throw new Error("invalid file name");
+  const courseDir = path.join(LECTURES_DIR, String(courseId));
+  const full = path.resolve(courseDir, name);
+  if (!full.startsWith(courseDir + path.sep)) throw new Error("invalid file path");
+  return full;
+}
+
+const lectureUpload = multer({
+  // a string destination makes multer create the folder if it is missing
+  storage: multer.diskStorage({
+    destination: UPLOADS_DIR,
+    filename: (req, file, cb) => cb(null, crypto.randomUUID()),
+  }),
+  limits: { fileSize: 25 * 1024 * 1024, files: 1 }, // 25 MB
+  fileFilter: (req, file, cb) => cb(null, file.mimetype === "application/pdf"),
+}).single("file");
+
 class teacher_controller {
+
+  // POST /api/teacher/login   { email, password }  →  { id, firstname, ..., role, token }
+  static async login(req, res) {
+    try {
+      const { email, password } = req.body || {};
+      const row = await authenticate("teacher", email, password);
+      if (!row)
+        return res
+          .status(401)
+          .json({ message: "one or both of the fields are wrong" });
+      return res.json(authResponse("teacher", row));
+    } catch (err) {
+      console.error("❌ teacher login error:", err.message);
+      return res.status(500).json({ message: "internal server error" });
+    }
+  }
 
   static async delete_lecture(req,res){
     try {
-
-// Check if the file exists
-const filePath = path.join(__dirname, '../lectures', req.query.courseId,req.query.file_name)
-await fs.access(filePath);
-console.log(`File ${filePath} exists, deleting...`);
-// Delete the file
-await fs.unlink(filePath);
-
-console.log(`File ${filePath} deleted successfully!`);
-const delete_lecture = await course_model.delete_leceture(req.query.courseId,req.query.file_name)
-
-// Example usage
-return res.send('done')
+      const { courseId, file_name } = req.query;
+      await course_model.checkTeacherGivesCourse(courseId, req.user.id);
+      const filePath = lecturePath(courseId, file_name);
+      await fs.unlink(filePath).catch((err) => {
+        if (err.code !== "ENOENT") throw err;
+      });
+      await course_model.delete_leceture(courseId, file_name)
+      return res.send('done')
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({message:'internal server error'})
+      console.log(error)
+      return res.status(400).json({ message: error.message })
     }
-}
+  }
 
 
   static async get_lectures(req, res) {
@@ -52,17 +95,14 @@ return res.send('done')
 
   static async get_lectures_by_course(req, res) {
     try {
-      const courseId = req.query.courseId;
-      const lectureName = req.query.lectureName;
-     
-        const filePath = path.join(__dirname, `../lectures/${courseId}/${lectureName}`);
-        console.log(filePath)
-        res.download(filePath, lectureName, (err) => {
-          if (err) {
-            console.log(err);
-            return res.status(400).json({ message: err.message });
-          }
-        });
+      const { courseId, lectureName } = req.query;
+      const filePath = lecturePath(courseId, lectureName);
+      res.download(filePath, lectureName, (err) => {
+        if (err && !res.headersSent) {
+          console.log(err.message);
+          return res.status(404).json({ message: "lecture file was not found" });
+        }
+      });
     } catch (err) {
       console.log(err);
       return res.status(400).json({ message: err.message });
@@ -70,69 +110,39 @@ return res.send('done')
   }
 
   static async add_lecture(req,res){
-
     try {
-        const storage = multer.diskStorage({
-          destination: function (req, file, cb) {
-            cb(null, './uploads')
-          },
-          filename: function (req, file, cb) {
-            cb(null,file.originalname)
-          }
-        })
-        const upload = multer({ storage }).single('file')
-        
-        await upload(req, res, async (err) => {
-          if (err) {
-            console.log(err.message)
-            return res.status(500).json({ message: 'internal error handling the file', m: err.message })
-          }
-          const email =req.headers.email;
-          const password =req.headers.password;
-          const id_course=req.body.id_course;
-          const id_teacher=req.body.id_teacher;
-          var idteacher = await get_id.teacher(email, password);
-        if (req.body.id_teacher != idteacher.id_teacher)
-            return res.status(400).json({ message: "ids do not match" })
-
-           let {id}= await teacher_model.add_idCourse(id_course)
-            let lectureId=id
-           const destinationDir = path.join('./lectures', String(id_course)); // Create directory based on product ID
-          await fs.mkdir(destinationDir, { recursive: true }); // Ensure directory exists
-          const filesNames= await fs.readdir(path.join('./','uploads'))
-          for (const fileName of filesNames) {
-            const finalPath = path.join(destinationDir,req.body?.fileName);
-            await fs.rename(path.join('./','uploads',fileName), finalPath); // Move each file
-          }
-          
-          const url = `https://127.0.0.1:3000/api/teacher/download_lecture?courseId=${id_course}&lectureName=${req.file.filename}`
-          await teacher_model.addlectureUrl(req.body.fileName, lectureId)
-          
-          return res.json("ok baby")
-        })
-  
-      }
-      catch (err) {
-        // console.log(err)
-        return res.status(400).json({ message: err.message })
-      }
-
-
-
-
-
- }
-  static async create_test_call(req, res) {
-    try {
-      const call = await Call.create(req.body);
-      return res.json(call.id);
+      await new Promise((resolve, reject) =>
+        lectureUpload(req, res, (err) => (err ? reject(err) : resolve()))
+      );
     } catch (err) {
-      console.log(err);
-      return res
-        .status(500)
-        .json({ success: false, err: "internal server error" });
+      console.log(err.message)
+      if (err.code === "LIMIT_FILE_SIZE")
+        return res.status(400).json({ message: "the PDF is too large (max 25 MB)" })
+      return res.status(500).json({ message: 'internal error handling the file', m: err.message })
+    }
+
+    const tempPath = req.file?.path;
+    try {
+      if (!req.file)
+        return res.status(400).json({ message: "a PDF file is required" })
+      const id_course = req.body.id_course;
+
+      // only the teacher of this course may add lectures to it
+      await course_model.checkTeacherGivesCourse(id_course, req.user.id);
+      const finalPath = lecturePath(id_course, req.body.fileName);
+      await fs.mkdir(path.dirname(finalPath), { recursive: true });
+
+      const { id: lectureId } = await teacher_model.add_idCourse(id_course)
+      await fs.rename(tempPath, finalPath);
+      await teacher_model.addlectureUrl(req.body.fileName, lectureId)
+
+      return res.json("ok")
+    } catch (err) {
+      if (tempPath) await fs.unlink(tempPath).catch(() => {});
+      return res.status(400).json({ message: err.message })
     }
   }
+
   static getStartAndEndOfDay = (date) => {
     const start = new Date(date);
     start.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
@@ -258,14 +268,12 @@ return res.send('done')
   };
   static async get_days_report(req, res) {
     try {
-      const { email, password } = req.headers;
-      console.log(email, password);
-      const teacher = await teacher_model.get_teacher(email, password);
       let reports = [];
       const { date, courseId } = req.query;
       if (!date || !courseId) {
         return res.status(400).send("Date and courseId are required");
       }
+      await course_model.checkTeacherGivesCourse(courseId, req.user.id);
 
       const { start, end } = teacher_controller.getStartAndEndOfDay(
         new Date(date)
@@ -310,12 +318,13 @@ return res.send('done')
   }
   static get_report = async (req, res) => {
     try {
-      const { email, password } = req.headers;
-      const teacher = await teacher_model.get_teacher(email, password);
-      // const { date, courseId } = req.query;
       const { callId } = req.query;
       const call = await Call.findById(callId);
       if (!call) return res.status(404).json({ message: "no call was found" });
+      if (String(call.teacherId) !== String(req.user.id))
+        return res
+          .status(403)
+          .json({ message: "you are not the teacher of this call" });
       const totalLectureTime =
         new Date(call.endedAt) - new Date(call.createdAt);
       // const totalLectureTime = teacher_controller.calculateTotalLectureTime(calls);
@@ -330,7 +339,8 @@ return res.send('done')
       };
       for (let student of report.students) {
         const result = await executeQuery(
-          `select first_name_stu,last_name_stu,email_stu,image_url from student where id_stu=${student.studentId}`
+          "select first_name_stu,last_name_stu,email_stu,image_url from student where id_stu=?",
+          [student.studentId]
         );
         if (!result.length) {
           console.log("did not find student");
@@ -340,7 +350,9 @@ return res.send('done')
         }
         student.name = result[0].first_name_stu + " " + result[0].last_name_stu;
         student.email = result[0].email_stu;
-        student.image_url = result[0].image_url;
+        student.image_url = result[0].image_url
+          ? `/api/student/get_student_image?id_student=${student.studentId}`
+          : "";
       }
 
       return res.json(report);
@@ -352,6 +364,7 @@ return res.send('done')
   static async getCoursesStudents(req, res) {
     try {
       const { courseId } = req.query;
+      await course_model.checkTeacherGivesCourse(courseId, req.user.id);
       const ids = await relater_model.get_students(courseId);
       return res.json(ids);
     } catch (err) {
@@ -361,11 +374,8 @@ return res.send('done')
   }
   static async createLesson(req, res) {
   try {
-    const { courseId, teacherId } = req.body;
-    const { email, password } = req.headers;
-    const objectId = await get_id.teacher(email, password);
-    if (objectId.id_teacher != teacherId)
-      return res.status(400).json({ message: "ids do not match" });
+    const { courseId } = req.body;
+    const teacherId = req.user.id; // from the token, not from the request body
 
     // Shut down any ongoing calls for this teacher
     let calls = await Call.find({ teacherId, onGoing: true });
@@ -395,37 +405,11 @@ return res.send('done')
   }
 }
 
-  static async checkTeacherGivesCourse(req, res) {
-    try {
-      var email = req.headers.email;
-      var password = req.headers.password;
-      var courseId = req.query.courseId;
-      var id_teacher = await get_id.teacher(email, password);
-      if (req.query.id != id_teacher.id_teacher)
-        return res.status(400).json({ message: "ids do not match" });
-
-      let teacher_id = await teacher_model.get_teacher_id(course_id);
-      let teacher = await teacher_model.get_teacher_by_id(teacher_id);
-      let students = await studentmodels.getstudents_by_course_id(course_id);
-      course.teacher = teacher;
-      course.students = students;
-      console.log(course.teacher);
-      return res.json({ course, teacher, students });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ message: err.message });
-    }
-  }
-
   static async get_course_info(req, res) {
     try {
-      var email = req.headers.email;
-      var password = req.headers.password;
-      var id = req.query.id;
       const course_id = req.query.course_id;
-      var id_teacher = await get_id.teacher(email, password);
-      if (req.query.id != id_teacher.id_teacher)
-        return res.status(400).json({ message: "ids do not match" });
+      // only the teacher of this course may see its students
+      await course_model.checkTeacherGivesCourse(course_id, req.user.id);
 
       let course = await teacher_model.get_course(course_id);
       let teacher_id = await teacher_model.get_teacher_id(course_id);
@@ -433,21 +417,7 @@ return res.send('done')
       let students = await studentmodels.getstudents_by_course_id(course_id);
       course.teacher = teacher;
       course.students = students;
-      console.log(course.teacher);
       return res.json({ course, teacher, students });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ message: err.message });
-    }
-  }
-
-  static async insert_teacher(req, res) {
-    try {
-      const email = req.headers.email;
-      const password = req.headers.password;
-      console.log(email, password);
-      const result = await teacher_model.get_teacher(email, password);
-      return res.json(result);
     } catch (err) {
       console.log(err);
       return res.status(400).json({ message: err.message });
@@ -457,8 +427,6 @@ return res.send('done')
   //************************************************************************* */
   static async add_course(req, res) {
     try {
-      var email = req.headers.email;
-      var password = req.headers.password;
       var course_name = req.body.course_name;
       var course_discription = req.body.course_discription;
       var first_course = req.body.first_course;
@@ -466,7 +434,6 @@ return res.send('done')
       var date2 = req.body.date2;
       var date1 = req.body.date1;
       course_model.validatedates(first_course, end_course);
-      var teacher = await get_id.teacher(email, password);
       var course_id = await teacher_model.add_course(
         course_name,
         course_discription,
@@ -475,11 +442,7 @@ return res.send('done')
         date1,
         date2
       );
-      const relation = await relater_model.add_relation(
-        course_id,
-        teacher.id_teacher
-      );
-      console.log("hello");
+      await relater_model.add_relation(course_id, req.user.id);
       return res.json(course_id);
     } catch (err) {
       console.log(err);
@@ -489,13 +452,7 @@ return res.send('done')
 
   static async get_courses(req, res) {
     try {
-      var email = req.headers.email;
-      var password = req.headers.password;
-
-      const id_teacher = req.query.id_teacher;
-      var teacher_id = await get_id.teacher(email, password);
-      if (req.query.id_teacher != teacher_id.id_teacher)
-        return res.status(400).json({ message: "ids do not match" });
+      const id_teacher = req.user.id;
       const teacher = await teacher_model.get_teacher_by_id(id_teacher);
       const id_courses = await course_model.get_courses_id(id_teacher);
       const courses = await course_model.get_courses(id_courses);
@@ -509,22 +466,14 @@ return res.send('done')
 
   static async update_date(req, res) {
     try {
-      console.log(req.body);
-      const id_teacher = req.body.id_teacher;
       const id_course = req.body.id_course;
       const first_course = req.body.first_course;
       const end_course = req.body.end_course;
       const date1 = req.body.date1;
       const date2 = req.body.date2;
-      var email = req.headers.email;
-      var password = req.headers.password;
-      var teacher_id = await get_id.teacher(email, password);
-      if (req.body.id_teacher != teacher_id.id_teacher)
-        return res.status(400).json({ message: "ids do not match" });
-      const validatedates = await course_model.validatedates(
-        first_course,
-        end_course
-      );
+      // only the teacher of this course may change it
+      await course_model.checkTeacherGivesCourse(id_course, req.user.id);
+      await course_model.validatedates(first_course, end_course);
       const update_d = await course_model.update(
         first_course,
         end_course,
@@ -532,24 +481,18 @@ return res.send('done')
         date2,
         id_course
       );
-      console.log(update_d);
       return res.json(update_d);
     } catch (err) {
-      // console.log(err)
       return res.status(400).json({ message: err.message });
     }
   }
 
   static async delete_course(req, res) {
     try {
-      var id = req.query.id;
       const id_course = req.query.id_course;
-      var email = req.headers.email;
-      var password = req.headers.password;
-      var teacher_id = await get_id.teacher(email, password);
-      if (req.query.id != teacher_id.id_teacher)
-        return res.status(400).json({ message: "ids do not match" });
-      const dlt_course = await course_model.delete_course(id_course);
+      // only the teacher of this course may delete it
+      await course_model.checkTeacherGivesCourse(id_course, req.user.id);
+      await course_model.delete_course(id_course);
       return res.json("delete succes");
     } catch (err) {
       console.log(err);
@@ -560,28 +503,15 @@ return res.send('done')
   static async get_courses_mystudent(req, res) {
     try {
       const id_stu = req.query.id_stu;
-      const id_teacher = req.query.id_teacher;
-      var email = req.headers.email;
-      var password = req.headers.password;
-      var teacher_id = await get_id.teacher(email, password);
-      if (req.query.id_teacher != teacher_id.id_teacher)
-        return res.status(400).json({ message: "ids do not match" });
-
       const id_courses = await course_model.get_courses_mystudent_id(
         id_stu,
-        id_teacher
+        req.user.id
       );
       const courses_mystudent = await course_model.get_courses(id_courses);
       return res.json(courses_mystudent);
     } catch (err) {
-      // console.log(err)
       return res.status(400).json({ message: err.message });
     }
   }
-
-
-  //*********************************************************** */
-
-
 }
 module.exports = teacher_controller;

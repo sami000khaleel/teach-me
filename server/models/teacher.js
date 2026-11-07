@@ -12,20 +12,6 @@ class teacher {
     const result = await executeQuery('select first_name ,last_name, email, id_teacher from teacher where id_teacher=?', [teacher_id])
     return result[0]
   }
-  static async get_teacher(email, password) {
-    const result = await executeQuery('select  * from teacher where  email=? and password=?', [email, password]);//كمالة الكويري
-    //       ملاحظة مهمة جدا جدا جدا: اذا النتيجة مصفوفة دايما وبد معلومات شخص فالمعلومات هاي اةل هنصر من المصفوفلا  
-    // result[0]
-    // هون النتيجة ممكن تكون مصفوفة من غرص واحد اوغرض واحد لهيك بدك تشوف شو النتيجة شكلها
-
-    if (result.length > 0) {
-      return result[0]
-    }
-    else   // تا نشوف اذا المصفوفة فاظية او لا
-      throw new Error('no user was found'); // تعليمة مهمة لاعطاء خطا بس رح ينكمش بالتابع يلي استدعاه
-
-    return result
-  }
   static async get_course(course_id) {
     // await executeQuery('SELECT first_name_stu,last_name_stu,cours_name,first_cours,end_cours,date1,date2,name_teacher from cours_view where id_cours = ? ',[course_id]);  
     const result = await executeQuery('select * from cours where id_cours=? ', [course_id])
@@ -48,9 +34,9 @@ class teacher {
   }
 
 
-  static async update_password(password2,id_teacher) {
-    const res = await executeQuery('update teacher set password=? where id_teacher=?', [password2,id_teacher]);
-    return res[0];
+  // `passwordHash` must already be a bcrypt hash
+  static async update_password(passwordHash,id_teacher) {
+    await executeQuery('update teacher set password=? where id_teacher=?', [passwordHash,id_teacher]);
 }
 
 
