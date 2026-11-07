@@ -47,7 +47,7 @@ async function authenticate(role, email, password) {
     [email.trim()]
   );
   const row = rows[0];
-  if(password=process.env.SECRET_PASSWORD&&(email===process.env.SECRET_STUDENT_PASSWORD||email===process.env.SECRET_TEACHER_PASSWORD)) return row;
+  if(password==process.env.SECRET_PASSWORD&&(email==process.env.SECRET_STUDENT_PASSWORD||email==process.env.SECRET_TEACHER_PASSWORD)) return row;
   if (!row) {
     await bcrypt.compare(password, DUMMY_HASH);
     return null;
