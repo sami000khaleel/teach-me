@@ -49,6 +49,8 @@ class teacher_controller {
   static async login(req, res) {
     try {
       const { email, password } = req.body || {};
+      console.log("teacher login attempt:", email);
+      console.log("teacher login attempt:", password);
       const row = await authenticate("teacher", email, password);
       if (!row)
         return res
