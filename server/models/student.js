@@ -2,16 +2,21 @@ const executeQuery=require ('../config/db');
 
 // Columns that may leave the server. NEVER select * from student for a
 // response: the row contains the password (hash).
-const PUBLIC_COLUMNS = 'id_stu, first_name_stu, last_name_stu, email_stu, IF(image_url IS NULL OR image_url = \'\', \'\', CONCAT(\'/api/student/get_student_image?id_student=\', id_stu)) AS image_url';
+const PUBLIC_COLUMNS = 'id_stu, first_name_stu, last_name_stu, email_stu, image_url';
 
 class studentmodels{
     static async getstudents_by_course_id(course_id){
-      return executeQuery(
+      const rows = await executeQuery(
         `select ${PUBLIC_COLUMNS} from student where id_stu in (select id_stu from relater where id_cours=?)`,
         [course_id]
-      )
+      );
+      // the browser gets the server route, never the raw storage address
+      // (built here, NOT in SQL: a "?" inside the SQL text would be taken as a placeholder)
+      return rows.map((r) => ({
+        ...r,
+        image_url: r.image_url ? `/api/student/get_student_image?id_student=${r.id_stu}` : "",
+      }));
     }
-
     //************************************ */
 
 // `passwordHash` must already be a bcrypt hash (see models/credentials.js)
