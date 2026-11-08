@@ -17,6 +17,7 @@ class studentmodels{
         image_url: r.image_url ? `/api/student/get_student_image?id_student=${r.id_stu}` : "",
       }));
     }
+
     //************************************ */
 
 // `passwordHash` must already be a bcrypt hash (see models/credentials.js)
