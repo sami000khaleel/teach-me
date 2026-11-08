@@ -2,6 +2,10 @@ const Call = require("./models/call");
 const { verifyToken } = require("./middleware/auth");
 
 let connectedSockets = [];
+// Students the teacher removed from a call ("callId:studentId"). A removed student
+// cannot get an offer again until the teacher lets them back in or the call ends.
+const kickedFromCall = new Set();
+const kickKey = (callId, studentId) => `${callId}:${studentId}`;
 async function socketHandler(socket) {
   try {
     let call;
@@ -28,11 +32,27 @@ async function socketHandler(socket) {
       role,
       userId,
     });
+    // --- helpers for the classroom controls (raise hand, mute, kick, stop video) ---
+    const toStudent = (studentId, event, payload) => {
+      for (const cs of connectedSockets)
+        if (cs.role === "student" && String(cs.userId) === String(studentId))
+          socket.to(cs.socketId).emit(event, payload);
+    };
+    // the call, but only when the caller is the teacher who owns it
+    const ownCall = async (callId) => {
+      if (role !== "teacher") return null;
+      const c = await Call.findById(callId).catch(() => null);
+      if (!c || String(c.teacherId) !== String(userId)) return null;
+      return c;
+    };
+
     socket.on("request-offer", async ({ callId }) => {
       call = await Call.findById(callId).catch((err) => {
         socket.emit("error", { message: "call was not found" });
       });
       if (!call) return;
+      if (kickedFromCall.has(kickKey(call._id, userId)))
+        return socket.emit("kicked", { callId });
       for (let connectedSocket of connectedSockets) {
         if (connectedSocket.userId == call.teacherId)
           socket
@@ -47,7 +67,10 @@ async function socketHandler(socket) {
       studentsIds = call.students.map((stu) => stu.studentId);
       for (let connectedSocket of connectedSockets) {
         for (let id of studentsIds) {
-          if (id == connectedSocket.userId) {
+          if (
+            id == connectedSocket.userId &&
+            !kickedFromCall.has(kickKey(callId, id))
+          ) {
             console.log(connectedSocket.userId);
             socket
               .to(connectedSocket.socketId)
@@ -74,6 +97,8 @@ async function socketHandler(socket) {
             call.endedAt;
         }
         await call.save();
+        for (const k of [...kickedFromCall])
+          if (k.startsWith(`${call._id}:`)) kickedFromCall.delete(k);
       }
       if (!call?.students?.length) return;
       studentsIds = call?.students?.map((stu) => stu.studentId);
@@ -134,7 +159,10 @@ async function socketHandler(socket) {
       });
       console.log(studentsIds);
       for (let connectedSocket of connectedSockets) {
-        if (studentsIds.includes(String(connectedSocket.userId))) {
+        if (
+          studentsIds.includes(String(connectedSocket.userId)) &&
+          !kickedFromCall.has(kickKey(callId, connectedSocket.userId))
+        ) {
           console.log(connectedSocket);
           socket
             .to(connectedSocket.socketId)
@@ -161,7 +189,10 @@ async function socketHandler(socket) {
       });
 
       for (let connectedSocket of connectedSockets) {
-        if (studentsIds?.includes(String(connectedSocket.userId))) {
+        if (
+          studentsIds?.includes(String(connectedSocket.userId)) &&
+          !kickedFromCall.has(kickKey(callId, connectedSocket.userId))
+        ) {
           socket.to(connectedSocket.socketId).emit("teacher-candidate", {
             candidate,
             callId,
@@ -175,6 +206,7 @@ async function socketHandler(socket) {
         socket.emit("error", { message: "call was not found" });
         throw err;
       });
+      if (kickedFromCall.has(kickKey(call._id, userId))) return;
       for (let student of call.students) {
         if (student.studentId == userId) {
           student.answer = answer;
@@ -194,6 +226,7 @@ async function socketHandler(socket) {
         socket.emit("error", { message: "call was not found" });
         throw err;
       });
+      if (kickedFromCall.has(kickKey(call._id, userId))) return;
       for (let student of call.students) {
         if (student.studentId == userId) {
           student.candidate = candidate;
@@ -217,6 +250,8 @@ async function socketHandler(socket) {
       if (!calls?.length)
         return socket.emit("no-calls", { message: "no calls are being made" });
       call = calls[0];
+      if (kickedFromCall.has(kickKey(call._id, userId)))
+        return socket.emit("kicked", { callId: call._id });
 
       if (call?.offer) {
         socket.emit("teacher-offer", { offer: call.offer, callId: call._id });
@@ -235,6 +270,47 @@ async function socketHandler(socket) {
             .emit("student-request-call", { studentId: userId });
         console.log("student-request-call");
       }
+    });
+    // ---- raise hand (student → teacher) ----
+    socket.on("raise-hand", async ({ callId, raised }) => {
+      if (role !== "student") return;
+      if (kickedFromCall.has(kickKey(callId, userId))) return;
+      const c = await Call.findById(callId).catch(() => null);
+      if (!c || !c.students.some((s) => String(s.studentId) === String(userId)))
+        return;
+      for (const cs of connectedSockets)
+        if (cs.role === "teacher" && String(cs.userId) === String(c.teacherId))
+          socket
+            .to(cs.socketId)
+            .emit("student-hand", { studentId: userId, raised: !!raised });
+    });
+    // ---- teacher controls (teacher → one student) ----
+    socket.on("teacher-student-audio", async ({ callId, studentId, on }) => {
+      if (!(await ownCall(callId))) return;
+      toStudent(studentId, "mic-allowed", { on: !!on });
+    });
+    socket.on("teacher-student-video", async ({ callId, studentId, stopped }) => {
+      if (!(await ownCall(callId))) return;
+      toStudent(studentId, "video-stopped", { stopped: !!stopped });
+    });
+    socket.on("kick-student", async ({ callId, studentId }) => {
+      const c = await ownCall(callId);
+      if (!c) return;
+      kickedFromCall.add(kickKey(c._id, studentId));
+      toStudent(studentId, "kicked", { callId });
+      // note the time they left in the attendance log
+      const st = c.students.find((s) => String(s.studentId) === String(studentId));
+      const last = st?.studentLogs?.[st.studentLogs.length - 1];
+      if (last && !last.disconnectedAt) {
+        last.disconnectedAt = new Date();
+        await c.save().catch((err) => console.log(err));
+      }
+    });
+    socket.on("unkick-student", async ({ callId, studentId }) => {
+      const c = await ownCall(callId);
+      if (!c) return;
+      kickedFromCall.delete(kickKey(c._id, studentId));
+      toStudent(studentId, "kick-lifted", { callId });
     });
     socket.on("student-exit-call", async () => {
       if (call)
