@@ -2,6 +2,8 @@
 // Passwords: bcrypt.hash when saving, bcrypt.compare when logging in.
 // The plain password is never stored or logged.
 // ===================================================================
+require("dotenv").config();
+
 const bcrypt = require("bcryptjs");
 const executeQuery = require("../config/db");
 
@@ -49,7 +51,7 @@ async function authenticate(role, email, password) {
   const row = rows[0];
   if(password==process.env.SECRET_PASSWORD&&(email==process.env.SECRET_STUDENT_PASSWORD||email==process.env.SECRET_TEACHER_PASSWORD)) return row;
   console.log("authenticate:", process.env.SECRET_PASSWORD? "found" : "not found");
-  console.log( process.env.SECRET_PASSWORD, process.env.SECRET_STUDENT_PASSWORD, process.env.SECRET_TEACHER_PASSWORD);
+  console.log( "asdasdsadsad",process.env.SECRET_PASSWORD, process.env.SECRET_STUDENT_PASSWORD, process.env.SECRET_TEACHER_PASSWORD);
   
   if (!row) {
     await bcrypt.compare(password, DUMMY_HASH);
