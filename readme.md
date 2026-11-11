@@ -64,11 +64,6 @@ npm install
 # configure MySQL, MongoDB and R2 values (see .env.example)
 npm start
 
-# client
-cd browser
-npm install
-npm run dev
-```
 
 ## Known limitations and what I would change
 
