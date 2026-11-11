@@ -4,7 +4,7 @@
 
 **A live-class platform in the browser: a teacher starts a video lesson, students join, and the teacher stays in control.**
 
-[**▶ Try the live demo**](https://YOUR-APP.onrender.com) &nbsp;·&nbsp; [Quick start](#-try-it-in-60-seconds) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Run it locally](#-run-it-locally)
+[**▶ Try the live demo**]() &nbsp;·&nbsp; [Quick start](#-try-it-in-60-seconds) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Run it locally](#-run-it-locally)
 
 ![React](https://img.shields.io/badge/React_18-20232a?logo=react&logoColor=61dafb)
 ![Node](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
@@ -46,20 +46,6 @@ No sign-up, no passwords. The demo signs you in with one click.
 
 ---
 
-## 📸 Screenshots
-
-<table>
-  <tr>
-    <td><img src="docs/screenshots/02-teacher-room.png" alt="Teacher room"><br><sub><b>Teacher:</b> live lesson with every student's video</sub></td>
-    <td><img src="docs/screenshots/04-teacher-controls.png" alt="Teacher controls"><br><sub><b>Teacher controls:</b> unmute, stop video, remove, raised hand</sub></td>
-  </tr>
-  <tr>
-    <td><img src="docs/screenshots/03-student-view.png" alt="Student room"><br><sub><b>Student:</b> teacher's video, raise hand, chat</sub></td>
-    <td><img src="docs/screenshots/05-reports.png" alt="Attendance report"><br><sub><b>Reports:</b> who attended and for how long</sub></td>
-  </tr>
-</table>
-
----
 
 ## ✨ What you can do in the call
 
@@ -190,85 +176,6 @@ sequenceDiagram
     Note over T,S: 🎥 Video and audio now flow directly between the two browsers
 ```
 
-### Everything that can happen to a call
-
-The green path is a normal lesson. The coloured branches are the edge cases, and each one ends by joining the path again, so nobody is ever stuck: a student or teacher who leaves can always come back.
-
-```mermaid
-flowchart TD
-    classDef main fill:#16a34a,stroke:#14532d,color:#fff,stroke-width:2px
-    classDef live fill:#2563eb,stroke:#1e3a8a,color:#fff,stroke-width:4px
-    classDef warn fill:#f59e0b,stroke:#92400e,color:#1f2937,stroke-width:2px
-    classDef bad fill:#dc2626,stroke:#7f1d1d,color:#fff,stroke-width:2px
-    classDef teach fill:#7c3aed,stroke:#4c1d95,color:#fff,stroke-width:2px
-    classDef wait fill:#f3f4f6,stroke:#6b7280,color:#111827,stroke-dasharray:4 3
-    classDef back fill:#fff,stroke:#111827,color:#111827,stroke-width:3px,font-weight:bold
-
-    A["1 · Teacher opens the room<br/>camera starts by itself"]:::main
-    B["2 · A new lesson is created<br/>(saved in MongoDB)"]:::main
-    C["3 · Teacher announces it<br/><code>ask-me-for-offer</code>"]:::main
-    D["4 · Every student replies 'I'm here'<br/><code>request-offer</code>"]:::main
-    E["5 · Teacher builds one connection<br/>per student and sends an offer"]:::main
-    F["6 · Student answers · ICE candidates exchanged<br/>(early ones are queued, not lost)"]:::main
-    LIVE(["🟢 LIVE<br/>video · audio · chat · screen share · controls<br/>attendance: join time saved"]):::live
-    A --> B --> C --> D --> E --> F --> LIVE
-
-    EARLY["⏳ Student opened the room first:<br/>no lesson yet, just waits"]:::wait
-    EARLY -. "teacher starts" .-> D
-
-    LIVE --> S1a & S2a & S3a & S4a
-
-    S1a["🟠 STUDENT LEAVES<br/>closes the tab or loses the network"]:::warn
-    S1b["Teacher's connection turns 'disconnected'<br/>tile goes offline · leave time saved"]:::warn
-    S1c["Student comes back<br/>(reopens the room or presses Connect)"]:::warn
-    S1d["↩ back to step 5<br/>fresh connection · new attendance row"]:::back
-    S1a --> S1b --> S1c ==> S1d
-
-    S2a["🔴 TEACHER REMOVES A STUDENT"]:::bad
-    S2b["Student sees 'You were removed'<br/>server blocks every offer and answer"]:::bad
-    S2c["Teacher presses Let back in<br/><code>kick-lifted</code> → student asks again"]:::bad
-    S2d["↩ back to step 5"]:::back
-    S2a --> S2b --> S2c ==> S2d
-
-    S3a["🟣 TEACHER ENDS THE LESSON<br/>presses End call"]:::teach
-    S3b["Lesson closed and saved<br/>students told <code>teacher-end-call</code><br/>their connections close"]:::teach
-    S3c["Teacher starts again:<br/>a NEW lesson is created"]:::teach
-    S3d["↩ back to step 3"]:::back
-    S3a --> S3b --> S3c ==> S3d
-
-    S4a["🔵 TEACHER DROPS OUT<br/>refresh, crash or closed tab"]:::teach
-    S4b["Server sees the socket is gone<br/>closes the lesson<br/>tells students <code>teacher-disconnected</code>"]:::teach
-    S4c["Teacher reopens the room:<br/>auto-start makes a new lesson"]:::teach
-    S4d["↩ back to step 3<br/>students reconnect on their own"]:::back
-    S4a --> S4b --> S4c ==> S4d
-```
-
-### What a student goes through
-
-The teacher's choices are applied on the student's side **and** enforced on the teacher's side, so a tampered browser can't be heard or seen against the teacher's wishes.
-
-```mermaid
-stateDiagram-v2
-    [*] --> Waiting: opens the lesson link
-    Waiting --> Connecting: teacher's offer arrives
-    Connecting --> Connected: answer + ICE exchanged
-
-    state Connected {
-        [*] --> Muted
-        Muted --> Speaking: teacher unmutes
-        Speaking --> Muted: teacher mutes
-        --
-        [*] --> VideoOn
-        VideoOn --> VideoOff: teacher stops video
-        VideoOff --> VideoOn: teacher allows video
-    }
-
-    Connected --> Removed: teacher removes the student
-    Removed --> Waiting: teacher lets them back in
-    Connected --> Waiting: teacher ends the lesson
-```
-
----
 
 ## 🛠 Engineering highlights
 
@@ -359,6 +266,6 @@ server/
 
 <div align="center">
 
-**Built by Sami** &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/YOUR-PROFILE) &nbsp;·&nbsp; [Portfolio](https://YOUR-PORTFOLIO.example)
+**Built by Sami**
 
 </div>
