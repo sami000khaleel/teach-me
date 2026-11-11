@@ -4,7 +4,7 @@
 
 **A live-class platform in the browser: a teacher starts a video lesson, students join, and the teacher stays in control.**
 
-[**▶ Try the live demo**]() &nbsp;·&nbsp; [Quick start](#-try-it-in-60-seconds) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Run it locally](#-run-it-locally)
+[**▶ Try the live demo**](https://teach-me-al46.onrender.com/home) &nbsp;·&nbsp; [Quick start](#-try-it-in-60-seconds) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Run it locally](#-run-it-locally)
 
 ![React](https://img.shields.io/badge/React_18-20232a?logo=react&logoColor=61dafb)
 ![Node](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
