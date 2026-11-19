@@ -1,40 +1,50 @@
 <div align="center">
 
-# 🎓 Teach-Me
+# 🎓 TeachMe
 
-### A real-time e-learning platform with multi-peer video, AI-assisted student monitoring, and automated attendance reports.
+**A live-class platform in the browser: a teacher starts a video lesson, students join, and the teacher stays in control.**
 
-**Built from scratch — no tutorials, no boilerplate, no shortcuts.**
+[**▶ Try the live demo**](https://YOUR-APP.onrender.com) &nbsp;·&nbsp; [Quick start](#-try-it-in-60-seconds) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Run it locally](#-run-it-locally)
 
-[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev)
-[![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js&logoColor=white)](https://nodejs.org)
-[![WebRTC](https://img.shields.io/badge/WebRTC-P2P-333333?logo=webrtc&logoColor=white)](https://webrtc.org)
-[![Socket.IO](https://img.shields.io/badge/Socket.IO-4.x-010101?logo=socket.io&logoColor=white)](https://socket.io)
-[![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?logo=mongodb&logoColor=white)](https://mongodb.com)
-[![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)](https://mysql.com)
-[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](https://docker.com)
+![React](https://img.shields.io/badge/React_18-20232a?logo=react&logoColor=61dafb)
+![Node](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
+![WebRTC](https://img.shields.io/badge/WebRTC-333333?logo=webrtc&logoColor=white)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?logo=socketdotio&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
+
+<a href="docs/teachme-demo.mp4"><img src="docs/teachme-demo.gif" alt="10-second demo: start a lesson, a student raises a hand, the teacher unmutes them, shares the screen and stops a student's video" width="860"></a>
+
+<sub>▲ 10 seconds of the real app: start a lesson · raise a hand · unmute · share the screen · stop a student's video. <a href="docs/teachme-demo.mp4">Watch it in HD</a></sub>
 
 </div>
 
+## What it is
+
+TeachMe lets a teacher run a **live video lesson** for the students of a course. Students join from any modern browser, no install. The video goes **directly between the browsers (WebRTC)**; the server only introduces them to each other. The teacher can hear or mute each student, stop their video, or remove them, and every lesson is logged for attendance reports.
+
+Built end to end by me: React front end, Node.js back end, real-time signaling, authentication, and deployment.
+
 ---
 
-## 👋 Why you should look at this project
+## ⚡ Try it in 60 seconds
 
-Most junior portfolios look the same: to-do apps, weather widgets, tutorial clones. **This one doesn't.**
+No sign-up, no passwords. The demo signs you in with one click.
 
-Teach-Me is a complete real-time teaching platform I designed and built end-to-end. It includes:
+1. **Open the [live demo](https://YOUR-APP.onrender.com).** The free hosting sleeps when idle, so the first load can take up to a minute.
+2. **Turn your VPN off** and allow the camera when asked (video calls usually don't work through a VPN).
+3. **Click "Try a demo video call"** (bottom right). You are signed in as the **teacher**, taken to the lesson, and your camera starts.
 
-- 🎥 **Multi-peer WebRTC video** — one teacher streams to many students, live, peer-to-peer. No SFU, no third-party video SDK. I wrote the signaling, ICE negotiation, and connection management myself.
-- 🤖 **AI observation pipeline** — the browser captures frames, the backend relays them to a Python service that detects attention state (attentive / phone / face missing / wrong person), and stores every observation with a timestamp.
-- 📊 **Automated attendance reports** — an algorithm clusters thousands of raw timestamps into human-readable "the student was on their phone for 45 seconds" intervals. Plain English, computed from raw data.
-- 💬 **Real-time chat** built on top of the same Socket.IO layer as the video signaling.
-- 🗄️ **Two databases** doing different jobs — MySQL for relational data, MongoDB for live session state. Chosen deliberately, not by accident.
-- 📦 **Dockerized** — `docker compose up` and it runs.
+   <img src="docs/screenshots/01-demo-button.png" alt="The Try a demo video call button" width="560">
 
-I built this because I wanted to prove to myself that I could. Every layer — the React UI, the Node backend, the WebRTC signaling, the observation algorithm, the database design — is mine.
+4. **Open the site again in a second window** (a private/incognito window, another browser, or your phone). The button now says **"Join the demo call as a student"**. Click it and allow the camera and microphone.
 
-**[📥 Try it locally in 3 commands →](#-run-it-in-60-seconds)**
-**[🎥 Watch the 2-minute demo →](https://1drv.ms/v/c/ca524006c0ac4fc8/ETmrB7oF_75PgMy_lPOCcLsBkOuhSDVU0okXV8RwZPg4vg?e=MIHYhl)**
+   <img src="docs/screenshots/03-student-view.png" alt="Student view" width="560">
+
+5. **Play with the controls:** raise the student's hand, unmute the student from the teacher window, share the screen, stop the student's video, or remove them.
+
+> **Tip:** if you were given the link of a running lesson, just open it in a private window. TeachMe shows a **"Join as a demo student"** card.
 
 ---
 
@@ -42,378 +52,315 @@ I built this because I wanted to prove to myself that I could. Every layer — t
 
 <table>
   <tr>
-    <td width="50%">
-      <img src="docs/login.png" alt="Login" />
-      <p align="center"><b>Authentication</b> — signup with profile image, login, password recovery, email verification</p>
-    </td>
-    <td width="50%">
-      <img src="docs/home.png" alt="Home" />
-      <p align="center"><b>Course catalog</b> — search, filter, enroll, dark mode</p>
-    </td>
+    <td><img src="docs/screenshots/02-teacher-room.png" alt="Teacher room"><br><sub><b>Teacher:</b> live lesson with every student's video</sub></td>
+    <td><img src="docs/screenshots/04-teacher-controls.png" alt="Teacher controls"><br><sub><b>Teacher controls:</b> unmute, stop video, remove, raised hand</sub></td>
   </tr>
   <tr>
-    <td width="50%">
-      <img src="docs/course.png" alt="Course detail" />
-      <p align="center"><b>Course page</b> — weekly schedule, enrolled students, live lecture button</p>
-    </td>
-    <td width="50%">
-      <img src="docs/room.png" alt="Live room" />
-      <p align="center"><b>Live lesson</b> — teacher streaming to multiple students via WebRTC, with chat and per-student status</p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <img src="docs/reports.png" alt="Reports" />
-      <p align="center"><b>Reports</b> — attendance summary per lesson, per student, per day</p>
-    </td>
-    <td width="50%">
-      <img src="docs/report-detail.png" alt="Report detail" />
-      <p align="center"><b>Report detail</b> — every observation the AI made, clustered into time intervals</p>
-    </td>
+    <td><img src="docs/screenshots/03-student-view.png" alt="Student room"><br><sub><b>Student:</b> teacher's video, raise hand, chat</sub></td>
+    <td><img src="docs/screenshots/05-reports.png" alt="Attendance report"><br><sub><b>Reports:</b> who attended and for how long</sub></td>
   </tr>
 </table>
 
-> **Note:** drop your screenshots into a `docs/` folder at the project root — the README will pick them up automatically.
-
 ---
 
-## 🏗 Architecture
+## ✨ What you can do in the call
+
+| | Teacher | Student |
+| --- | --- | --- |
+| **Video & audio** | Starts the lesson (camera starts by itself), switches camera | Sees and hears the teacher |
+| **Screen sharing** | Shares a screen instead of the camera, live, for everyone | Sees the screen |
+| **Hear students** | Unmute / mute any single student (students are muted by default) | Speaks only when the teacher allows it |
+| **Raise hand** | Sees a badge and a banner on the student's tile | Raises or lowers the hand |
+| **Moderation** | Stops one student's video, or removes a student (and can let them back in) | Is told what happened |
+| **Chat** | Sees and answers messages | Writes messages |
+| **Attendance** | Per-lesson reports with join and leave times | – |
+
+### Who can do what
+
+Green is what a visitor can try right now, blue is the live call, orange is moderation, grey is everyday account and course management.
 
 ```mermaid
 flowchart LR
-    subgraph Browser["🌐 Browser (React + Vite)"]
-        UI[UI Pages]
-        RTC[WebRTC PeerConnections]
-        SNAP[Frame Capture<br/>ImageCapture / Canvas]
-    end
+    classDef actor fill:#111827,stroke:#111827,color:#fff,font-weight:bold,stroke-width:2px
+    classDef demo fill:#16a34a,stroke:#14532d,color:#fff,stroke-width:4px
+    classDef live fill:#2563eb,stroke:#1e3a8a,color:#fff,stroke-width:2px
+    classDef mod fill:#f59e0b,stroke:#92400e,color:#1f2937,stroke-width:2px
+    classDef base fill:#f3f4f6,stroke:#9ca3af,color:#111827
 
-    subgraph Server["🖥 Node.js + Express + Socket.IO"]
-        API[REST API]
-        SIO[Socket.IO Hub]
-        ALGO[Observation<br/>Clustering Algorithm]
-        DIST[Serves built React app]
-    end
+    V["🧑‍💼 VISITOR<br/>(recruiter)"]:::actor
+    T["👩‍🏫 TEACHER"]:::actor
+    S["🧑‍🎓 STUDENT"]:::actor
 
-    subgraph AI["🐍 Python Flask AI Service"]
-        CV[Computer Vision<br/>Face + Pose + Action]
-    end
+    D1(["⭐ Try the demo call<br/>one click, signed in as teacher"]):::demo
+    D2(["⭐ Join the demo call<br/>as a student"]):::demo
 
-    subgraph DB["🗄 Data Layer"]
-        MY[(MySQL<br/>relational)]
-        MG[(MongoDB<br/>live session)]
-    end
+    U1(["Start / end a live lesson"]):::live
+    U2(["Share camera or screen"]):::live
+    M1(["Unmute / mute a student"]):::mod
+    M2(["Stop a student's video"]):::mod
+    M3(["Remove a student<br/>or let them back in"]):::mod
+    B2(["Manage courses"]):::base
+    B3(["Read attendance reports"]):::base
 
-    UI -->|REST| API
-    RTC <-->|Signaling| SIO
-    SNAP -->|POST /check_frame| API
-    API -->|relay frame| CV
-    CV -->|observation label| API
-    API -->|save| MG
-    API <-->|users, courses| MY
-    ALGO -->|read logs| MG
-    ALGO -->|response| API
-    DIST --> UI
+    C1(["Chat during the lesson"]):::live
+    B1(["Sign in · sign up<br/>recover password"]):::base
+
+    U4(["Join a live lesson"]):::live
+    U5(["Raise a hand"]):::live
+    U6(["Speak when the teacher unmutes"]):::live
+    B4(["Browse courses and lectures"]):::base
+
+    V --- D1 & D2
+    T --- U1 & U2 & M1 & M2 & M3 & B2 & B3
+    T --- C1
+    T --- B1
+    C1 --- S
+    B1 --- S
+    U4 --- S
+    U5 --- S
+    U6 --- S
+    B4 --- S
+
+    %% invisible links only to line the use cases up in columns
+    U1 ~~~ D1
+    U1 ~~~ D2
+    D1 ~~~ U4
+    C1 ~~~ U4
 ```
-
-**Design decisions I made deliberately:**
-
-| Choice | Why |
-|---|---|
-| **Peer-to-peer WebRTC, no SFU** | Simpler to reason about; the teacher's browser is the source of truth. An SFU (LiveKit, mediasoup) would scale better but adds a whole new service to maintain. For a 1-to-many classroom, this is the right trade-off. |
-| **MySQL for relational data** | Users, courses, enrollments — all naturally relational. Foreign keys enforce integrity. |
-| **MongoDB for live session state** | A `Call` document grows unboundedly during a lesson (messages, logs, observations). Embedding it in a single document is faster than joins and matches the access pattern. |
-| **AI service as optional** | The backend calls the AI service with a 5-second timeout. If it's down, the lesson continues with `attentive` as the default. **Nothing breaks.** |
-| **Docker for orchestration** | Two databases + Node + Python is a lot of moving parts. One command brings everything up. |
 
 ---
 
-## 🎥 Deep dive: How the live lesson works
+## 🧠 How it works
 
-### 1. Signaling (Socket.IO + WebRTC)
+### The big picture
 
-WebRTC can't find peers on its own — it needs a **signaling channel**. I built that channel on top of Socket.IO.
+```mermaid
+flowchart LR
+    subgraph B["Browsers"]
+        T["👩‍🏫 Teacher<br/>React app"]
+        S["🧑‍🎓 Students<br/>React app"]
+    end
+
+    subgraph R["Render: one free web service"]
+        API["Express REST API<br/>JWT + role checks"]
+        WS["Socket.IO<br/>signaling server"]
+        FE["Serves the built<br/>React app"]
+    end
+
+    MY[("MySQL on Aiven<br/>users, courses")]
+    MO[("MongoDB<br/>lessons, chat, attendance")]
+    R2[("Cloudflare R2<br/>profile pictures")]
+    STUN["STUN server<br/>(find public address)"]
+
+    T & S -- "HTTPS + JWT" --> API
+    T & S -- "WebSocket + JWT" --> WS
+    API --> MY
+    API --> MO
+    API -- "streams private images" --> R2
+    WS --> MO
+    T <== "🎥 video and audio<br/>peer-to-peer (WebRTC)" ==> S
+    T & S -.-> STUN
+```
+
+The teacher keeps **one WebRTC connection per student** (a star, not a server in the middle). The server never touches the video; it only relays small signaling messages and enforces who is allowed to do what.
+
+### How a call is set up
 
 ```mermaid
 sequenceDiagram
-    participant T as 👨‍🏫 Teacher
-    participant S as 🔌 Server
-    participant S1 as 🧑‍🎓 Student A
-    participant S2 as 🧑‍🎓 Student B
+    autonumber
+    participant T as Teacher's browser
+    participant V as Server (Express + Socket.IO)
+    participant M as MongoDB
+    participant S as Student's browser
 
-    T->>S: create_lesson (REST)
-    S-->>T: callId
-
-    T->>S: emit ask-me-for-offer
-    S->>S1: ask-me-for-offer
-    S->>S2: ask-me-for-offer
-
-    S1->>S: emit request-offer
-    S->>T: request-offer (studentId=A)
-
-    T->>T: RTCPeerConnection.createOffer()
-    T->>S: emit teacher-offer (offer, callId)
-    S->>S1: teacher-offer
-
-    S1->>S1: setRemoteDescription(offer)
-    S1->>S1: createAnswer()
-    S1->>S: emit student-answer
-    S->>T: student-answer (from A)
-
-    par ICE trickle
-        T->>S: emit teacher-candidate
-        S->>S1: teacher-candidate
-        S1->>S: emit student-candidate
-        S->>T: student-candidate
-    end
-
-    Note over T,S1: ✅ WebRTC connection established (P2P media)
+    T->>V: POST /create_lesson
+    V->>M: save the lesson
+    T->>V: ask-me-for-offer
+    V-->>S: ask-me-for-offer
+    S->>V: request-offer
+    V-->>T: request-offer (which student)
+    Note over T: new RTCPeerConnection for this student,<br/>camera + microphone added
+    T->>V: teacher-offer (SDP)
+    V-->>S: teacher-offer
+    Note over S: sets the offer, adds camera + muted microphone
+    S->>V: student-answer (SDP)
+    V-->>T: student-answer
+    T-->>S: ICE candidates (through the server)
+    S-->>T: ICE candidates (through the server)
+    Note over T,S: Candidates that arrive before the answer is applied<br/>are queued, then added (no "remote description was null" error)
+    Note over T,S: 🎥 Video and audio now flow directly between the two browsers
 ```
 
-Each student gets their **own** `RTCPeerConnection` from the teacher — so the teacher's browser maintains N connections for N students. This is what makes it "multi-peer."
+### Everything that can happen to a call
 
-### 2. Frame capture → AI → observation
-
-While the lesson runs, each student's browser captures a frame every `1/fps` seconds:
-
-```mermaid
-flowchart LR
-    V[📹 Student video] -->|every 500ms| C{ImageCapture<br/>available?}
-    C -->|yes| IC[ImageCapture.takePhoto]
-    C -->|no| CV[Canvas.drawImage]
-    IC --> B[Blob]
-    CV --> B
-    B -->|POST multipart| API[/api/student/check_frame/]
-    API -->|forward| AI[Flask /api/observation]
-    AI -->|label| API
-    API -->|push timestamp| MG[(MongoDB<br/>Call.students[].observations)]
-```
-
-The backend is a **thin relay** — it does not process images. This keeps Node fast and lets me swap the AI model without touching the app.
-
-The AI service returns one of five labels:
-- `attentive` — student is paying attention
-- `notAttentive` — looking away
-- `usingPhone` — phone detected
-- `noFace` — face not visible
-- `facesDoNotMatch` — wrong person
-
-### 3. The observation clustering algorithm
-
-This is the part I'm proudest of. Raw data looks like this:
-
-```json
-{
-  "title": "usingPhone",
-  "occurrencesDates": [
-    "2024-06-20T09:15:00.000Z",
-    "2024-06-20T09:15:02.000Z",
-    "2024-06-20T09:15:04.000Z",
-    "2024-06-20T09:15:08.000Z",
-    "2024-06-20T09:15:10.000Z"
-  ]
-}
-```
-
-**1,000 raw timestamps are useless to a teacher.** They need to see: *"at 9:15 AM, this student was on their phone for 45 seconds."*
-
-So I wrote an algorithm that walks the timestamps and clusters them into **continuous intervals**:
-
-- **Rule 1 — continuity:** the gap between consecutive timestamps must be **≤ 2 seconds**. A 3-second gap means the student put the phone away and picked it up again — that's a new interval.
-- **Rule 2 — significance:** the total duration of a cluster must be **≥ 2 seconds**. This rules out single-frame noise (e.g. AI misclassifying one frame).
+The green path is a normal lesson. The coloured branches are the edge cases, and each one ends by joining the path again, so nobody is ever stuck: a student or teacher who leaves can always come back.
 
 ```mermaid
 flowchart TD
-    A[Sorted timestamps] --> B[start = ts[0]]
-    B --> C{next ts - prev ts<br/>≤ 2s?}
-    C -->|yes| D[extend cluster]
-    C -->|no| E{cluster duration<br/>≥ 2s?}
-    E -->|yes| F[emit interval<br/>from: start, to: prev]
-    E -->|no| G[discard noise]
-    F --> H[start = next ts]
-    G --> H
-    D --> C
-    H --> C
+    classDef main fill:#16a34a,stroke:#14532d,color:#fff,stroke-width:2px
+    classDef live fill:#2563eb,stroke:#1e3a8a,color:#fff,stroke-width:4px
+    classDef warn fill:#f59e0b,stroke:#92400e,color:#1f2937,stroke-width:2px
+    classDef bad fill:#dc2626,stroke:#7f1d1d,color:#fff,stroke-width:2px
+    classDef teach fill:#7c3aed,stroke:#4c1d95,color:#fff,stroke-width:2px
+    classDef wait fill:#f3f4f6,stroke:#6b7280,color:#111827,stroke-dasharray:4 3
+    classDef back fill:#fff,stroke:#111827,color:#111827,stroke-width:3px,font-weight:bold
+
+    A["1 · Teacher opens the room<br/>camera starts by itself"]:::main
+    B["2 · A new lesson is created<br/>(saved in MongoDB)"]:::main
+    C["3 · Teacher announces it<br/><code>ask-me-for-offer</code>"]:::main
+    D["4 · Every student replies 'I'm here'<br/><code>request-offer</code>"]:::main
+    E["5 · Teacher builds one connection<br/>per student and sends an offer"]:::main
+    F["6 · Student answers · ICE candidates exchanged<br/>(early ones are queued, not lost)"]:::main
+    LIVE(["🟢 LIVE<br/>video · audio · chat · screen share · controls<br/>attendance: join time saved"]):::live
+    A --> B --> C --> D --> E --> F --> LIVE
+
+    EARLY["⏳ Student opened the room first:<br/>no lesson yet, just waits"]:::wait
+    EARLY -. "teacher starts" .-> D
+
+    LIVE --> S1a & S2a & S3a & S4a
+
+    S1a["🟠 STUDENT LEAVES<br/>closes the tab or loses the network"]:::warn
+    S1b["Teacher's connection turns 'disconnected'<br/>tile goes offline · leave time saved"]:::warn
+    S1c["Student comes back<br/>(reopens the room or presses Connect)"]:::warn
+    S1d["↩ back to step 5<br/>fresh connection · new attendance row"]:::back
+    S1a --> S1b --> S1c ==> S1d
+
+    S2a["🔴 TEACHER REMOVES A STUDENT"]:::bad
+    S2b["Student sees 'You were removed'<br/>server blocks every offer and answer"]:::bad
+    S2c["Teacher presses Let back in<br/><code>kick-lifted</code> → student asks again"]:::bad
+    S2d["↩ back to step 5"]:::back
+    S2a --> S2b --> S2c ==> S2d
+
+    S3a["🟣 TEACHER ENDS THE LESSON<br/>presses End call"]:::teach
+    S3b["Lesson closed and saved<br/>students told <code>teacher-end-call</code><br/>their connections close"]:::teach
+    S3c["Teacher starts again:<br/>a NEW lesson is created"]:::teach
+    S3d["↩ back to step 3"]:::back
+    S3a --> S3b --> S3c ==> S3d
+
+    S4a["🔵 TEACHER DROPS OUT<br/>refresh, crash or closed tab"]:::teach
+    S4b["Server sees the socket is gone<br/>closes the lesson<br/>tells students <code>teacher-disconnected</code>"]:::teach
+    S4c["Teacher reopens the room:<br/>auto-start makes a new lesson"]:::teach
+    S4d["↩ back to step 3<br/>students reconnect on their own"]:::back
+    S4a --> S4b --> S4c ==> S4d
 ```
 
-The output is a clean list of `{ from, to }` intervals per observation type, plus the total accumulated time. **This is the difference between a data dump and an actual report.**
+### What a student goes through
 
-### 4. Real-time chat
+The teacher's choices are applied on the student's side **and** enforced on the teacher's side, so a tampered browser can't be heard or seen against the teacher's wishes.
 
-Chat reuses the same Socket.IO connection as the signaling. Messages are:
+```mermaid
+stateDiagram-v2
+    [*] --> Waiting: opens the lesson link
+    Waiting --> Connecting: teacher's offer arrives
+    Connecting --> Connected: answer + ICE exchanged
 
-1. Emitted by the student with `message` event
-2. Persisted into `Call.messages[]` in MongoDB
-3. Broadcast to the teacher and all other students in the call
+    state Connected {
+        [*] --> Muted
+        Muted --> Speaking: teacher unmutes
+        Speaking --> Muted: teacher mutes
+        --
+        [*] --> VideoOn
+        VideoOn --> VideoOff: teacher stops video
+        VideoOff --> VideoOn: teacher allows video
+    }
 
-The chat is **scoped to the call** — when a lesson ends, the message history is frozen with it.
+    Connected --> Removed: teacher removes the student
+    Removed --> Waiting: teacher lets them back in
+    Connected --> Waiting: teacher ends the lesson
+```
 
 ---
 
-## 🚀 Run it in 60 seconds
+## 🛠 Engineering highlights
 
-> **Prerequisites:** Docker Desktop is installed and running.
+- **Real-time signaling done carefully.** The offer, answer, and ICE-candidate handshake runs over Socket.IO. Candidates that arrive early are queued until the remote description exists, which avoids a classic WebRTC race.
+- **Live screen share without renegotiation.** The camera track is swapped for the screen track with `replaceTrack`, including for students who join mid-share.
+- **Server-enforced moderation.** Mute, stop-video, and remove events are accepted only from the teacher who owns the lesson. A removed student gets no offers, answers, or candidates until let back in.
+- **Authentication and security basics.** bcrypt password hashing, signed JWTs (also checked in the Socket.IO handshake), role middleware, ownership checks on every teacher resource, per-IP rate limiting on login routes, Helmet headers, path-traversal protection on file routes.
+- **Private image storage.** Profile pictures live in a private Cloudflare R2 bucket and are streamed through the API, so no public bucket URL is needed and the free host's disk is never used.
+- **One deployable.** The Express server also serves the built React app, so the whole project runs as a single free Render service.
+- **Privacy-minded analytics.** A visit counter stores only a date in MongoDB (one per browser, bots skipped). A privacy notice explains this on first visit.
+
+**Honest limits:** media is peer-to-peer from the teacher to every student, which suits classes of a handful of students (a larger class would need a media server). Only STUN is configured, no TURN relay, so some VPNs and strict corporate networks can block the call. Lecture PDF uploads are switched off in the demo because the free host's disk is temporary.
+
+---
+
+## 🧰 Tech stack
+
+| Area | Technology |
+| --- | --- |
+| Front end | React 18, Vite, Tailwind CSS, React Router, Axios, lucide-react |
+| Real time | WebRTC (native `RTCPeerConnection`), Socket.IO |
+| Back end | Node.js, Express, Helmet, Multer, Nodemailer |
+| Data | MySQL (mysql2, hosted on Aiven), MongoDB (Mongoose) |
+| Files | Cloudflare R2 (S3 API) |
+| Auth | bcryptjs, JSON Web Tokens |
+| Hosting | Render (free tier) |
+
+---
+
+## 💻 Run it locally
+
+> The easiest way to evaluate TeachMe is the [live demo](#-try-it-in-60-seconds). A local run needs your own databases, and the MySQL table definitions are not part of this repository.
+
+You need Node.js 20+, a MySQL database with the TeachMe tables, and a MongoDB database (a free Atlas cluster works).
 
 ```bash
-git clone <your-repo-url> teach-me && cd teach-me
+# 1. Install and build the front end (it is copied into server/dist)
+cd client
+npm install
+node build.js
 
-cp .env.example .env          # then fill in GMAIL_APP_PASSWORD (optional)
-
-docker compose up --build
+# 2. Configure and start the server
+cd ../server
+npm install
+cp .env.example .env        # then fill it in (see below)
+npm start                   # http://localhost:3000
 ```
 
-That's it. Open **http://localhost:3000**.
+**Environment variables** (`server/.env`, see `.env.example` for comments):
 
-The first build takes ~3 minutes (it compiles the React app and installs dependencies for Node). Subsequent starts are instant.
+| Variable | Purpose |
+| --- | --- |
+| `JWT_SECRET` | **Required.** Long random string (32+ characters) used to sign tokens |
+| `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` | MySQL connection |
+| `DB_CA` | MySQL CA certificate text (needed for Aiven) |
+| `MONGO_URI` (or `MONGO_CLUSTER`, `MONGO_USER`, `MONGO_PASSWORD`, `MONGO_DB`) | MongoDB connection |
+| `CLIENT_ORIGIN` | Your site's address, for CORS |
+| `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET` | Cloudflare R2 for profile pictures |
+| `GMAIL_USER`, `GMAIL_APP_PASSWORD` | Optional: sends account-recovery emails |
 
-### Quick walkthrough to see it working
+**Accounts:** teachers have no sign-up page, so they are created with a script (students sign up in the app):
 
-1. **Sign up as a teacher** → create a course
-2. **Open an incognito window** → sign up as a student → enroll in that course
-3. **As teacher:** click *Start Lecture* → click the camera icon
-4. **As student:** click *Attend Lesson*
-5. **Watch the magic:** the student's video appears on the teacher's screen, and vice versa
-6. **Chat:** type a message as the student, see it appear on the teacher's side
-7. **End the call**, then open *Reports* — you'll see the attendance record
-
-> **Why incognito?** Browsers lock the camera to one tab at a time. Two tabs in the same browser will fail to establish WebRTC. Use two different browsers or an incognito window.
-
----
-
-## 🛠 Tech Stack
-
-| Layer | Technologies |
-|---|---|
-| **Frontend** | React 18, Vite, React Router v6, TailwindCSS, Socket.IO Client, Lucide Icons, react-datepicker |
-| **Backend** | Node.js 20, Express, Socket.IO, Mongoose, mysql2/promise, Multer, Nodemailer, dotenv |
-| **Real-time** | WebRTC (native), Socket.IO, REST |
-| **Databases** | MySQL 8 (relational), MongoDB 7 (session state) |
-| **AI (optional)** | Python 3.11, Flask, OpenCV, MediaPipe, face_recognition |
-| **Infrastructure** | Docker, Docker Compose, multi-stage builds |
-
----
-
-## 📂 Project layout
-
-```
-teach-me/
-├── browser/                  React (Vite) frontend
-│   ├── src/
-│   │   ├── Components/       Reusable UI (Navbar, CourseForm, Reports, …)
-│   │   ├── pages/            Route-level pages (Home, Room, Course, …)
-│   │   ├── api/api.js        Axios API layer
-│   │   └── main.jsx          Router + entry
-│   └── package.json
-│
-├── server/                   Node.js backend
-│   ├── config/db.js          MySQL connection pool
-│   ├── controllers/          Route handlers (student, teacher)
-│   ├── models/               MySQL queries + Mongoose schemas
-│   ├── routes/               Express routers
-│   ├── db/                   MySQL schema (auto-loaded by Docker)
-│   ├── socketHandler.js      Socket.IO event handlers
-│   └── index.js              Express + Socket.IO entry
-│
-├── flask_server/             (Optional) AI microservice
-│   ├── server_flask_new_api.py
-│   ├── requirements.txt
-│   └── *.pkl                 Trained face-encoding model
-│
-├── Dockerfile                Multi-stage: frontend build + backend runtime
-├── docker-compose.yml        MySQL + MongoDB + Server orchestration
-├── .env.example              Environment template
-└── README.md
+```bash
+cd server
+node scripts/create-account.js teacher "Ada" "Lovelace" ada@example.com "a-strong-password"
+node scripts/seed-demo.js   # optional: the demo teacher, demo student and demo course used by the live demo
 ```
 
 ---
 
-## 🔌 REST API (highlights)
+## 📁 Project layout
 
-<details>
-<summary><b>Student endpoints</b></summary>
-
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| `POST` | `/api/student/addstudent` | Register (multipart: data + image) |
-| `GET`  | `/api/student/reinsert` | Login |
-| `GET`  | `/api/student/get_courses` | List all courses |
-| `POST` | `/api/student/login_course` | Enroll in a course |
-| `GET`  | `/api/student/get_my_courses` | Student's enrolled courses |
-| `POST` | `/api/student/check_frame` | Send a frame for AI observation |
-
-</details>
-
-<details>
-<summary><b>Teacher endpoints</b></summary>
-
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| `POST` | `/api/teacher/add_course` | Create course |
-| `POST` | `/api/teacher/create_lesson` | Start a new live call |
-| `GET`  | `/api/teacher/get_report` | Full report for a call |
-| `GET`  | `/api/teacher/get_days_report` | Reports for a specific day |
-| `POST` | `/api/teacher/add_lecture` | Upload PDF lecture |
-
-</details>
-
-<details>
-<summary><b>Socket.IO events</b></summary>
-
-| Event | Direction | Purpose |
-|-------|-----------|---------|
-| `ask-me-for-offer` | teacher → students | Teacher started a call |
-| `request-offer` | student → teacher | Student requests WebRTC offer |
-| `teacher-offer` | teacher → students | SDP offer |
-| `student-answer` | student → teacher | SDP answer |
-| `teacher-candidate` / `student-candidate` | both | ICE candidates |
-| `message` | both | Chat |
-| `student-joined-call` / `student-out` | student → server | Log connection times |
-| `teacher-end-call` | teacher → students | End lesson |
-
-</details>
-
----
-
-## 🎮 Demo Mode
-
-The **schedule gate is intentionally disabled** so lessons can be started at any time — perfect for live demos.
-
-To re-enable it: open `browser/src/pages/utilities.jsx` → `giveCourseAction`, uncomment the `🔒 ORIGINAL GATE` blocks, and remove the `🎮 DEMO MODE` returns.
-
----
-
-## 🧗 What I'd do differently in production
-
-Being honest about this is more useful than pretending the project is perfect:
-
-| Limitation | The fix |
-|---|---|
-| Passwords stored in plain text | Add `bcrypt` — I know this is the #1 change |
-| No automated tests | Add Jest + Supertest for critical endpoints; the clustering algorithm deserves its own unit test suite |
-| WebRTC uses only STUN | Add a TURN server (Twilio, Cloudflare) for users behind strict NATs |
-| File uploads on local disk | Move to S3 / R2 with signed URLs |
-| One-to-many P2P doesn't scale past ~4 users | Replace with an SFU (LiveKit is my pick) |
-| No rate limiting | Add `express-rate-limit` on auth endpoints |
-| AI service must run locally | Containerize it and deploy to a GPU host, or fall back to a hosted vision API |
-
----
-
-## 📬 About me
-
-I'm **Sami Khaleel** — a full-stack developer based in Jülich, NRW, Germany.
-
-I built Teach-Me to prove to myself that I could ship something real, not another tutorial. If you're reading this because you're hiring, **I'd love to talk**. I'm available immediately and I speak English (C1) and German (B2).
-
-- 📧 **Email:** sami000khaleel@gmail.com
-- 💼 **LinkedIn:** [linkedin.com/in/sami-khaleel](https://linkedin.com/in/)
-- 🐙 **GitHub:** [@sami000khaleel](https://github.com/sami000khaleel)
-- 📍 **Location:** Jülich, NRW (open to Köln, Aachen, Düsseldorf, remote)
-
-**[🎥 Watch the demo →](https://1drv.ms/v/c/ca524006c0ac4fc8/ETmrB7oF_75PgMy_lPOCcLsBkOuhSDVU0okXV8RwZPg4vg?e=MIHYhl)**
+```
+client/                      React + Vite + Tailwind
+  src/pages/Room.jsx           the live room: WebRTC, screen share, controls
+  src/Components/DemoGuide/    one-click demo and "join as student" cards
+server/
+  index.js                     Express app, security headers, serves the client
+  socketHandler.js             signaling + classroom controls (raise hand, mute, remove)
+  controllers/, routes/        REST API for teachers and students
+  middleware/auth.js           JWT + role checks
+  config/r2.js                 private image storage on Cloudflare R2
+  models/                      MySQL access and Mongoose models
+  scripts/                     seed-demo.js, create-account.js
+```
 
 ---
 
 <div align="center">
 
-**⭐ If you found this project interesting, feel free to star it — it helps more than you think.**
+**Built by Sami** &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/YOUR-PROFILE) &nbsp;·&nbsp; [Portfolio](https://YOUR-PORTFOLIO.example)
 
 </div>
