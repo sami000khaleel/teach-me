@@ -91,6 +91,13 @@
     @apply px-3 py-1.5 text-xs;
   }
 
+  /* the eye-catching "try the demo" button: moving gradient + breathing glow */
+  .btn-demo {
+    @apply btn rounded-2xl bg-gradient-to-r from-brand-600 via-fuchsia-500 to-violet-600 text-white;
+    background-size: 220% 220%;
+    animation: demo-gradient 6s ease infinite, demo-glow 2.4s ease-in-out infinite;
+  }
+
   /* form fields */
   .field {
     @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/[0.15] dark:border-white/10 dark:bg-ink-900/60 dark:text-slate-100 dark:placeholder:text-slate-500;
@@ -154,4 +161,33 @@ html .react-datepicker__triangle {
 }
 .dark .react-datepicker__day--selected {
   color: #fff;
+}
+
+/* ------------------------------------------------------------------ */
+/* Demo button: glow, moving gradient, gentle up-and-down float        */
+/* ------------------------------------------------------------------ */
+.btn-demo:hover {
+  filter: brightness(1.08);
+}
+.demo-float {
+  animation: demo-float 3.2s ease-in-out infinite;
+}
+/* holds still under the mouse, so it is easy to click */
+.demo-float:hover {
+  animation-play-state: paused;
+}
+@keyframes demo-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes demo-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.55), 0 12px 32px -8px rgba(79, 70, 229, 0.65); }
+  50% { box-shadow: 0 0 0 12px rgba(139, 92, 246, 0), 0 18px 44px -6px rgba(217, 70, 239, 0.75); }
+}
+@keyframes demo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-demo, .demo-float { animation: none !important; }
 }
